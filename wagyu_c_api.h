@@ -50,7 +50,7 @@ WAGYUCAPICALL mapbox_geometry_t *mapbox_point_to_geometry(mapbox_point_t *pt);
 WAGYUCAPICALL bool mapbox_point_equal(mapbox_point_t *geom1,
                                       mapbox_point_t *geom2);
 
-WAGYUCAPICALL mapbox_line_string_t *mapbox_line_string_new(double *x, double *y,
+WAGYUCAPICALL mapbox_line_string_t *mapbox_line_string_new(double *xy,
                                                            int pointcount);
 WAGYUCAPICALL void mapbox_line_string_free(mapbox_line_string_t *pt);
 WAGYUCAPICALL int mapbox_line_string_get_points_count(mapbox_line_string_t *pt);
@@ -65,7 +65,7 @@ mapbox_line_string_to_geometry(mapbox_line_string_t *pt);
 WAGYUCAPICALL bool mapbox_line_string_equal(mapbox_line_string_t *geom1,
                                             mapbox_line_string_t *geom2);
 
-WAGYUCAPICALL mapbox_multi_point_t *mapbox_multi_point_new(double *x, double *y,
+WAGYUCAPICALL mapbox_multi_point_t *mapbox_multi_point_new(double *xy,
                                                            int pointcount);
 WAGYUCAPICALL void mapbox_multi_point_free(mapbox_multi_point_t *pt);
 WAGYUCAPICALL int mapbox_multi_point_get_points_count(mapbox_multi_point_t *pt);
@@ -80,7 +80,7 @@ mapbox_multi_point_to_geometry(mapbox_multi_point_t *pt);
 WAGYUCAPICALL bool mapbox_multi_point_equal(mapbox_multi_point_t *geom1,
                                             mapbox_multi_point_t *geom2);
 
-WAGYUCAPICALL mapbox_linear_ring_t *mapbox_linear_ring_new(double *x, double *y,
+WAGYUCAPICALL mapbox_linear_ring_t *mapbox_linear_ring_new(double *xy,
                                                            int pointcount);
 WAGYUCAPICALL void mapbox_linear_ring_free(mapbox_linear_ring_t *pt);
 WAGYUCAPICALL int mapbox_linear_ring_get_points_count(mapbox_linear_ring_t *pt);

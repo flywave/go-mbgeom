@@ -119,12 +119,11 @@ bool mapbox_point_equal(mapbox_point_t *geom1, mapbox_point_t *geom2) {
   return geom1->pt == geom2->pt;
 }
 
-mapbox_line_string_t *mapbox_line_string_new(double *x, double *y,
-                                             int pointcount) {
+mapbox_line_string_t *mapbox_line_string_new(double *xy, int pointcount) {
   mapbox::geometry::line_string<double> ls;
   ls.reserve(pointcount);
   for (int i = 0; i < pointcount; i++) {
-    ls.emplace_back(mapbox::geometry::point<double>{x[i], y[i]});
+    ls.emplace_back(mapbox::geometry::point<double>{xy[i * 2], xy[i * 2 + 1]});
   }
   return new mapbox_line_string_t{std::move(ls)};
 }
@@ -162,12 +161,11 @@ bool mapbox_line_string_equal(mapbox_line_string_t *geom1,
   return geom1->ls == geom2->ls;
 }
 
-mapbox_multi_point_t *mapbox_multi_point_new(double *x, double *y,
-                                             int pointcount) {
+mapbox_multi_point_t *mapbox_multi_point_new(double *xy, int pointcount) {
   mapbox::geometry::multi_point<double> ls;
   ls.reserve(pointcount);
   for (int i = 0; i < pointcount; i++) {
-    ls.emplace_back(mapbox::geometry::point<double>{x[i], y[i]});
+    ls.emplace_back(mapbox::geometry::point<double>{xy[i * 2], xy[i * 2 + 1]});
   }
   return new mapbox_multi_point_t{std::move(ls)};
 }
@@ -205,12 +203,11 @@ bool mapbox_multi_point_equal(mapbox_multi_point_t *geom1,
   return geom1->mp == geom2->mp;
 }
 
-mapbox_linear_ring_t *mapbox_linear_ring_new(double *x, double *y,
-                                             int pointcount) {
+mapbox_linear_ring_t *mapbox_linear_ring_new(double *xy, int pointcount) {
   mapbox::geometry::linear_ring<double> ls;
   ls.reserve(pointcount);
   for (int i = 0; i < pointcount; i++) {
-    ls.emplace_back(mapbox::geometry::point<double>{x[i], y[i]});
+    ls.emplace_back(mapbox::geometry::point<double>{xy[i * 2], xy[i * 2 + 1]});
   }
   return new mapbox_linear_ring_t{std::move(ls)};
 }

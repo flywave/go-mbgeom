@@ -85,6 +85,11 @@ func (e *LineString) GetPoint(i int) *Point {
 	return p
 }
 
+func (e *LineString) getPoint(i int, pt *Point) {
+	pt.p = C.mapbox_line_string_get_point(e.ls, C.int(i))
+	runtime.SetFinalizer(pt, (*Point).free)
+}
+
 func (e *LineString) SetPoint(i int, x, y float64) {
 	C.mapbox_line_string_update_point(e.ls, C.int(i), C.double(x), C.double(y))
 }
@@ -101,6 +106,23 @@ func (e *LineString) Geom() *Geometry {
 
 func (e *LineString) Equal(b *LineString) bool {
 	return bool(C.mapbox_line_string_equal(e.ls, b.ls))
+}
+
+func (e *LineString) Subpoints() []Point {
+	ret := make([]Point, e.Count())
+	for i := range ret {
+		e.getPoint(i, &ret[i])
+	}
+	return ret
+}
+
+func (e *LineString) Data() [][]float64 {
+	ret := make([][]float64, e.Count())
+	for i := range ret {
+		p := e.GetPoint(i)
+		ret[i] = p.Data()
+	}
+	return ret
 }
 
 type MultiPoint struct {
@@ -130,6 +152,11 @@ func (e *MultiPoint) GetPoint(i int) *Point {
 	return p
 }
 
+func (e *MultiPoint) getPoint(i int, pt *Point) {
+	pt.p = C.mapbox_multi_point_get_point(e.mp, C.int(i))
+	runtime.SetFinalizer(pt, (*Point).free)
+}
+
 func (e *MultiPoint) SetPoint(i int, x, y float64) {
 	C.mapbox_multi_point_update_point(e.mp, C.int(i), C.double(x), C.double(y))
 }
@@ -146,6 +173,23 @@ func (e *MultiPoint) Geom() *Geometry {
 
 func (e *MultiPoint) Equal(b *MultiPoint) bool {
 	return bool(C.mapbox_multi_point_equal(e.mp, b.mp))
+}
+
+func (e *MultiPoint) Points() []Point {
+	ret := make([]Point, e.Count())
+	for i := range ret {
+		e.getPoint(i, &ret[i])
+	}
+	return ret
+}
+
+func (e *MultiPoint) Data() [][]float64 {
+	ret := make([][]float64, e.Count())
+	for i := range ret {
+		p := e.GetPoint(i)
+		ret[i] = p.Data()
+	}
+	return ret
 }
 
 type LinearRing struct {
@@ -182,8 +226,30 @@ func (e *LinearRing) AppendPoint(x, y float64) {
 	C.mapbox_linear_ring_append_point(e.lr, C.double(x), C.double(y))
 }
 
+func (e *LinearRing) getPoint(i int, pt *Point) {
+	pt.p = C.mapbox_linear_ring_get_point(e.lr, C.int(i))
+	runtime.SetFinalizer(pt, (*Point).free)
+}
+
 func (e *LinearRing) Equal(b *LinearRing) bool {
 	return bool(C.mapbox_linear_ring_equal(e.lr, b.lr))
+}
+
+func (e *LinearRing) Points() []Point {
+	ret := make([]Point, e.Count())
+	for i := range ret {
+		e.getPoint(i, &ret[i])
+	}
+	return ret
+}
+
+func (e *LinearRing) Data() [][]float64 {
+	ret := make([][]float64, e.Count())
+	for i := range ret {
+		p := e.GetPoint(i)
+		ret[i] = p.Data()
+	}
+	return ret
 }
 
 type Polygon struct {

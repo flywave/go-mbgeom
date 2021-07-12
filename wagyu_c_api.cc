@@ -5,6 +5,10 @@
 #include <mapbox/geometry.hpp>
 #include <mapbox/geometry/wagyu/wagyu.hpp>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct _mapbox_box_t {
   mapbox::geometry::box<double> box;
 };
@@ -111,6 +115,10 @@ mapbox_geometry_t *mapbox_point_to_geometry(mapbox_point_t *pt) {
   return new mapbox_geometry_t{mapbox::geometry::geometry<double>{pt->pt}};
 }
 
+bool mapbox_point_equal(mapbox_point_t *geom1, mapbox_point_t *geom2) {
+  return geom1->pt == geom2->pt;
+}
+
 mapbox_line_string_t *mapbox_line_string_new(double *x, double *y,
                                              int pointcount) {
   mapbox::geometry::line_string<double> ls;
@@ -147,6 +155,11 @@ void mapbox_line_string_append_point(mapbox_line_string_t *pt, double x,
 
 mapbox_geometry_t *mapbox_line_string_to_geometry(mapbox_line_string_t *pt) {
   return new mapbox_geometry_t{mapbox::geometry::geometry<double>{pt->ls}};
+}
+
+bool mapbox_line_string_equal(mapbox_line_string_t *geom1,
+                              mapbox_line_string_t *geom2) {
+  return geom1->ls == geom2->ls;
 }
 
 mapbox_multi_point_t *mapbox_multi_point_new(double *x, double *y,
@@ -187,6 +200,11 @@ void mapbox_multi_point_append_point(mapbox_multi_point_t *pt, double x,
   pt->mp.emplace_back(mapbox::geometry::point<double>{x, y});
 }
 
+bool mapbox_multi_point_equal(mapbox_multi_point_t *geom1,
+                              mapbox_multi_point_t *geom2) {
+  return geom1->mp == geom2->mp;
+}
+
 mapbox_linear_ring_t *mapbox_linear_ring_new(double *x, double *y,
                                              int pointcount) {
   mapbox::geometry::linear_ring<double> ls;
@@ -219,6 +237,11 @@ mapbox_point_t *mapbox_linear_ring_get_point(mapbox_linear_ring_t *pt, int i) {
 void mapbox_linear_ring_append_point(mapbox_linear_ring_t *pt, double x,
                                      double y) {
   pt->lr.emplace_back(mapbox::geometry::point<double>{x, y});
+}
+
+bool mapbox_linear_ring_equal(mapbox_linear_ring_t *geom1,
+                              mapbox_linear_ring_t *geom2) {
+  return geom1->lr == geom2->lr;
 }
 
 mapbox_polygon_t *mapbox_polygon_new(mapbox_linear_ring_t *rings,
@@ -276,6 +299,10 @@ void mapbox_polygon_append_interior_ring(mapbox_polygon_t *pt,
   pt->poly.emplace_back(ring->lr);
 }
 
+bool mapbox_polygon_equal(mapbox_polygon_t *geom1, mapbox_polygon_t *geom2) {
+  return geom1->poly == geom2->poly;
+}
+
 mapbox_multi_line_string_t *
 mapbox_multi_line_string_new(mapbox_line_string_t *lines, int ringcount) {
   mapbox::geometry::multi_line_string<double> mls;
@@ -316,6 +343,11 @@ mapbox_multi_line_string_to_geometry(mapbox_multi_line_string_t *pt) {
   return new mapbox_geometry_t{mapbox::geometry::geometry<double>{pt->mls}};
 }
 
+bool mapbox_multi_line_string_equal(mapbox_multi_line_string_t *geom1,
+                                    mapbox_multi_line_string_t *geom2) {
+  return geom1->mls == geom2->mls;
+}
+
 mapbox_multi_polygon_t *mapbox_multi_polygon_new(mapbox_polygon_t *polys,
                                                  int polycount) {
   mapbox::geometry::multi_polygon<double> mls;
@@ -340,7 +372,7 @@ void mapbox_multi_polygon_update(mapbox_multi_polygon_t *pt, int i,
   }
 }
 
-int mapbox_multi_line_get_count(mapbox_multi_polygon_t *pt) {
+int mapbox_multi_polygon_get_count(mapbox_multi_polygon_t *pt) {
   return pt->mp.size();
 }
 
@@ -351,6 +383,11 @@ mapbox_polygon_t *mapbox_multi_polygon_get(mapbox_multi_polygon_t *pt, int i) {
 mapbox_geometry_t *
 mapbox_multi_polygon_to_geometry(mapbox_multi_polygon_t *pt) {
   return new mapbox_geometry_t{mapbox::geometry::geometry<double>{pt->mp}};
+}
+
+bool mapbox_multi_polygon_equal(mapbox_multi_polygon_t *geom1,
+                                mapbox_multi_polygon_t *geom2) {
+  return geom1->mp == geom2->mp;
 }
 
 void mapbox_geometry_free(mapbox_geometry_t *geom) { delete geom; }
@@ -433,6 +470,10 @@ mapbox_geometry_cast_multi_polygon(mapbox_geometry_t *geom) {
         geom->geom.get<mapbox::geometry::multi_polygon<double>>()};
   }
   return nullptr;
+}
+
+bool mapbox_geometry_equal(mapbox_geometry_t *geom1, mapbox_geometry_t *geom2) {
+  return geom1->geom == geom2->geom;
 }
 
 mapbox_geometry_collection_t *mapbox_geometry_collection_new() {
@@ -755,20 +796,41 @@ mapbox_feature_t *mapbox_feature_collection_get(mapbox_feature_collection_t *gc,
   return nullptr;
 }
 
-mapbox_wagyu_t *mapbox_wagyu_new() {}
+mapbox_wagyu_t *mapbox_wagyu_new() { return new mapbox_wagyu_t{}; }
 
-void mapbox_wagyu_free(mapbox_wagyu_t *ctx) {}
+void mapbox_wagyu_free(mapbox_wagyu_t *ctx) { delete ctx; }
 
-void mapbox_wagyu_add_ring(mapbox_wagyu_t *ctx, _mapbox_linear_ring_t *ring) {}
+void mapbox_wagyu_add_ring(mapbox_wagyu_t *ctx, mapbox_linear_ring_t *ring,
+                           uint8_t p_type) {
+  ctx->ctx.add_ring(ring->lr,
+                    static_cast<mapbox::geometry::wagyu::polygon_type>(p_type));
+}
 
-void mapbox_wagyu_add_polygon(mapbox_wagyu_t *ctx, _mapbox_polygon_t *poly) {}
+void mapbox_wagyu_add_polygon(mapbox_wagyu_t *ctx, mapbox_polygon_t *poly,
+                              uint8_t p_type) {
+  ctx->ctx.add_polygon(
+      poly->poly, static_cast<mapbox::geometry::wagyu::polygon_type>(p_type));
+}
 
-void mapbox_wagyu_reverse_rings(mapbox_wagyu_t *ctx, _Bool value) {}
+void mapbox_wagyu_reverse_rings(mapbox_wagyu_t *ctx, _Bool value) {
+  ctx->ctx.reverse_rings(value);
+}
 
-void mapbox_wagyu_clear(mapbox_wagyu_t *ctx) {}
+void mapbox_wagyu_clear(mapbox_wagyu_t *ctx) { ctx->ctx.clear(); }
 
-mapbox_box_t *mapbox_wagyu_get_bounds(mapbox_wagyu_t *ctx) {}
+mapbox_box_t *mapbox_wagyu_get_bounds(mapbox_wagyu_t *ctx) {
+  return new mapbox_box_t{ctx->ctx.get_bounds()};
+}
 
-_Bool mapbox_wagyu_execute(mapbox_wagyu_t *ctx, int tp,
-                           mapbox_multi_polygon_t *mp, int subject_fill_type,
-                           int clip_fill_type) {}
+_Bool mapbox_wagyu_execute(mapbox_wagyu_t *ctx, uint8_t tp,
+                           mapbox_multi_polygon_t *mp,
+                           uint8_t subject_fill_type, uint8_t clip_fill_type) {
+  return ctx->ctx.execute(
+      static_cast<mapbox::geometry::wagyu::clip_type>(tp), mp->mp,
+      static_cast<mapbox::geometry::wagyu::fill_type>(subject_fill_type),
+      static_cast<mapbox::geometry::wagyu::fill_type>(clip_fill_type));
+}
+
+#ifdef __cplusplus
+}
+#endif

@@ -4,6 +4,10 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #if defined(WIN32) || defined(WINDOWS) || defined(_WIN32) || defined(_WINDOWS)
 #define WAGYUCAPICALL __declspec(dllexport)
 #else
@@ -43,6 +47,8 @@ WAGYUCAPICALL void mapbox_point_get_xy(mapbox_point_t *pt, double *x,
                                        double *y);
 WAGYUCAPICALL void mapbox_point_set_xy(mapbox_point_t *pt, double x, double y);
 WAGYUCAPICALL mapbox_geometry_t *mapbox_point_to_geometry(mapbox_point_t *pt);
+WAGYUCAPICALL bool mapbox_point_equal(mapbox_point_t *geom1,
+                                      mapbox_point_t *geom2);
 
 WAGYUCAPICALL mapbox_line_string_t *mapbox_line_string_new(double *x, double *y,
                                                            int pointcount);
@@ -56,6 +62,8 @@ WAGYUCAPICALL void mapbox_line_string_append_point(mapbox_line_string_t *pt,
                                                    double x, double y);
 WAGYUCAPICALL mapbox_geometry_t *
 mapbox_line_string_to_geometry(mapbox_line_string_t *pt);
+WAGYUCAPICALL bool mapbox_line_string_equal(mapbox_line_string_t *geom1,
+                                            mapbox_line_string_t *geom2);
 
 WAGYUCAPICALL mapbox_multi_point_t *mapbox_multi_point_new(double *x, double *y,
                                                            int pointcount);
@@ -69,6 +77,8 @@ WAGYUCAPICALL mapbox_point_t *
 mapbox_multi_point_get_point(mapbox_multi_point_t *pt, int i);
 WAGYUCAPICALL mapbox_geometry_t *
 mapbox_multi_point_to_geometry(mapbox_multi_point_t *pt);
+WAGYUCAPICALL bool mapbox_multi_point_equal(mapbox_multi_point_t *geom1,
+                                            mapbox_multi_point_t *geom2);
 
 WAGYUCAPICALL mapbox_linear_ring_t *mapbox_linear_ring_new(double *x, double *y,
                                                            int pointcount);
@@ -80,6 +90,8 @@ WAGYUCAPICALL void mapbox_linear_ring_append_point(mapbox_linear_ring_t *pt,
                                                    double x, double y);
 WAGYUCAPICALL mapbox_point_t *
 mapbox_linear_ring_get_point(mapbox_linear_ring_t *pt, int i);
+WAGYUCAPICALL bool mapbox_linear_ring_equal(mapbox_linear_ring_t *geom1,
+                                            mapbox_linear_ring_t *geom2);
 
 WAGYUCAPICALL mapbox_polygon_t *mapbox_polygon_new(mapbox_linear_ring_t *rings,
                                                    int ringcount);
@@ -99,6 +111,8 @@ WAGYUCAPICALL mapbox_linear_ring_t *
 mapbox_polygon_get_interior(mapbox_polygon_t *pt, int i);
 WAGYUCAPICALL mapbox_geometry_t *
 mapbox_polygon_to_geometry(mapbox_polygon_t *pt);
+WAGYUCAPICALL bool mapbox_polygon_equal(mapbox_polygon_t *geom1,
+                                        mapbox_polygon_t *geom2);
 
 WAGYUCAPICALL mapbox_multi_line_string_t *
 mapbox_multi_line_string_new(mapbox_line_string_t *lines, int ringcount);
@@ -115,6 +129,9 @@ WAGYUCAPICALL mapbox_line_string_t *
 mapbox_multi_line_string_get(mapbox_multi_line_string_t *pt, int i);
 WAGYUCAPICALL mapbox_geometry_t *
 mapbox_multi_line_string_to_geometry(mapbox_multi_line_string_t *pt);
+WAGYUCAPICALL bool
+mapbox_multi_line_string_equal(mapbox_multi_line_string_t *geom1,
+                               mapbox_multi_line_string_t *geom2);
 
 WAGYUCAPICALL mapbox_multi_polygon_t *
 mapbox_multi_polygon_new(mapbox_polygon_t *lines, int ringcount);
@@ -123,11 +140,13 @@ WAGYUCAPICALL void mapbox_multi_polygon_append(mapbox_multi_polygon_t *pt,
                                                mapbox_polygon_t *line);
 WAGYUCAPICALL void mapbox_multi_polygon_update(mapbox_multi_polygon_t *pt,
                                                int i, mapbox_polygon_t *line);
-WAGYUCAPICALL int mapbox_multi_line_get_count(mapbox_multi_polygon_t *pt);
+WAGYUCAPICALL int mapbox_multi_polygon_get_count(mapbox_multi_polygon_t *pt);
 WAGYUCAPICALL mapbox_polygon_t *
 mapbox_multi_polygon_get(mapbox_multi_polygon_t *pt, int i);
 WAGYUCAPICALL mapbox_geometry_t *
 mapbox_multi_polygon_to_geometry(mapbox_multi_polygon_t *pt);
+WAGYUCAPICALL bool mapbox_multi_polygon_equal(mapbox_multi_polygon_t *geom1,
+                                              mapbox_multi_polygon_t *geom2);
 
 WAGYUCAPICALL void mapbox_geometry_free(mapbox_geometry_t *geom);
 WAGYUCAPICALL _Bool mapbox_geometry_empty(mapbox_geometry_t *geom);
@@ -150,6 +169,8 @@ WAGYUCAPICALL mapbox_multi_line_string_t *
 mapbox_geometry_cast_multi_line_string(mapbox_geometry_t *geom);
 WAGYUCAPICALL mapbox_multi_polygon_t *
 mapbox_geometry_cast_multi_polygon(mapbox_geometry_t *geom);
+WAGYUCAPICALL bool mapbox_geometry_equal(mapbox_geometry_t *geom1,
+                                         mapbox_geometry_t *geom2);
 
 WAGYUCAPICALL mapbox_geometry_collection_t *mapbox_geometry_collection_new();
 WAGYUCAPICALL void
@@ -262,15 +283,21 @@ mapbox_feature_collection_get(mapbox_feature_collection_t *gc, int i);
 WAGYUCAPICALL mapbox_wagyu_t *mapbox_wagyu_new();
 WAGYUCAPICALL void mapbox_wagyu_free(mapbox_wagyu_t *ctx);
 WAGYUCAPICALL void mapbox_wagyu_add_ring(mapbox_wagyu_t *ctx,
-                                         _mapbox_linear_ring_t *ring);
+                                         mapbox_linear_ring_t *ring,
+                                         uint8_t p_type);
 WAGYUCAPICALL void mapbox_wagyu_add_polygon(mapbox_wagyu_t *ctx,
-                                            _mapbox_polygon_t *poly);
+                                            mapbox_polygon_t *poly,
+                                            uint8_t p_type);
 WAGYUCAPICALL void mapbox_wagyu_reverse_rings(mapbox_wagyu_t *ctx, _Bool value);
 WAGYUCAPICALL void mapbox_wagyu_clear(mapbox_wagyu_t *ctx);
 WAGYUCAPICALL mapbox_box_t *mapbox_wagyu_get_bounds(mapbox_wagyu_t *ctx);
-WAGYUCAPICALL _Bool mapbox_wagyu_execute(mapbox_wagyu_t *ctx, int tp,
+WAGYUCAPICALL _Bool mapbox_wagyu_execute(mapbox_wagyu_t *ctx, uint8_t tp,
                                          mapbox_multi_polygon_t *mp,
-                                         int subject_fill_type,
-                                         int clip_fill_type);
+                                         uint8_t subject_fill_type,
+                                         uint8_t clip_fill_type);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

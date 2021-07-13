@@ -2,6 +2,7 @@
 
 #include <string.h>
 
+#include <mapbox/feature.hpp>
 #include <mapbox/geometry.hpp>
 #include <mapbox/geometry/wagyu/wagyu.hpp>
 
@@ -14,15 +15,15 @@ struct _mapbox_box_t {
 };
 
 struct _mapbox_value_t {
-  mapbox::geometry::value val;
+  mapbox::feature::value val;
 };
 
 struct _mapbox_property_map_t {
-  mapbox::geometry::property_map prop;
+  mapbox::feature::property_map prop;
 };
 
 struct _mapbox_identifier_t {
-  mapbox::geometry::identifier id;
+  mapbox::feature::identifier id;
 };
 
 struct _mapbox_point_t {
@@ -62,11 +63,11 @@ struct _mapbox_geometry_t {
 };
 
 struct _mapbox_feature_t {
-  mapbox::geometry::feature<double> feat;
+  mapbox::feature::feature<double> feat;
 };
 
 struct _mapbox_feature_collection_t {
-  mapbox::geometry::feature_collection<double> fc;
+  mapbox::feature::feature_collection<double> fc;
 };
 
 struct _mapbox_wagyu_t {
@@ -532,54 +533,54 @@ mapbox_geometry_collection_get(mapbox_geometry_collection_t *gc, int i) {
 
 mapbox_value_t *mapbox_value_new() {
   return new mapbox_value_t{
-      mapbox::geometry::value{mapbox::geometry::null_value}};
+      mapbox::feature::value{mapbox::feature::null_value}};
 }
 
 void mapbox_value_free(mapbox_value_t *val) { delete val; }
 
 mapbox_value_t *mapbox_value_from_bool(_Bool v) {
-  return new mapbox_value_t{mapbox::geometry::value{v}};
+  return new mapbox_value_t{mapbox::feature::value{v}};
 }
 
 mapbox_value_t *mapbox_value_from_uint(uint64_t v) {
-  return new mapbox_value_t{mapbox::geometry::value{v}};
+  return new mapbox_value_t{mapbox::feature::value{v}};
 }
 
 mapbox_value_t *mapbox_value_from_int(int64_t v) {
-  return new mapbox_value_t{mapbox::geometry::value{v}};
+  return new mapbox_value_t{mapbox::feature::value{v}};
 }
 
 mapbox_value_t *mapbox_value_from_double(double v) {
-  return new mapbox_value_t{mapbox::geometry::value{v}};
+  return new mapbox_value_t{mapbox::feature::value{v}};
 }
 
 mapbox_value_t *mapbox_value_from_string(const char *v) {
-  return new mapbox_value_t{mapbox::geometry::value{std::string(v)}};
+  return new mapbox_value_t{mapbox::feature::value{std::string(v)}};
 }
 
 mapbox_value_t *mapbox_value_from_values(mapbox_value_t **vs, int valuecount) {
-  std::vector<mapbox::geometry::value> v;
+  std::vector<mapbox::feature::value> v;
   v.reserve(valuecount);
   for (int i = 0; i < valuecount; i++) {
     v.emplace_back(vs[i]->val);
   }
-  return new mapbox_value_t{mapbox::geometry::value{v}};
+  return new mapbox_value_t{mapbox::feature::value{v}};
 }
 
 mapbox_value_t *mapbox_value_from_keyvalues(const char **ks,
                                             mapbox_value_t **vs,
                                             int valuecount) {
-  std::unordered_map<std::string, mapbox::geometry::value> v;
+  std::unordered_map<std::string, mapbox::feature::value> v;
   for (int i = 0; i < valuecount; i++) {
     v.emplace(ks[i], vs[i]->val);
   }
-  return new mapbox_value_t{mapbox::geometry::value{v}};
+  return new mapbox_value_t{mapbox::feature::value{v}};
 }
 
 _Bool mapbox_value_is_empty(mapbox_value_t *geom) { return !geom->val.valid(); }
 
 _Bool mapbox_value_is_null(mapbox_value_t *geom) {
-  return geom->val.is<mapbox::geometry::null_value_t>();
+  return geom->val.is<mapbox::feature::null_value_t>();
 }
 
 _Bool mapbox_value_is_bool(mapbox_value_t *geom) {
@@ -603,13 +604,12 @@ _Bool mapbox_value_is_string(mapbox_value_t *geom) {
 }
 
 _Bool mapbox_value_is_vector(mapbox_value_t *geom) {
-  return geom->val.is<
-      mapbox::util::recursive_wrapper<std::vector<mapbox::geometry::value>>>();
+  return geom->val.is<std::shared_ptr<std::vector<mapbox::feature::value>>>();
 }
 
 _Bool mapbox_value_is_map(mapbox_value_t *geom) {
-  return geom->val.is<mapbox::util::recursive_wrapper<
-      std::unordered_map<std::string, mapbox::geometry::value>>>();
+  return geom->val.is<std::shared_ptr<
+      std::unordered_map<std::string, mapbox::feature::value>>>();
 }
 
 _Bool mapbox_value_cast_bool(mapbox_value_t *geom) {
@@ -635,8 +635,8 @@ char *mapbox_value_cast_string(mapbox_value_t *geom) {
 
 mapbox_value_t **mapbox_value_cast_vector(mapbox_value_t *geom, int *count) {
   auto wvec = geom->val.get<
-      mapbox::util::recursive_wrapper<std::vector<mapbox::geometry::value>>>();
-  auto &vec = wvec.get();
+      std::shared_ptr<std::vector<mapbox::feature::value>>>();
+  auto &vec = *wvec;
   mapbox_value_t **ret = new mapbox_value_t *[vec.size()];
   *count = vec.size();
   for (int i = 0; i < vec.size(); i++) {
@@ -648,9 +648,9 @@ mapbox_value_t **mapbox_value_cast_vector(mapbox_value_t *geom, int *count) {
 void mapbox_values_free(mapbox_value_t **vs) { delete[] vs; }
 
 mapbox_property_map_t *mapbox_value_cast_map(mapbox_value_t *geom) {
-  auto wmap = geom->val.get<mapbox::util::recursive_wrapper<
-      std::unordered_map<std::string, mapbox::geometry::value>>>();
-  return new mapbox_property_map_t{wmap.get()};
+  auto wmap = geom->val.get<std::shared_ptr<
+      std::unordered_map<std::string, mapbox::feature::value>>>();
+  return new mapbox_property_map_t{*wmap};
 }
 
 mapbox_property_map_t *mapbox_property_map_new() {
@@ -756,14 +756,14 @@ char *mapbox_identifier_cast_string(mapbox_identifier_t *geom) {
 }
 
 mapbox_feature_t *mapbox_feature_new(mapbox_geometry_t *geom) {
-  return new mapbox_feature_t{mapbox::geometry::feature<double>{geom->geom}};
+  return new mapbox_feature_t{mapbox::feature::feature<double>{geom->geom}};
 }
 
 mapbox_feature_t *mapbox_feature_create(mapbox_identifier_t *id,
                                         mapbox_geometry_t *geom,
                                         mapbox_property_map_t *props) {
   return new mapbox_feature_t{
-      mapbox::geometry::feature<double>{geom->geom, props->prop, id->id}};
+      mapbox::feature::feature<double>{geom->geom, props->prop, id->id}};
 }
 
 void mapbox_feature_free(mapbox_feature_t *feat) { delete feat; }
@@ -784,8 +784,8 @@ void mapbox_feature_set_property_map(mapbox_feature_t *feat,
 }
 
 mapbox_identifier_t *mapbox_feature_get_identifier(mapbox_feature_t *feat) {
-  if (feat->feat.id) {
-    return new mapbox_identifier_t{*feat->feat.id};
+  if (feat->feat.id.valid()) {
+    return new mapbox_identifier_t{feat->feat.id};
   }
   return nullptr;
 }

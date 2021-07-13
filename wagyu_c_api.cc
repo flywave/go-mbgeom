@@ -152,6 +152,13 @@ void mapbox_line_string_append_point(mapbox_line_string_t *pt, double x,
   pt->ls.emplace_back(mapbox::geometry::point<double>{x, y});
 }
 
+void mapbox_line_string_get_point_xy(mapbox_line_string_t *pt, int i, double *x,
+                                     double *y) {
+  auto p = pt->ls[i];
+  *x = p.x;
+  *y = p.y;
+}
+
 mapbox_geometry_t *mapbox_line_string_to_geometry(mapbox_line_string_t *pt) {
   return new mapbox_geometry_t{mapbox::geometry::geometry<double>{pt->ls}};
 }
@@ -203,6 +210,13 @@ bool mapbox_multi_point_equal(mapbox_multi_point_t *geom1,
   return geom1->mp == geom2->mp;
 }
 
+void mapbox_multi_point_get_point_xy(mapbox_multi_point_t *pt, int i, double *x,
+                                     double *y) {
+  auto p = pt->mp[i];
+  *x = p.x;
+  *y = p.y;
+}
+
 mapbox_linear_ring_t *mapbox_linear_ring_new(double *xy, int pointcount) {
   mapbox::geometry::linear_ring<double> ls;
   ls.reserve(pointcount);
@@ -231,6 +245,13 @@ mapbox_point_t *mapbox_linear_ring_get_point(mapbox_linear_ring_t *pt, int i) {
   return new mapbox_point_t{mapbox::geometry::point<double>{p.x, p.y}};
 }
 
+void mapbox_linear_ring_get_point_xy(mapbox_linear_ring_t *pt, int i, double *x,
+                                     double *y) {
+  auto p = pt->lr[i];
+  *x = p.x;
+  *y = p.y;
+}
+
 void mapbox_linear_ring_append_point(mapbox_linear_ring_t *pt, double x,
                                      double y) {
   pt->lr.emplace_back(mapbox::geometry::point<double>{x, y});
@@ -241,12 +262,12 @@ bool mapbox_linear_ring_equal(mapbox_linear_ring_t *geom1,
   return geom1->lr == geom2->lr;
 }
 
-mapbox_polygon_t *mapbox_polygon_new(mapbox_linear_ring_t *rings,
+mapbox_polygon_t *mapbox_polygon_new(mapbox_linear_ring_t **rings,
                                      int ringcount) {
   mapbox::geometry::polygon<double> polys;
   polys.reserve(ringcount);
   for (int i = 0; i < ringcount; i++) {
-    polys.emplace_back(rings[i].lr);
+    polys.emplace_back(rings[i]->lr);
   }
   return new mapbox_polygon_t{polys};
 }
@@ -301,11 +322,11 @@ bool mapbox_polygon_equal(mapbox_polygon_t *geom1, mapbox_polygon_t *geom2) {
 }
 
 mapbox_multi_line_string_t *
-mapbox_multi_line_string_new(mapbox_line_string_t *lines, int ringcount) {
+mapbox_multi_line_string_new(mapbox_line_string_t **lines, int ringcount) {
   mapbox::geometry::multi_line_string<double> mls;
   mls.reserve(ringcount);
   for (int i = 0; i < ringcount; i++) {
-    mls.emplace_back(lines[i].ls);
+    mls.emplace_back(lines[i]->ls);
   }
   return new mapbox_multi_line_string_t{mls};
 }
@@ -345,12 +366,12 @@ bool mapbox_multi_line_string_equal(mapbox_multi_line_string_t *geom1,
   return geom1->mls == geom2->mls;
 }
 
-mapbox_multi_polygon_t *mapbox_multi_polygon_new(mapbox_polygon_t *polys,
+mapbox_multi_polygon_t *mapbox_multi_polygon_new(mapbox_polygon_t **polys,
                                                  int polycount) {
   mapbox::geometry::multi_polygon<double> mls;
   mls.reserve(polycount);
   for (int i = 0; i < polycount; i++) {
-    mls.emplace_back(polys[i].poly);
+    mls.emplace_back(polys[i]->poly);
   }
   return new mapbox_multi_polygon_t{mls};
 }
@@ -536,20 +557,20 @@ mapbox_value_t *mapbox_value_from_string(const char *v) {
   return new mapbox_value_t{mapbox::geometry::value{std::string(v)}};
 }
 
-mapbox_value_t *mapbox_value_from_values(mapbox_value_t *vs, int valuecount) {
+mapbox_value_t *mapbox_value_from_values(mapbox_value_t **vs, int valuecount) {
   std::vector<mapbox::geometry::value> v;
   v.reserve(valuecount);
   for (int i = 0; i < valuecount; i++) {
-    v.emplace_back(vs[i].val);
+    v.emplace_back(vs[i]->val);
   }
   return new mapbox_value_t{mapbox::geometry::value{v}};
 }
 
-mapbox_value_t *mapbox_value_from_keyvalues(const char **ks, mapbox_value_t *vs,
+mapbox_value_t *mapbox_value_from_keyvalues(const char **ks, mapbox_value_t **vs,
                                             int valuecount) {
   std::unordered_map<std::string, mapbox::geometry::value> v;
   for (int i = 0; i < valuecount; i++) {
-    v.emplace(ks[i], vs[i].val);
+    v.emplace(ks[i], vs[i]->val);
   }
   return new mapbox_value_t{mapbox::geometry::value{v}};
 }
@@ -611,19 +632,19 @@ char *mapbox_value_cast_string(mapbox_value_t *geom) {
   return strdup(str.c_str());
 }
 
-mapbox_value_t *mapbox_value_cast_vector(mapbox_value_t *geom, int *count) {
+mapbox_value_t **mapbox_value_cast_vector(mapbox_value_t *geom, int *count) {
   auto wvec = geom->val.get<
       mapbox::util::recursive_wrapper<std::vector<mapbox::geometry::value>>>();
   auto &vec = wvec.get();
-  mapbox_value_t *ret = new mapbox_value_t[vec.size()];
+  mapbox_value_t **ret = new mapbox_value_t*[vec.size()];
   *count = vec.size();
   for (int i = 0; i < vec.size(); i++) {
-    ret[i].val = vec[i];
+    ret[i] = new mapbox_value_t{vec[i]};
   }
   return ret;
 }
 
-void mapbox_values_free(mapbox_value_t *vs) { delete[] vs; }
+void mapbox_values_free(mapbox_value_t **vs) { delete[] vs; }
 
 mapbox_property_map_t *mapbox_value_cast_map(mapbox_value_t *geom) {
   auto wmap = geom->val.get<mapbox::util::recursive_wrapper<

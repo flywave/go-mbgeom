@@ -60,6 +60,8 @@ WAGYUCAPICALL void mapbox_line_string_update_point(mapbox_line_string_t *pt,
                                                    int i, double x, double y);
 WAGYUCAPICALL void mapbox_line_string_append_point(mapbox_line_string_t *pt,
                                                    double x, double y);
+WAGYUCAPICALL void mapbox_line_string_get_point_xy(mapbox_line_string_t *pt,
+                                                   int i, double *x, double *y);
 WAGYUCAPICALL mapbox_geometry_t *
 mapbox_line_string_to_geometry(mapbox_line_string_t *pt);
 WAGYUCAPICALL bool mapbox_line_string_equal(mapbox_line_string_t *geom1,
@@ -73,6 +75,8 @@ WAGYUCAPICALL void mapbox_multi_point_update_point(mapbox_multi_point_t *pt,
                                                    int i, double x, double y);
 WAGYUCAPICALL void mapbox_multi_point_append_point(mapbox_multi_point_t *pt,
                                                    double x, double y);
+WAGYUCAPICALL void mapbox_multi_point_get_point_xy(mapbox_multi_point_t *pt,
+                                                   int i, double *x, double *y);
 WAGYUCAPICALL mapbox_point_t *
 mapbox_multi_point_get_point(mapbox_multi_point_t *pt, int i);
 WAGYUCAPICALL mapbox_geometry_t *
@@ -90,10 +94,12 @@ WAGYUCAPICALL void mapbox_linear_ring_append_point(mapbox_linear_ring_t *pt,
                                                    double x, double y);
 WAGYUCAPICALL mapbox_point_t *
 mapbox_linear_ring_get_point(mapbox_linear_ring_t *pt, int i);
+WAGYUCAPICALL void mapbox_linear_ring_get_point_xy(mapbox_linear_ring_t *pt,
+                                                   int i, double *x, double *y);
 WAGYUCAPICALL bool mapbox_linear_ring_equal(mapbox_linear_ring_t *geom1,
                                             mapbox_linear_ring_t *geom2);
 
-WAGYUCAPICALL mapbox_polygon_t *mapbox_polygon_new(mapbox_linear_ring_t *rings,
+WAGYUCAPICALL mapbox_polygon_t *mapbox_polygon_new(mapbox_linear_ring_t **rings,
                                                    int ringcount);
 WAGYUCAPICALL void mapbox_polygon_free(mapbox_polygon_t *pt);
 WAGYUCAPICALL mapbox_linear_ring_t *
@@ -115,7 +121,7 @@ WAGYUCAPICALL bool mapbox_polygon_equal(mapbox_polygon_t *geom1,
                                         mapbox_polygon_t *geom2);
 
 WAGYUCAPICALL mapbox_multi_line_string_t *
-mapbox_multi_line_string_new(mapbox_line_string_t *lines, int ringcount);
+mapbox_multi_line_string_new(mapbox_line_string_t **lines, int ringcount);
 WAGYUCAPICALL void
 mapbox_multi_line_string_free(mapbox_multi_line_string_t *pt);
 WAGYUCAPICALL void
@@ -134,7 +140,7 @@ mapbox_multi_line_string_equal(mapbox_multi_line_string_t *geom1,
                                mapbox_multi_line_string_t *geom2);
 
 WAGYUCAPICALL mapbox_multi_polygon_t *
-mapbox_multi_polygon_new(mapbox_polygon_t *lines, int ringcount);
+mapbox_multi_polygon_new(mapbox_polygon_t **lines, int ringcount);
 WAGYUCAPICALL void mapbox_multi_polygon_free(mapbox_multi_polygon_t *pt);
 WAGYUCAPICALL void mapbox_multi_polygon_append(mapbox_multi_polygon_t *pt,
                                                mapbox_polygon_t *line);
@@ -195,10 +201,10 @@ WAGYUCAPICALL mapbox_value_t *mapbox_value_from_uint(uint64_t v);
 WAGYUCAPICALL mapbox_value_t *mapbox_value_from_int(int64_t v);
 WAGYUCAPICALL mapbox_value_t *mapbox_value_from_double(double v);
 WAGYUCAPICALL mapbox_value_t *mapbox_value_from_string(const char *v);
-WAGYUCAPICALL mapbox_value_t *mapbox_value_from_values(mapbox_value_t *vs,
+WAGYUCAPICALL mapbox_value_t *mapbox_value_from_values(mapbox_value_t **vs,
                                                        int valuecount);
 WAGYUCAPICALL mapbox_value_t *mapbox_value_from_keyvalues(const char **ks,
-                                                          mapbox_value_t *vs,
+                                                          mapbox_value_t **vs,
                                                           int valuecount);
 WAGYUCAPICALL _Bool mapbox_value_is_empty(mapbox_value_t *geom);
 WAGYUCAPICALL _Bool mapbox_value_is_null(mapbox_value_t *geom);
@@ -214,9 +220,9 @@ WAGYUCAPICALL uint64_t mapbox_value_cast_uint(mapbox_value_t *geom);
 WAGYUCAPICALL int64_t mapbox_value_cast_int(mapbox_value_t *geom);
 WAGYUCAPICALL double mapbox_value_cast_double(mapbox_value_t *geom);
 WAGYUCAPICALL char *mapbox_value_cast_string(mapbox_value_t *geom);
-WAGYUCAPICALL mapbox_value_t *mapbox_value_cast_vector(mapbox_value_t *geom,
+WAGYUCAPICALL mapbox_value_t **mapbox_value_cast_vector(mapbox_value_t *geom,
                                                        int *count);
-WAGYUCAPICALL void mapbox_values_free(mapbox_value_t *vs);
+WAGYUCAPICALL void mapbox_values_free(mapbox_value_t **vs);
 WAGYUCAPICALL mapbox_property_map_t *
 mapbox_value_cast_map(mapbox_value_t *geom);
 

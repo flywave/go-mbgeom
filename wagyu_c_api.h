@@ -235,6 +235,9 @@ WAGYUCAPICALL void mapbox_property_map_set(mapbox_property_map_t *val,
 WAGYUCAPICALL _Bool mapbox_property_map_has(mapbox_property_map_t *val,
                                             const char *key);
 WAGYUCAPICALL _Bool mapbox_property_map_empty(mapbox_property_map_t *val);
+WAGYUCAPICALL char **mapbox_property_map_keys(mapbox_property_map_t *val, int *count);
+WAGYUCAPICALL void mapbox_property_map_free_keys(char **keys, int count);
+WAGYUCAPICALL int mapbox_property_map_count(mapbox_property_map_t *val);
 
 WAGYUCAPICALL mapbox_identifier_t *mapbox_identifier_from_uint(uint64_t v);
 WAGYUCAPICALL mapbox_identifier_t *mapbox_identifier_from_int(int64_t v);
@@ -254,6 +257,7 @@ WAGYUCAPICALL mapbox_feature_t *mapbox_feature_new(mapbox_geometry_t *geom);
 WAGYUCAPICALL mapbox_feature_t *
 mapbox_feature_create(mapbox_identifier_t *id, mapbox_geometry_t *geom,
                       mapbox_property_map_t *props);
+WAGYUCAPICALL void mapbox_feature_free(mapbox_feature_t *feat);
 WAGYUCAPICALL void mapbox_feature_set_identifier(mapbox_feature_t *feat,
                                                  mapbox_identifier_t *id);
 WAGYUCAPICALL void mapbox_feature_set_geometry(mapbox_feature_t *feat,

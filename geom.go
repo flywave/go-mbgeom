@@ -672,7 +672,7 @@ func (e *GeometryCollection) Append(geom *Geometry) {
 	C.mapbox_geometry_collection_append(e.g, geom.g)
 }
 
-func (e *GeometryCollection) Update(i int, geom *Geometry) {
+func (e *GeometryCollection) Set(i int, geom *Geometry) {
 	C.mapbox_geometry_collection_update(e.g, C.int(i), geom.g)
 }
 
@@ -682,7 +682,7 @@ func (e *GeometryCollection) Get(i int) *Geometry {
 	return geom
 }
 
-func (e *GeometryCollection) GetAll() geom.Collection {
+func (e *GeometryCollection) ToGeom() geom.Collection {
 	ret := make(geom.Collection, e.Count())
 	for i := range ret {
 		ret[i] = e.Get(i)

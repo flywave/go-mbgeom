@@ -566,7 +566,8 @@ mapbox_value_t *mapbox_value_from_values(mapbox_value_t **vs, int valuecount) {
   return new mapbox_value_t{mapbox::geometry::value{v}};
 }
 
-mapbox_value_t *mapbox_value_from_keyvalues(const char **ks, mapbox_value_t **vs,
+mapbox_value_t *mapbox_value_from_keyvalues(const char **ks,
+                                            mapbox_value_t **vs,
                                             int valuecount) {
   std::unordered_map<std::string, mapbox::geometry::value> v;
   for (int i = 0; i < valuecount; i++) {
@@ -636,7 +637,7 @@ mapbox_value_t **mapbox_value_cast_vector(mapbox_value_t *geom, int *count) {
   auto wvec = geom->val.get<
       mapbox::util::recursive_wrapper<std::vector<mapbox::geometry::value>>>();
   auto &vec = wvec.get();
-  mapbox_value_t **ret = new mapbox_value_t*[vec.size()];
+  mapbox_value_t **ret = new mapbox_value_t *[vec.size()];
   *count = vec.size();
   for (int i = 0; i < vec.size(); i++) {
     ret[i] = new mapbox_value_t{vec[i]};
@@ -680,6 +681,27 @@ _Bool mapbox_property_map_has(mapbox_property_map_t *val, const char *key) {
 
 _Bool mapbox_property_map_empty(mapbox_property_map_t *val) {
   return val->prop.empty();
+}
+
+char **mapbox_property_map_keys(mapbox_property_map_t *val, int *count) {
+  *count = val->prop.size();
+  char **keys = new char *[*count];
+  int i = 0;
+  for (auto rp : val->prop) {
+    keys[i] = strdup(rp.first.c_str());
+  }
+  return keys;
+}
+
+void mapbox_property_map_free_keys(char **keys, int count) {
+  for (int i = 0; i < count; i++) {
+    free(keys[i]);
+  }
+  delete[] keys;
+}
+
+int mapbox_property_map_count(mapbox_property_map_t *val) {
+  return val->prop.size();
 }
 
 mapbox_identifier_t *mapbox_identifier_from_uint(uint64_t v) {
@@ -743,6 +765,8 @@ mapbox_feature_t *mapbox_feature_create(mapbox_identifier_t *id,
   return new mapbox_feature_t{
       mapbox::geometry::feature<double>{geom->geom, props->prop, id->id}};
 }
+
+void mapbox_feature_free(mapbox_feature_t *feat) { delete feat; }
 
 void mapbox_feature_set_identifier(mapbox_feature_t *feat,
                                    mapbox_identifier_t *id) {

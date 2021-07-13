@@ -5,6 +5,8 @@
 #include <mapbox/feature.hpp>
 #include <mapbox/geometry.hpp>
 #include <mapbox/geometry/wagyu/wagyu.hpp>
+#include <mapbox/geojson.hpp>
+#include <mapbox/geojsonvt.hpp>
 
 #ifdef __cplusplus
 extern "C" {
@@ -72,6 +74,14 @@ struct _mapbox_feature_collection_t {
 
 struct _mapbox_wagyu_t {
   mapbox::geometry::wagyu::wagyu<double> ctx;
+};
+
+struct _mapbox_geojson_t {
+  mapbox::geojson::geojson json;
+};
+
+struct _mapbox_geojsonvt_t {
+  mapbox::geojsonvt::GeoJSONVT vt;
 };
 
 mapbox_box_t *mapbox_box_new(mapbox_point_t *min, mapbox_point_t *max) {

@@ -32,6 +32,10 @@ typedef struct _mapbox_feature_collection_t mapbox_feature_collection_t;
 
 typedef struct _mapbox_wagyu_t mapbox_wagyu_t;
 
+typedef struct _mapbox_geojson_t mapbox_geojson_t;
+
+typedef struct _mapbox_geojsonvt_t mapbox_geojsonvt_t;
+
 WAGYUCAPICALL mapbox_box_t *mapbox_box_new(mapbox_point_t *min,
                                            mapbox_point_t *max);
 WAGYUCAPICALL void mapbox_box_free(mapbox_box_t *box);

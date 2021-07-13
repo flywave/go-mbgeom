@@ -7,6 +7,7 @@
 #include <mapbox/geometry/wagyu/wagyu.hpp>
 #include <mapbox/geojson.hpp>
 #include <mapbox/geojsonvt.hpp>
+#include <mapbox/cheap_ruler.hpp>
 
 #ifdef __cplusplus
 extern "C" {

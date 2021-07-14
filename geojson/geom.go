@@ -7,6 +7,7 @@ package geojson
 // #cgo CXXFLAGS:  -I ../ -std=c++14
 import "C"
 import (
+	"reflect"
 	"runtime"
 	"unsafe"
 
@@ -680,6 +681,35 @@ func (e *Geometry) Envelope() *Box {
 	d := &Box{C.mapbox_box_envelope(e.g)}
 	runtime.SetFinalizer(d, (*Box).free)
 	return d
+}
+
+func (e *Geometry) Intersects(o *Geometry) bool {
+	return bool(C.mapbox_spatial_algorithms_intersects(e.g, o.g))
+}
+
+func (e *Geometry) Disjoint(o *Geometry) bool {
+	return bool(C.mapbox_spatial_algorithms_disjoint(e.g, o.g))
+}
+
+func (e *Geometry) Intersection(o *Geometry) []*Geometry {
+	var si C.int
+	cgeoms := C.mapbox_spatial_algorithms_intersection(e.g, o.g, &si)
+	defer C.mapbox_spatial_free_geometrys(cgeoms)
+
+	var geomsSlice []*C.struct__mapbox_geometry_t
+	geomsHeader := (*reflect.SliceHeader)((unsafe.Pointer(&geomsSlice)))
+	geomsHeader.Cap = int(si)
+	geomsHeader.Len = int(si)
+	geomsHeader.Data = uintptr(unsafe.Pointer(cgeoms))
+
+	geoms := make([]*Geometry, int(si))
+
+	for i := range geoms {
+		g := &Geometry{g: geomsSlice[i]}
+		runtime.SetFinalizer(g, (*Geometry).free)
+		geoms[i] = g
+	}
+	return geoms
 }
 
 type GeometryCollection struct {

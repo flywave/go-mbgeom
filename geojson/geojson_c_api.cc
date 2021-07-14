@@ -6,7 +6,8 @@
 #include <mapbox/geometry/algorithms/detail/boost_adapters.hpp>
 #include <mapbox/geometry/algorithms/intersection.hpp>
 #include <mapbox/geometry/algorithms/intersection_impl.hpp>
-#include <mapbox/geometry/algorithms/predicates.hpp>
+#include <mapbox/geometry/algorithms/predicates/disjoint_impl.hpp>
+#include <mapbox/geometry/algorithms/predicates/intersects_impl.hpp>
 
 #include <string.h>
 
@@ -847,8 +848,8 @@ char *mapbox_geojson_stringify(mapbox_geojson_t *gejson) {
   return strdup(json.c_str());
 }
 
-bool mapbox_spatial_algorithms_intersects(mapbox_geometry_t *geom1,
-                                          mapbox_geometry_t *geom2) {
+_Bool mapbox_spatial_algorithms_intersects(mapbox_geometry_t *geom1,
+                                           mapbox_geometry_t *geom2) {
   return mapbox::geometry::algorithms::intersects(geom1->geom, geom2->geom);
 }
 
@@ -868,6 +869,10 @@ mapbox_spatial_algorithms_intersection(mapbox_geometry_t *geom1,
     ret[i] = new mapbox_geometry_t{geoms[i]};
   }
   return ret;
+}
+
+void mapbox_spatial_free_geometrys(mapbox_geometry_t **geoms) {
+  delete[] geoms;
 }
 
 #ifdef __cplusplus

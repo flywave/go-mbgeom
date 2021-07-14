@@ -1,4 +1,4 @@
-package algorithms
+package geojson
 
 // #include <stdlib.h>
 // #include <string.h>

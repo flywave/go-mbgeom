@@ -1,6 +1,8 @@
 #include "geojson_c_api.h"
 #include "geom_c_api_impl.hh"
 
+#include <mapbox/geojson_impl.hpp>
+
 #include <string.h>
 
 #ifdef __cplusplus
@@ -567,8 +569,8 @@ char *mapbox_value_cast_string(mapbox_value_t *geom) {
 }
 
 mapbox_value_t **mapbox_value_cast_vector(mapbox_value_t *geom, int *count) {
-  auto wvec = geom->val.get<
-      std::shared_ptr<std::vector<mapbox::feature::value>>>();
+  auto wvec =
+      geom->val.get<std::shared_ptr<std::vector<mapbox::feature::value>>>();
   auto &vec = *wvec;
   mapbox_value_t **ret = new mapbox_value_t *[vec.size()];
   *count = vec.size();
@@ -769,6 +771,75 @@ mapbox_feature_t *mapbox_feature_collection_get(mapbox_feature_collection_t *gc,
     return new mapbox_feature_t{gc->fc[i]};
   }
   return nullptr;
+}
+
+mapbox_geojson_t *mapbox_geojson_parse(const char *json) {
+  return new mapbox_geojson_t{mapbox::geojson::parse(json)};
+}
+
+mapbox_geojson_t *mapbox_geojson_from_geometry(mapbox_geometry_t *geom) {
+  return new mapbox_geojson_t{geom->geom};
+}
+
+mapbox_geojson_t *mapbox_geojson_from_feature(mapbox_feature_t *feat) {
+  return new mapbox_geojson_t{feat->feat};
+}
+
+mapbox_geojson_t *
+mapbox_geojson_from_feature_collection(mapbox_feature_collection_t *fc) {
+  return new mapbox_geojson_t{fc->fc};
+}
+
+void mapbox_geojson_free(mapbox_geojson_t *gejson) { delete gejson; }
+
+_Bool mapbox_geojson_is_empty(mapbox_geojson_t *gejson) {
+  return !gejson->json.valid();
+}
+
+_Bool mapbox_geojson_is_geometry(mapbox_geojson_t *gejson) {
+  return gejson->json.is<mapbox::geojson::geometry>();
+}
+
+_Bool mapbox_geojson_is_feature(mapbox_geojson_t *gejson) {
+  return gejson->json.is<mapbox::geojson::feature>();
+}
+
+_Bool mapbox_geojson_is_feature_collection(mapbox_geojson_t *gejson) {
+  return gejson->json.is<mapbox::geojson::feature_collection>();
+}
+
+mapbox_geometry_t *mapbox_geojson_get_geometry(mapbox_geojson_t *gejson) {
+  return new mapbox_geometry_t{gejson->json.get<mapbox::geojson::geometry>()};
+}
+
+mapbox_feature_t *mapbox_geojson_get_feature(mapbox_geojson_t *gejson) {
+  return new mapbox_feature_t{gejson->json.get<mapbox::geojson::feature>()};
+}
+
+mapbox_feature_collection_t *
+mapbox_geojson_get_feature_collection(mapbox_geojson_t *gejson) {
+  return new mapbox_feature_collection_t{
+      gejson->json.get<mapbox::geojson::feature_collection>()};
+}
+
+void mapbox_geojson_set_geometry(mapbox_geojson_t *gejson,
+                                 mapbox_geometry_t *geom) {
+  gejson->json = geom->geom;
+}
+
+void mapbox_geojson_set_feature(mapbox_geojson_t *gejson,
+                                mapbox_feature_t *feat) {
+  gejson->json = feat->feat;
+}
+
+void mapbox_geojson_set_feature_collection(mapbox_geojson_t *gejson,
+                                           mapbox_feature_collection_t *fc) {
+  gejson->json = fc->fc;
+}
+
+char *mapbox_geojson_stringify(mapbox_geojson_t *gejson) {
+  std::string json = mapbox::geojson::stringify(gejson->json);
+  return strdup(json.c_str());
 }
 
 #ifdef __cplusplus

@@ -1,4 +1,4 @@
-module github.com/flywave/go-wagyu
+module github.com/flywave/go-mbgeom
 
 go 1.13
 

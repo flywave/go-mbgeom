@@ -409,16 +409,31 @@ struct to_value {
         return result;
     }
 
-    rapidjson_value operator()(const std::vector<value>& array) {
+    rapidjson_value operator()(const  std::shared_ptr<std::vector<value> > array) {
         rapidjson_value result;
         result.SetArray();
-        for (const auto& item : array) {
+        for (const auto& item : *array) {
             result.PushBack(value::visit(item, *this), allocator);
         }
         return result;
     }
 
-    rapidjson_value operator()(const std::unordered_map<std::string, value>& map) {
+    rapidjson_value operator()(const std::shared_ptr<std::unordered_map<std::string, value>> map) {
+        rapidjson_value result;
+        result.SetObject();
+        for (const auto& property : *map) {
+            result.AddMember(
+                rapidjson::GenericStringRef<char> {
+                    property.first.data(),
+                    rapidjson::SizeType(property.first.size())
+                },
+                value::visit(property.second, *this),
+                allocator);
+        }
+        return result;
+    }
+
+    rapidjson_value operator()(const std::unordered_map<std::string, value> &map) {
         rapidjson_value result;
         result.SetObject();
         for (const auto& property : map) {

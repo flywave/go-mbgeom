@@ -30,6 +30,10 @@ func (e *Point) free() {
 	}
 }
 
+func (v *Point) GetNative() unsafe.Pointer {
+	return unsafe.Pointer(v.p)
+}
+
 func (e *Point) GetType() string {
 	return "Point"
 }
@@ -77,6 +81,10 @@ func (e *LineString) free() {
 	if e.ls != nil {
 		C.mapbox_line_string_free(e.ls)
 	}
+}
+
+func (v *LineString) GetNative() unsafe.Pointer {
+	return unsafe.Pointer(v.ls)
 }
 
 func (e *LineString) GetType() string {
@@ -160,6 +168,10 @@ func (e *MultiPoint) free() {
 	}
 }
 
+func (v *MultiPoint) GetNative() unsafe.Pointer {
+	return unsafe.Pointer(v.mp)
+}
+
 func (e *MultiPoint) GetType() string {
 	return "MultiPoint"
 }
@@ -241,6 +253,10 @@ func (e *LinearRing) free() {
 	}
 }
 
+func (v *LinearRing) GetNative() unsafe.Pointer {
+	return unsafe.Pointer(v.lr)
+}
+
 func (e *LinearRing) GetType() string {
 	return "LinearRing"
 }
@@ -319,6 +335,10 @@ func (e *Polygon) free() {
 	if e.p != nil {
 		C.mapbox_polygon_free(e.p)
 	}
+}
+
+func (v *Polygon) GetNative() unsafe.Pointer {
+	return unsafe.Pointer(v.p)
 }
 
 func (e *Polygon) GetType() string {
@@ -421,6 +441,10 @@ func (e *MultiLineString) free() {
 	}
 }
 
+func (v *MultiLineString) GetNative() unsafe.Pointer {
+	return unsafe.Pointer(v.mls)
+}
+
 func (e *MultiLineString) GetType() string {
 	return "MultiLineString"
 }
@@ -499,6 +523,10 @@ func (e *MultiPolygon) free() {
 	}
 }
 
+func (v *MultiPolygon) GetNative() unsafe.Pointer {
+	return unsafe.Pointer(v.mp)
+}
+
 func (e *MultiPolygon) GetType() string {
 	return "MultiPolygon"
 }
@@ -564,6 +592,10 @@ func (e *Geometry) free() {
 	if e.g != nil {
 		C.mapbox_geometry_free(e.g)
 	}
+}
+
+func (v *Geometry) GetNative() unsafe.Pointer {
+	return unsafe.Pointer(v.g)
 }
 
 func (e *Geometry) GetType() string {
@@ -652,6 +684,10 @@ func (e *Geometry) Envelope() *Box {
 
 type GeometryCollection struct {
 	g *C.struct__mapbox_geometry_collection_t
+}
+
+func (v *GeometryCollection) GetNative() unsafe.Pointer {
+	return unsafe.Pointer(v.g)
 }
 
 func (e *GeometryCollection) free() {

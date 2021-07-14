@@ -313,6 +313,10 @@ func NewFeature(geom *Geometry) *Feature {
 	return ret
 }
 
+func (v *Feature) GetNative() unsafe.Pointer {
+	return unsafe.Pointer(v.f)
+}
+
 func (v *Feature) SetIdentifier(id *Identifier) {
 	C.mapbox_feature_set_identifier(v.f, id.m)
 }

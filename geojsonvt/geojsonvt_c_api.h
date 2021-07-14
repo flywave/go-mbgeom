@@ -351,8 +351,22 @@ GEOJSONVTCAPICALL void geojsonvt_tile_free(geojsonvt_tile_t *t);
 GEOJSONVTCAPICALL geojsonvt_feature_collection_t *
 geojsonvt_tile_get_feature_collection(geojsonvt_tile_t *t);
 
-GEOJSONVTCAPICALL geojsonvt_t *geojsonvt_new(void *geom);
+struct _geojsonvt_tile_options_t {
+  double tolerance;
+  uint16_t extent;
+  uint16_t buffer;
+  bool lineMetrics;
+  uint8_t maxZoom;
+  uint8_t indexMaxZoom;
+  uint32_t indexMaxPoints;
+  bool generateId;
+};
+
+GEOJSONVTCAPICALL geojsonvt_t *
+geojsonvt_new(void *geom, struct _geojsonvt_tile_options_t opts);
 GEOJSONVTCAPICALL void geojsonvt_free(geojsonvt_t *t);
+GEOJSONVTCAPICALL geojsonvt_tile_t *
+geojsonvt_get_tile(geojsonvt_t *t, uint32_t z, uint32_t x, uint32_t y);
 
 #ifdef __cplusplus
 }

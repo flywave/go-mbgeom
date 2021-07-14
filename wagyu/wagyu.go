@@ -9,7 +9,7 @@ import "C"
 import (
 	"runtime"
 
-	"github.com/flywave/go-wagyu/geojson"
+	"github.com/flywave/go-mbgeom/geojson"
 )
 
 type ClipType uint8
@@ -54,11 +54,11 @@ func (e *Context) free() {
 }
 
 func (e *Context) AddRing(rings *geojson.LinearRing, ptype PolygonType) {
-	C.mapbox_wagyu_add_ring(e.c, rings.lr, C.uchar(ptype))
+	C.mapbox_wagyu_add_ring(e.c, (*_Ctype_struct__mapbox_linear_ring_t)(rings.GetNative()), C.uchar(ptype))
 }
 
 func (e *Context) AddPolygon(poly *geojson.Polygon, ptype PolygonType) {
-	C.mapbox_wagyu_add_polygon(e.c, poly.p, C.uchar(ptype))
+	C.mapbox_wagyu_add_polygon(e.c, (*_Ctype_struct__mapbox_polygon_t)(poly.GetNative()), C.uchar(ptype))
 }
 
 func (e *Context) ReverseRings(value bool) {
@@ -70,11 +70,9 @@ func (e *Context) Clear() {
 }
 
 func (e *Context) GetBounds() *geojson.Box {
-	d := &geojson.Box{C.mapbox_wagyu_get_bounds(e.c)}
-	runtime.SetFinalizer(d, (*geojson.Box).free)
-	return d
+	return geojson.NewBoxNative(C.mapbox_wagyu_get_bounds(e.c))
 }
 
 func (e *Context) Execute(tp ClipType, p *geojson.MultiPolygon, subjectFillType FillType, clipFillType FillType) bool {
-	return bool(C.mapbox_wagyu_execute(e.c, C.uchar(tp), p.mp, C.uchar(subjectFillType), C.uchar(clipFillType)))
+	return bool(C.mapbox_wagyu_execute(e.c, C.uchar(tp), (*_Ctype_struct__mapbox_multi_polygon_t)(p.GetNative()), C.uchar(subjectFillType), C.uchar(clipFillType)))
 }

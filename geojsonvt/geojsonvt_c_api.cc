@@ -1,5 +1,5 @@
 #include "geojsonvt_c_api.h"
-#include "wagyu_c_api_impl.hh"
+#include "geom_c_api_impl.hh"
 
 #include <string.h>
 
@@ -888,13 +888,21 @@ geojsonvt_tile_get_feature_collection(geojsonvt_tile_t *t) {
   return new geojsonvt_feature_collection_t{t->t.features};
 }
 
-geojsonvt_t *geojsonvt_new(void *geom) {
+geojsonvt_t *geojsonvt_new(void *geom, struct _geojsonvt_tile_options_t opts) {
+  mapbox::geojsonvt::Options opt =
+      *reinterpret_cast<mapbox::geojsonvt::Options *>(&opts);
   return new geojsonvt_t{
-    vt : mapbox::geojsonvt::GeoJSONVT(((mapbox_feature_collection_t *)geom)->fc)
+    vt : mapbox::geojsonvt::GeoJSONVT(((struct _mapbox_geojson_t *)geom)->json,
+                                      opt)
   };
 }
 
 void geojsonvt_free(geojsonvt_t *t) { delete t; }
+
+geojsonvt_tile_t *geojsonvt_get_tile(geojsonvt_t *t, uint32_t z, uint32_t x,
+                                     uint32_t y) {
+  return new geojsonvt_tile_t{t->vt.getTile(z, x, y)};
+}
 
 #ifdef __cplusplus
 }

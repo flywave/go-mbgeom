@@ -6,7 +6,10 @@ package geojson
 // #cgo CFLAGS: -I ../
 // #cgo CXXFLAGS:  -I ../ -std=c++14
 import "C"
-import "runtime"
+import (
+	"runtime"
+	"unsafe"
+)
 
 type Box struct {
 	m *C.struct__mapbox_box_t
@@ -19,7 +22,13 @@ func (e *Box) free() {
 }
 
 func NewBox(min, max *Point) *Box {
-	d := &Box{C.mapbox_box_new(min.p, max.p)}
+	d := &Box{m: C.mapbox_box_new(min.p, max.p)}
+	runtime.SetFinalizer(d, (*Box).free)
+	return d
+}
+
+func NewBoxNative(m unsafe.Pointer) *Box {
+	d := &Box{m: (*C.struct__mapbox_box_t)(m)}
 	runtime.SetFinalizer(d, (*Box).free)
 	return d
 }

@@ -328,9 +328,9 @@ mapbox_geojson_set_feature_collection(mapbox_geojson_t *gejson,
                                       mapbox_feature_collection_t *fc);
 GEOJSONCAPICALL char *mapbox_geojson_stringify(mapbox_geojson_t *gejson);
 
-GEOJSONCAPICALL mapbox_geometry_t **
+GEOJSONCAPICALL bool
 mapbox_spatial_algorithms_intersects(mapbox_geometry_t *geom1,
-                                     mapbox_geometry_t *geom2, int *count);
+                                     mapbox_geometry_t *geom2);
 GEOJSONCAPICALL _Bool mapbox_spatial_algorithms_disjoint(
     mapbox_geometry_t *geom1, mapbox_geometry_t *geom2);
 GEOJSONCAPICALL mapbox_geometry_t **

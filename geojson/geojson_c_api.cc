@@ -3,12 +3,10 @@
 
 #include <mapbox/geojson_impl.hpp>
 
-#include <mapbox/geometry/algorithms/closest_point.hpp>
 #include <mapbox/geometry/algorithms/detail/boost_adapters.hpp>
 #include <mapbox/geometry/algorithms/intersection.hpp>
 #include <mapbox/geometry/algorithms/intersection_impl.hpp>
 #include <mapbox/geometry/algorithms/predicates.hpp>
-#include <mapbox/geometry/algorithms/scaling.hpp>
 
 #include <string.h>
 
@@ -849,23 +847,27 @@ char *mapbox_geojson_stringify(mapbox_geojson_t *gejson) {
   return strdup(json.c_str());
 }
 
-mapbox_geometry_t **
-mapbox_spatial_algorithms_intersects(mapbox_geometry_t *geom1,
-                                     mapbox_geometry_t *geom2, int *count) {
-  auto geoms =
-      mapbox::geometry::algorithms::intersection(geom1->geom, geom2->geom);
-  return nullptr;
+bool mapbox_spatial_algorithms_intersects(mapbox_geometry_t *geom1,
+                                          mapbox_geometry_t *geom2) {
+  return mapbox::geometry::algorithms::intersects(geom1->geom, geom2->geom);
 }
 
 _Bool mapbox_spatial_algorithms_disjoint(mapbox_geometry_t *geom1,
                                          mapbox_geometry_t *geom2) {
-  return false;
+  return mapbox::geometry::algorithms::disjoint(geom1->geom, geom2->geom);
 }
 
 mapbox_geometry_t **
 mapbox_spatial_algorithms_intersection(mapbox_geometry_t *geom1,
                                        mapbox_geometry_t *geom2, int *count) {
-  return nullptr;
+  auto geoms =
+      mapbox::geometry::algorithms::intersection(geom1->geom, geom2->geom);
+  mapbox_geometry_t **ret = new mapbox_geometry_t *[geoms.size()];
+  *count = geoms.size();
+  for (int i = 0; i < geoms.size(); i++) {
+    ret[i] = new mapbox_geometry_t{geoms[i]};
+  }
+  return ret;
 }
 
 #ifdef __cplusplus

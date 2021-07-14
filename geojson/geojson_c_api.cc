@@ -3,6 +3,13 @@
 
 #include <mapbox/geojson_impl.hpp>
 
+#include <mapbox/geometry/algorithms/closest_point.hpp>
+#include <mapbox/geometry/algorithms/detail/boost_adapters.hpp>
+#include <mapbox/geometry/algorithms/intersection.hpp>
+#include <mapbox/geometry/algorithms/intersection_impl.hpp>
+#include <mapbox/geometry/algorithms/predicates.hpp>
+#include <mapbox/geometry/algorithms/scaling.hpp>
+
 #include <string.h>
 
 #ifdef __cplusplus
@@ -840,6 +847,25 @@ void mapbox_geojson_set_feature_collection(mapbox_geojson_t *gejson,
 char *mapbox_geojson_stringify(mapbox_geojson_t *gejson) {
   std::string json = mapbox::geojson::stringify(gejson->json);
   return strdup(json.c_str());
+}
+
+mapbox_geometry_t **
+mapbox_spatial_algorithms_intersects(mapbox_geometry_t *geom1,
+                                     mapbox_geometry_t *geom2, int *count) {
+  auto geoms =
+      mapbox::geometry::algorithms::intersection(geom1->geom, geom2->geom);
+  return nullptr;
+}
+
+_Bool mapbox_spatial_algorithms_disjoint(mapbox_geometry_t *geom1,
+                                         mapbox_geometry_t *geom2) {
+  return false;
+}
+
+mapbox_geometry_t **
+mapbox_spatial_algorithms_intersection(mapbox_geometry_t *geom1,
+                                       mapbox_geometry_t *geom2, int *count) {
+  return nullptr;
 }
 
 #ifdef __cplusplus

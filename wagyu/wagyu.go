@@ -54,11 +54,11 @@ func (e *Context) free() {
 }
 
 func (e *Context) AddRing(rings *geojson.LinearRing, ptype PolygonType) {
-	C.mapbox_wagyu_add_ring(e.c, (*_Ctype_struct__mapbox_linear_ring_t)(rings.GetNative()), C.uchar(ptype))
+	C.mapbox_wagyu_add_ring(e.c, rings.GetNative(), C.uchar(ptype))
 }
 
 func (e *Context) AddPolygon(poly *geojson.Polygon, ptype PolygonType) {
-	C.mapbox_wagyu_add_polygon(e.c, (*_Ctype_struct__mapbox_polygon_t)(poly.GetNative()), C.uchar(ptype))
+	C.mapbox_wagyu_add_polygon(e.c, poly.GetNative(), C.uchar(ptype))
 }
 
 func (e *Context) ReverseRings(value bool) {
@@ -74,5 +74,5 @@ func (e *Context) GetBounds() *geojson.Box {
 }
 
 func (e *Context) Execute(tp ClipType, p *geojson.MultiPolygon, subjectFillType FillType, clipFillType FillType) bool {
-	return bool(C.mapbox_wagyu_execute(e.c, C.uchar(tp), (*_Ctype_struct__mapbox_multi_polygon_t)(p.GetNative()), C.uchar(subjectFillType), C.uchar(clipFillType)))
+	return bool(C.mapbox_wagyu_execute(e.c, C.uchar(tp), p.GetNative(), C.uchar(subjectFillType), C.uchar(clipFillType)))
 }

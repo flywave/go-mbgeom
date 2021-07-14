@@ -1,89 +1,11 @@
-#include "wagyu_c_api.h"
+#include "geojson_c_api.h"
+#include "geom_c_api_impl.hh"
 
 #include <string.h>
-
-#include <mapbox/feature.hpp>
-#include <mapbox/geometry.hpp>
-#include <mapbox/geometry/wagyu/wagyu.hpp>
-#include <mapbox/geojson.hpp>
-#include <mapbox/geojsonvt.hpp>
-#include <mapbox/cheap_ruler.hpp>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-struct _mapbox_box_t {
-  mapbox::geometry::box<double> box;
-};
-
-struct _mapbox_value_t {
-  mapbox::feature::value val;
-};
-
-struct _mapbox_property_map_t {
-  mapbox::feature::property_map prop;
-};
-
-struct _mapbox_identifier_t {
-  mapbox::feature::identifier id;
-};
-
-struct _mapbox_point_t {
-  mapbox::geometry::point<double> pt;
-};
-
-struct _mapbox_line_string_t {
-  mapbox::geometry::line_string<double> ls;
-};
-
-struct _mapbox_linear_ring_t {
-  mapbox::geometry::linear_ring<double> lr;
-};
-
-struct _mapbox_polygon_t {
-  mapbox::geometry::polygon<double> poly;
-};
-
-struct _mapbox_multi_point_t {
-  mapbox::geometry::multi_point<double> mp;
-};
-
-struct _mapbox_multi_line_string_t {
-  mapbox::geometry::multi_line_string<double> mls;
-};
-
-struct _mapbox_multi_polygon_t {
-  mapbox::geometry::multi_polygon<double> mp;
-};
-
-struct _mapbox_geometry_collection_t {
-  mapbox::geometry::geometry_collection<double> gc;
-};
-
-struct _mapbox_geometry_t {
-  mapbox::geometry::geometry<double> geom;
-};
-
-struct _mapbox_feature_t {
-  mapbox::feature::feature<double> feat;
-};
-
-struct _mapbox_feature_collection_t {
-  mapbox::feature::feature_collection<double> fc;
-};
-
-struct _mapbox_wagyu_t {
-  mapbox::geometry::wagyu::wagyu<double> ctx;
-};
-
-struct _mapbox_geojson_t {
-  mapbox::geojson::geojson json;
-};
-
-struct _mapbox_geojsonvt_t {
-  mapbox::geojsonvt::GeoJSONVT vt;
-};
 
 mapbox_box_t *mapbox_box_new(mapbox_point_t *min, mapbox_point_t *max) {
   return new mapbox_box_t{mapbox::geometry::box<double>{min->pt, max->pt}};
@@ -847,41 +769,6 @@ mapbox_feature_t *mapbox_feature_collection_get(mapbox_feature_collection_t *gc,
     return new mapbox_feature_t{gc->fc[i]};
   }
   return nullptr;
-}
-
-mapbox_wagyu_t *mapbox_wagyu_new() { return new mapbox_wagyu_t{}; }
-
-void mapbox_wagyu_free(mapbox_wagyu_t *ctx) { delete ctx; }
-
-void mapbox_wagyu_add_ring(mapbox_wagyu_t *ctx, mapbox_linear_ring_t *ring,
-                           uint8_t p_type) {
-  ctx->ctx.add_ring(ring->lr,
-                    static_cast<mapbox::geometry::wagyu::polygon_type>(p_type));
-}
-
-void mapbox_wagyu_add_polygon(mapbox_wagyu_t *ctx, mapbox_polygon_t *poly,
-                              uint8_t p_type) {
-  ctx->ctx.add_polygon(
-      poly->poly, static_cast<mapbox::geometry::wagyu::polygon_type>(p_type));
-}
-
-void mapbox_wagyu_reverse_rings(mapbox_wagyu_t *ctx, _Bool value) {
-  ctx->ctx.reverse_rings(value);
-}
-
-void mapbox_wagyu_clear(mapbox_wagyu_t *ctx) { ctx->ctx.clear(); }
-
-mapbox_box_t *mapbox_wagyu_get_bounds(mapbox_wagyu_t *ctx) {
-  return new mapbox_box_t{ctx->ctx.get_bounds()};
-}
-
-_Bool mapbox_wagyu_execute(mapbox_wagyu_t *ctx, uint8_t tp,
-                           mapbox_multi_polygon_t *mp,
-                           uint8_t subject_fill_type, uint8_t clip_fill_type) {
-  return ctx->ctx.execute(
-      static_cast<mapbox::geometry::wagyu::clip_type>(tp), mp->mp,
-      static_cast<mapbox::geometry::wagyu::fill_type>(subject_fill_type),
-      static_cast<mapbox::geometry::wagyu::fill_type>(clip_fill_type));
 }
 
 #ifdef __cplusplus

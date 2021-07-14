@@ -3,10 +3,14 @@ package wagyu
 // #include <stdlib.h>
 // #include <string.h>
 // #include "wagyu_c_api.h"
-// #cgo CFLAGS: -I ./
-// #cgo CXXFLAGS:  -I ./ -std=c++14
+// #cgo CFLAGS: -I ../
+// #cgo CXXFLAGS:  -I ../ -std=c++14
 import "C"
-import "runtime"
+import (
+	"runtime"
+
+	"github.com/flywave/go-wagyu/geojson"
+)
 
 type ClipType uint8
 
@@ -49,11 +53,11 @@ func (e *Context) free() {
 	}
 }
 
-func (e *Context) AddRing(rings *LinearRing, ptype PolygonType) {
+func (e *Context) AddRing(rings *geojson.LinearRing, ptype PolygonType) {
 	C.mapbox_wagyu_add_ring(e.c, rings.lr, C.uchar(ptype))
 }
 
-func (e *Context) AddPolygon(poly *Polygon, ptype PolygonType) {
+func (e *Context) AddPolygon(poly *geojson.Polygon, ptype PolygonType) {
 	C.mapbox_wagyu_add_polygon(e.c, poly.p, C.uchar(ptype))
 }
 
@@ -65,12 +69,12 @@ func (e *Context) Clear() {
 	C.mapbox_wagyu_clear(e.c)
 }
 
-func (e *Context) GetBounds() *Box {
-	d := &Box{C.mapbox_wagyu_get_bounds(e.c)}
-	runtime.SetFinalizer(d, (*Box).free)
+func (e *Context) GetBounds() *geojson.Box {
+	d := &geojson.Box{C.mapbox_wagyu_get_bounds(e.c)}
+	runtime.SetFinalizer(d, (*geojson.Box).free)
 	return d
 }
 
-func (e *Context) Execute(tp ClipType, p *MultiPolygon, subjectFillType FillType, clipFillType FillType) bool {
+func (e *Context) Execute(tp ClipType, p *geojson.MultiPolygon, subjectFillType FillType, clipFillType FillType) bool {
 	return bool(C.mapbox_wagyu_execute(e.c, C.uchar(tp), p.mp, C.uchar(subjectFillType), C.uchar(clipFillType)))
 }

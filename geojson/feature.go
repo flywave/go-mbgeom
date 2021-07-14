@@ -1,10 +1,10 @@
-package wagyu
+package geojson
 
 // #include <stdlib.h>
 // #include <string.h>
-// #include "wagyu_c_api.h"
-// #cgo CFLAGS: -I ./
-// #cgo CXXFLAGS:  -I ./ -std=c++14
+// #include "geojson_c_api.h"
+// #cgo CFLAGS: -I ../
+// #cgo CXXFLAGS:  -I ../ -std=c++14
 import "C"
 import (
 	"reflect"
@@ -359,6 +359,10 @@ func NewFeatureCollection() *FeatureCollection {
 	ret := &FeatureCollection{fc: C.mapbox_feature_collection_new()}
 	runtime.SetFinalizer(ret, (*FeatureCollection).free)
 	return ret
+}
+
+func (v *FeatureCollection) GetNative() unsafe.Pointer {
+	return unsafe.Pointer(v.fc)
 }
 
 func (v *FeatureCollection) free() {

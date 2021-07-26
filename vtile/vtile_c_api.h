@@ -65,6 +65,7 @@ VTILECAPICALL _Bool mvt_vector_tile_is_vector_tile(const char *data, size_t si);
 
 VTILECAPICALL mvt_layer_t *mvt_layer_new();
 VTILECAPICALL mvt_layer_t *mvt_layer_new_with_data(const char *data, size_t si);
+VTILECAPICALL void mvt_vector_layer_free(mvt_layer_t *ctx);
 VTILECAPICALL _Bool mvt_layer_valid(mvt_layer_t *ctx);
 VTILECAPICALL const char *mvt_layer_get_data(mvt_layer_t *ctx, size_t *si);
 VTILECAPICALL const char *mvt_layer_get_name(mvt_layer_t *ctx);

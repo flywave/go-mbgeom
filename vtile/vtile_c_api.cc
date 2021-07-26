@@ -205,6 +205,10 @@ mvt_layer_t *mvt_layer_new_with_data(const char *data, size_t si) {
   return new mvt_layer_t{vtzero::layer(vtzero::data_view(data, si))};
 }
 
+void mvt_vector_layer_free(mvt_layer_t *ctx) {
+  delete ctx;
+}
+
 _Bool mvt_layer_valid(mvt_layer_t *ctx) { return ctx->l.valid(); }
 
 const char *mvt_layer_get_data(mvt_layer_t *ctx, size_t *si) {

@@ -584,12 +584,12 @@ void mvt_point_feature_builder_add_property(
   builder->builder.add_property(property->prop);
 }
 
-void mvt_point_feature_builder_copy_property(
+void mvt_point_feature_builder_copy_properties(
     mvt_point_feature_builder_t *builder, mvt_feature_t *feat) {
   builder->builder.copy_properties(feat->feat);
 }
 
-void mvt_point_feature_builder_copy_property_with_mapper(
+void mvt_point_feature_builder_copy_properties_with_mapper(
     mvt_point_feature_builder_t *builder, mvt_feature_t *feat,
     mvt_property_mapper_t *mapper) {
   builder->builder.copy_properties(feat->feat, mapper->mapper);
@@ -632,12 +632,12 @@ void mvt_linestring_feature_builder_add_property(
   builder->builder.add_property(property->prop);
 }
 
-void mvt_linestring_feature_builder_copy_property(
+void mvt_linestring_feature_builder_copy_properties(
     mvt_linestring_feature_builder_t *builder, mvt_feature_t *feat) {
   builder->builder.copy_properties(feat->feat);
 }
 
-void mvt_linestring_feature_builder_copy_property_with_mapper(
+void mvt_linestring_feature_builder_copy_properties_with_mapper(
     mvt_linestring_feature_builder_t *builder, mvt_feature_t *feat,
     mvt_property_mapper_t *mapper) {
   builder->builder.copy_properties(feat->feat, mapper->mapper);
@@ -683,12 +683,12 @@ void mvt_polygon_feature_builder_add_property(
   builder->builder.add_property(property->prop);
 }
 
-void mvt_polygon_feature_builder_copy_property(
+void mvt_polygon_feature_builder_copy_properties(
     mvt_polygon_feature_builder_t *builder, mvt_feature_t *feat) {
   builder->builder.copy_properties(feat->feat);
 }
 
-void mvt_polygon_feature_builder_copy_property_with_mapper(
+void mvt_polygon_feature_builder_copy_properties_with_mapper(
     mvt_polygon_feature_builder_t *builder, mvt_feature_t *feat,
     mvt_property_mapper_t *mapper) {
   builder->builder.copy_properties(feat->feat, mapper->mapper);
@@ -738,12 +738,12 @@ void mvt_geometry_feature_builder_add_property(
   builder->builder.add_property(property->prop);
 }
 
-void mvt_geometry_feature_builder_copy_property(
+void mvt_geometry_feature_builder_copy_properties(
     mvt_geometry_feature_builder_t *builder, mvt_feature_t *feat) {
   builder->builder.copy_properties(feat->feat);
 }
 
-void mvt_geometry_feature_builder_copy_property_with_mapper(
+void mvt_geometry_feature_builder_copy_properties_with_mapper(
     mvt_geometry_feature_builder_t *builder, mvt_feature_t *feat,
     mvt_property_mapper_t *mapper) {
   builder->builder.copy_properties(feat->feat, mapper->mapper);

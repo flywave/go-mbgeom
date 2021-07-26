@@ -4,6 +4,7 @@
 
 #include <vtzero/builder.hpp>
 #include <vtzero/index.hpp>
+#include <vtzero/property_mapper.hpp>
 #include <vtzero/vector_tile.hpp>
 
 #include <unordered_map>
@@ -34,6 +35,10 @@ struct _mvt_geometry_t {
 
 struct _mvt_property_t {
   vtzero::property prop;
+};
+
+struct _mvt_property_mapper_t {
+  vtzero::property_mapper mapper;
 };
 
 struct _mvt_geometry_point_t {
@@ -127,8 +132,7 @@ struct _mvt_uint32_value_index_t {
 };
 
 struct _mvt_float_value_index_t {
-  vtzero::value_index<vtzero::float_value_type, float, std::unordered_map>
-      idx;
+  vtzero::value_index<vtzero::float_value_type, float, std::unordered_map> idx;
 };
 
 struct _mvt_double_value_index_t {
@@ -585,6 +589,12 @@ void mvt_point_feature_builder_copy_property(
   builder->builder.copy_properties(feat->feat);
 }
 
+void mvt_point_feature_builder_copy_property_with_mapper(
+    mvt_point_feature_builder_t *builder, mvt_feature_t *feat,
+    mvt_property_mapper_t *mapper) {
+  builder->builder.copy_properties(feat->feat, mapper->mapper);
+}
+
 void mvt_point_feature_builder_commit(mvt_point_feature_builder_t *builder) {
   builder->builder.commit();
 }
@@ -627,6 +637,12 @@ void mvt_linestring_feature_builder_copy_property(
   builder->builder.copy_properties(feat->feat);
 }
 
+void mvt_linestring_feature_builder_copy_property_with_mapper(
+    mvt_linestring_feature_builder_t *builder, mvt_feature_t *feat,
+    mvt_property_mapper_t *mapper) {
+  builder->builder.copy_properties(feat->feat, mapper->mapper);
+}
+
 void mvt_linestring_feature_builder_commit(
     mvt_linestring_feature_builder_t *builder) {
   builder->builder.commit();
@@ -656,6 +672,7 @@ void mvt_polygon_feature_builder_set_id(mvt_polygon_feature_builder_t *builder,
                                         uint64_t id) {
   builder->builder.set_id(id);
 }
+
 void mvt_polygon_feature_builder_copy_id(mvt_polygon_feature_builder_t *builder,
                                          mvt_feature_t *feat) {
   builder->builder.copy_id(feat->feat);
@@ -669,6 +686,12 @@ void mvt_polygon_feature_builder_add_property(
 void mvt_polygon_feature_builder_copy_property(
     mvt_polygon_feature_builder_t *builder, mvt_feature_t *feat) {
   builder->builder.copy_properties(feat->feat);
+}
+
+void mvt_polygon_feature_builder_copy_property_with_mapper(
+    mvt_polygon_feature_builder_t *builder, mvt_feature_t *feat,
+    mvt_property_mapper_t *mapper) {
+  builder->builder.copy_properties(feat->feat, mapper->mapper);
 }
 
 void mvt_polygon_feature_builder_add_ring(
@@ -718,6 +741,12 @@ void mvt_geometry_feature_builder_add_property(
 void mvt_geometry_feature_builder_copy_property(
     mvt_geometry_feature_builder_t *builder, mvt_feature_t *feat) {
   builder->builder.copy_properties(feat->feat);
+}
+
+void mvt_geometry_feature_builder_copy_property_with_mapper(
+    mvt_geometry_feature_builder_t *builder, mvt_feature_t *feat,
+    mvt_property_mapper_t *mapper) {
+  builder->builder.copy_properties(feat->feat, mapper->mapper);
 }
 
 void mvt_geometry_feature_builder_commit(
@@ -800,8 +829,8 @@ uint32_t mvt_uint32_value_index_get(mvt_uint32_value_index_t *idx,
 
 mvt_float_value_index_t *mvt_float_value_index_new(mvt_layer_builder_t *layer) {
   return new mvt_float_value_index_t{
-      vtzero::value_index<vtzero::float_value_type, float,
-                          std::unordered_map>(layer->builder)};
+      vtzero::value_index<vtzero::float_value_type, float, std::unordered_map>(
+          layer->builder)};
 }
 
 void mvt_float_value_index_free(mvt_float_value_index_t *idx) { delete idx; }
@@ -819,8 +848,7 @@ mvt_double_value_index_new(mvt_layer_builder_t *layer) {
 
 void mvt_double_value_index_free(mvt_double_value_index_t *idx) { delete idx; }
 
-uint32_t mvt_double_value_index_get(mvt_double_value_index_t *idx,
-                                    double val) {
+uint32_t mvt_double_value_index_get(mvt_double_value_index_t *idx, double val) {
   return idx->idx(val).value();
 }
 
@@ -904,6 +932,32 @@ char *mvt_composite(mvt_baton_t *baton, size_t *size, _Bool *error) {
   char *result = (char *)malloc(sizeof(char) * *size);
   memcpy(result, str.c_str(), *size);
   return result;
+}
+
+mvt_property_mapper_t *mvt_property_mapper_new(mvt_layer_t *layer,
+                                               mvt_layer_builder_t *builder) {
+  return new mvt_property_mapper_t{
+      vtzero::property_mapper(layer->l, builder->builder)};
+}
+
+void mvt_property_mapper_free(mvt_property_mapper_t *mapper) { delete mapper; }
+
+uint32_t mvt_property_mapper_map_key(mvt_property_mapper_t *mapper,
+                                     uint32_t key) {
+  return mapper->mapper.map_key(key).value();
+}
+
+uint32_t mvt_property_mapper_map_value(mvt_property_mapper_t *mapper,
+                                       uint32_t val) {
+  return mapper->mapper.map_value(val).value();
+}
+
+void mvt_property_mapper_map_keyvalue(mvt_property_mapper_t *mapper,
+                                      uint32_t key, uint32_t val,
+                                      uint32_t *mkey, uint32_t *mval) {
+  auto pair = mapper->mapper(vtzero::index_value_pair(key, val));
+  *mkey = pair.key().value();
+  *mval = pair.value().value();
 }
 
 #ifdef __cplusplus

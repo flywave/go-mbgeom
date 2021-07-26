@@ -201,6 +201,10 @@ mvt_point_feature_builder_add_property(mvt_point_feature_builder_t *builder,
 VTILECAPICALL void
 mvt_point_feature_builder_copy_property(mvt_point_feature_builder_t *builder,
                                         mvt_feature_t *feat);
+VTILECAPICALL void mvt_point_feature_builder_copy_property_with_mapper(
+    mvt_point_feature_builder_t *builder, mvt_feature_t *feat,
+    mvt_property_mapper_t *mapper);
+
 VTILECAPICALL void
 mvt_point_feature_builder_commit(mvt_point_feature_builder_t *builder);
 VTILECAPICALL void
@@ -233,7 +237,9 @@ VTILECAPICALL void mvt_linestring_feature_builder_add_linestring(
 VTILECAPICALL void mvt_linestring_feature_builder_set_point(
     mvt_linestring_feature_builder_t *builder, const int32_t x,
     const int32_t y);
-
+VTILECAPICALL void mvt_linestring_feature_builder_copy_property_with_mapper(
+    mvt_linestring_feature_builder_t *builder, mvt_feature_t *feat,
+    mvt_property_mapper_t *mapper);
 VTILECAPICALL void
 mvt_polygon_feature_builder_free(mvt_polygon_feature_builder_t *builder);
 VTILECAPICALL void
@@ -247,6 +253,9 @@ mvt_polygon_feature_builder_add_property(mvt_polygon_feature_builder_t *builder,
                                          mvt_property_t *property);
 VTILECAPICALL void mvt_polygon_feature_builder_copy_property(
     mvt_polygon_feature_builder_t *builder, mvt_feature_t *feat);
+VTILECAPICALL void mvt_polygon_feature_builder_copy_property_with_mapper(
+    mvt_polygon_feature_builder_t *builder, mvt_feature_t *feat,
+    mvt_property_mapper_t *mapper);
 VTILECAPICALL void
 mvt_polygon_feature_builder_commit(mvt_polygon_feature_builder_t *builder);
 VTILECAPICALL void
@@ -272,6 +281,9 @@ VTILECAPICALL void mvt_geometry_feature_builder_add_property(
     mvt_geometry_feature_builder_t *builder, mvt_property_t *property);
 VTILECAPICALL void mvt_geometry_feature_builder_copy_property(
     mvt_geometry_feature_builder_t *builder, mvt_feature_t *feat);
+VTILECAPICALL void mvt_geometry_feature_builder_copy_property_with_mapper(
+    mvt_geometry_feature_builder_t *builder, mvt_feature_t *feat,
+    mvt_property_mapper_t *mapper);
 VTILECAPICALL void
 mvt_geometry_feature_builder_commit(mvt_geometry_feature_builder_t *builder);
 VTILECAPICALL void
@@ -358,6 +370,17 @@ VTILECAPICALL void mvt_baton_clear_tile(mvt_baton_t *baton);
 
 VTILECAPICALL char *mvt_composite(mvt_baton_t *baton, size_t *size,
                                   _Bool *error);
+
+VTILECAPICALL mvt_property_mapper_t *
+mvt_property_mapper_new(mvt_layer_t *layer, mvt_layer_builder_t *builder);
+VTILECAPICALL void mvt_property_mapper_free(mvt_property_mapper_t *mapper);
+VTILECAPICALL uint32_t
+mvt_property_mapper_map_key(mvt_property_mapper_t *mapper, uint32_t key);
+VTILECAPICALL uint32_t
+mvt_property_mapper_map_value(mvt_property_mapper_t *mapper, uint32_t val);
+VTILECAPICALL void
+mvt_property_mapper_map_keyvalue(mvt_property_mapper_t *mapper, uint32_t key,
+                                 uint32_t val, uint32_t *mkey, uint32_t *mval);
 
 #ifdef __cplusplus
 }

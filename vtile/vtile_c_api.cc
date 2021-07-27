@@ -480,11 +480,11 @@ size_t mvt_geometry_linestring_count(mvt_geometry_linestring_t *ls) {
 }
 
 size_t mvt_geometry_linestring_get_lines(mvt_geometry_linestring_t *ls,
-                                         mvt_geometry_point_t *ptlist,
+                                         mvt_geometry_point_t **ptlist,
                                          size_t count) {
   size_t si = std::min(count, ls->data.size());
   for (int i = 0; i < si; i++) {
-    ptlist[i].data = ls->data[i];
+    ptlist[i] = new mvt_geometry_point_t{ls->data[i]};
   }
   return si;
 }
@@ -496,11 +496,11 @@ size_t mvt_geometry_polygon_count(mvt_geometry_polygon_t *poly) {
 }
 
 size_t mvt_geometry_polygon_get_lines(mvt_geometry_polygon_t *poly,
-                                      mvt_geometry_point_t *ptlist,
+                                      mvt_geometry_point_t **ptlist,
                                       size_t count) {
   size_t si = std::min(count, poly->data.size());
   for (int i = 0; i < si; i++) {
-    ptlist[i].data = poly->data[i];
+    ptlist[i] = new mvt_geometry_point_t{poly->data[i]};
   }
   return si;
 }

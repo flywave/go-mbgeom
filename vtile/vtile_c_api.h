@@ -155,12 +155,12 @@ VTILECAPICALL void mvt_geometry_linestring_free(mvt_geometry_linestring_t *ls);
 VTILECAPICALL size_t
 mvt_geometry_linestring_count(mvt_geometry_linestring_t *ls);
 VTILECAPICALL size_t mvt_geometry_linestring_get_lines(
-    mvt_geometry_linestring_t *ls, mvt_geometry_point_t *ptlist, size_t count);
+    mvt_geometry_linestring_t *ls, mvt_geometry_point_t **ptlist, size_t count);
 
 VTILECAPICALL void mvt_geometry_polygon_free(mvt_geometry_polygon_t *poly);
 VTILECAPICALL size_t mvt_geometry_polygon_count(mvt_geometry_polygon_t *poly);
 VTILECAPICALL size_t mvt_geometry_polygon_get_lines(
-    mvt_geometry_polygon_t *poly, mvt_geometry_point_t *ptlist, size_t count);
+    mvt_geometry_polygon_t *poly, mvt_geometry_point_t **ptlist, size_t count);
 
 VTILECAPICALL mvt_tile_builder_t *mvt_tile_builder_new();
 VTILECAPICALL void mvt_tile_builder_free(mvt_tile_builder_t *tb);

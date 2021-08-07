@@ -9,6 +9,8 @@ import "C"
 import (
 	"runtime"
 	"unsafe"
+
+	"github.com/flywave/go-geom"
 )
 
 type GeoJSON struct {
@@ -37,6 +39,27 @@ func NewGeoJSONFromFeature(feat *Feature) *GeoJSON {
 
 func NewGeoJSONFromFeatureCollection(feat *FeatureCollection) *GeoJSON {
 	geojson := &GeoJSON{m: C.mapbox_geojson_from_feature_collection(feat.fc)}
+	runtime.SetFinalizer(geojson, (*GeoJSON).free)
+	return geojson
+}
+
+func NewGeoJSONFromGeomGeometry(geom geom.Geometry) *GeoJSON {
+	g := NewGeomGeometry(geom)
+	geojson := &GeoJSON{m: C.mapbox_geojson_from_geometry(g.g)}
+	runtime.SetFinalizer(geojson, (*GeoJSON).free)
+	return geojson
+}
+
+func NewGeoJSONFromGeomFeature(feat *geom.Feature) *GeoJSON {
+	f := NewGeomFeature(feat)
+	geojson := &GeoJSON{m: C.mapbox_geojson_from_feature(f.f)}
+	runtime.SetFinalizer(geojson, (*GeoJSON).free)
+	return geojson
+}
+
+func NewGeoJSONFromGeomFeatureCollection(feat *geom.FeatureCollection) *GeoJSON {
+	ffeat := NewGeomFeatureCollection(feat)
+	geojson := &GeoJSON{m: C.mapbox_geojson_from_feature_collection(ffeat.fc)}
 	runtime.SetFinalizer(geojson, (*GeoJSON).free)
 	return geojson
 }

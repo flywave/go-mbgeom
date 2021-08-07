@@ -18,6 +18,22 @@ type Value struct {
 	v *C.struct__mapbox_value_t
 }
 
+func NewValueRaw(v interface{}) *Value {
+	switch t := v.(type) {
+	case bool:
+		return NewValueFromBool(t)
+	case uint64:
+		return NewValueFromUInt(t)
+	case int64:
+		return NewValueFromInt(t)
+	case float64:
+		return NewValueFromDouble(t)
+	case string:
+		return NewValueFromString(t)
+	}
+	return nil
+}
+
 func NewValue() *Value {
 	ret := &Value{v: C.mapbox_value_new()}
 	runtime.SetFinalizer(ret, (*Value).free)
@@ -168,6 +184,15 @@ type PropertyMap struct {
 	m *C.struct__mapbox_property_map_t
 }
 
+func NewPropertyMapRaw(Properties map[string]interface{}) *PropertyMap {
+	ret := &PropertyMap{m: C.mapbox_property_map_new()}
+	runtime.SetFinalizer(ret, (*PropertyMap).free)
+	for k, v := range Properties {
+		ret.Set(k, NewValueRaw(v))
+	}
+	return ret
+}
+
 func NewPropertyMap() *PropertyMap {
 	ret := &PropertyMap{m: C.mapbox_property_map_new()}
 	runtime.SetFinalizer(ret, (*PropertyMap).free)
@@ -242,6 +267,20 @@ func (v *Identifier) free() {
 	C.mapbox_identifier_free(v.m)
 }
 
+func NewIdentifierFromRaw(id interface{}) *Identifier {
+	switch cid := id.(type) {
+	case uint64:
+		return NewIdentifierFromUInt(cid)
+	case int64:
+		return NewIdentifierFromInt(cid)
+	case float64:
+		return NewIdentifierFromDouble(cid)
+	case string:
+		return NewIdentifierFromString(cid)
+	}
+	return nil
+}
+
 func NewIdentifierFromUInt(b uint64) *Identifier {
 	ret := &Identifier{m: C.mapbox_identifier_from_uint(C.ulong(b))}
 	runtime.SetFinalizer(ret, (*Identifier).free)
@@ -313,6 +352,15 @@ func NewFeature(geom *Geometry) *Feature {
 	return ret
 }
 
+func NewGeomFeature(f *geom.Feature) *Feature {
+	g_ := NewGeomGeometry(f.Geometry)
+	ret := &Feature{f: C.mapbox_feature_new(g_.g)}
+	runtime.SetFinalizer(ret, (*Feature).free)
+	id := f.ID
+	ret.SetIdentifier(NewIdentifierFromRaw(id))
+	return ret
+}
+
 func (v *Feature) GetNative() unsafe.Pointer {
 	return unsafe.Pointer(v.f)
 }
@@ -357,6 +405,15 @@ func (v *Feature) ToGeom() *geom.Feature {
 
 type FeatureCollection struct {
 	fc *C.struct__mapbox_feature_collection_t
+}
+
+func NewGeomFeatureCollection(f *geom.FeatureCollection) *FeatureCollection {
+	ret := &FeatureCollection{fc: C.mapbox_feature_collection_new()}
+	runtime.SetFinalizer(ret, (*FeatureCollection).free)
+	for _, feat := range f.Features {
+		ret.Append(NewGeomFeature(feat))
+	}
+	return ret
 }
 
 func NewFeatureCollection() *FeatureCollection {

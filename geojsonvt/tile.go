@@ -20,6 +20,6 @@ func (t *Tile) free() {
 
 func (t *Tile) GetFeatureCollection() *FeatureCollection {
 	fc := &FeatureCollection{fc: C.geojsonvt_tile_get_feature_collection(t.t)}
-	runtime.SetFinalizer(fc, (*GeometryCollection).free)
+	runtime.SetFinalizer(fc, (*FeatureCollection).free)
 	return fc
 }

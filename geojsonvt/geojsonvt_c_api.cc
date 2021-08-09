@@ -889,8 +889,17 @@ geojsonvt_tile_get_feature_collection(geojsonvt_tile_t *t) {
 }
 
 geojsonvt_t *geojsonvt_new(void *geom, struct _geojsonvt_tile_options_t opts) {
-  mapbox::geojsonvt::Options opt =
-      *reinterpret_cast<mapbox::geojsonvt::Options *>(&opts);
+  mapbox::geojsonvt::Options opt;
+  {
+    opt.tolerance = opts.tolerance;
+    opt.extent = opts.extent;
+    opt.buffer = opts.buffer;
+    opt.lineMetrics = opts.lineMetrics;
+    opt.maxZoom = opts.maxZoom;
+    opt.indexMaxZoom = opts.indexMaxZoom;
+    opt.indexMaxPoints = opts.indexMaxPoints;
+    opt.generateId = opts.generateId;
+  }
   return new geojsonvt_t{
     vt : mapbox::geojsonvt::GeoJSONVT(((struct _mapbox_geojson_t *)geom)->json,
                                       opt)

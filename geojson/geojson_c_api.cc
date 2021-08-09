@@ -460,6 +460,11 @@ bool mapbox_geometry_equal(mapbox_geometry_t *geom1, mapbox_geometry_t *geom2) {
   return geom1->geom == geom2->geom;
 }
 
+char *mapbox_geometry_stringify(mapbox_geometry_t *geom) {
+  auto json = mapbox::geojson::stringify(geom->geom);
+  return strdup(json.c_str());
+}
+
 mapbox_geometry_collection_t *mapbox_geometry_collection_new() {
   return new mapbox_geometry_collection_t{};
 }
@@ -767,6 +772,11 @@ bool mapbox_feature_equal(mapbox_feature_t *feat1, mapbox_feature_t *feat2) {
   return feat1->feat == feat2->feat;
 }
 
+char *mapbox_feature_stringify(mapbox_feature_t *feat) {
+   auto json = mapbox::geojson::stringify(feat->feat);
+  return strdup(json.c_str());
+}
+
 mapbox_feature_collection_t *mapbox_feature_collection_new() {
   return new mapbox_feature_collection_t{};
 }
@@ -818,6 +828,12 @@ mapbox_geojson_t *mapbox_geojson_from_feature(mapbox_feature_t *feat) {
 mapbox_geojson_t *
 mapbox_geojson_from_feature_collection(mapbox_feature_collection_t *fc) {
   return new mapbox_geojson_t{fc->fc};
+}
+
+char *
+mapbox_feature_collection_stringify(mapbox_feature_collection_t *fc) {
+  auto json = mapbox::geojson::stringify(fc->fc);
+  return strdup(json.c_str());
 }
 
 void mapbox_geojson_free(mapbox_geojson_t *gejson) { delete gejson; }

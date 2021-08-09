@@ -9,6 +9,9 @@
 #include <mapbox/geojsonvt.hpp>
 #include <mapbox/geometry.hpp>
 #include <mapbox/geometry/wagyu/wagyu.hpp>
+#include <mapbox/geojsonvt_impl.hpp>
+ 
+#include <rapidjson/document.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -371,8 +374,7 @@ bool geojsonvt_polygon_equal(geojsonvt_polygon_t *geom1,
   return geom1->poly == geom2->poly;
 }
 
-geojsonvt_multi_line_string_t *
-geojsonvt_multi_line_string_new_empty() {
+geojsonvt_multi_line_string_t *geojsonvt_multi_line_string_new_empty() {
   return new geojsonvt_multi_line_string_t{};
 }
 
@@ -422,8 +424,7 @@ bool geojsonvt_multi_line_string_equal(geojsonvt_multi_line_string_t *geom1,
   return geom1->mls == geom2->mls;
 }
 
-geojsonvt_multi_polygon_t *
-geojsonvt_multi_polygon_new_empty() {
+geojsonvt_multi_polygon_t *geojsonvt_multi_polygon_new_empty() {
   return new geojsonvt_multi_polygon_t{};
 }
 
@@ -556,6 +557,11 @@ geojsonvt_geometry_cast_multi_polygon(geojsonvt_geometry_t *geom) {
 bool geojsonvt_geometry_equal(geojsonvt_geometry_t *geom1,
                               geojsonvt_geometry_t *geom2) {
   return geom1->geom == geom2->geom;
+}
+
+char *geojsonvt_geometry_stringify(geojsonvt_geometry_t *geom) {
+  auto json = mapbox::geojson::stringifyvt(geom->geom);
+  return strdup(json.c_str());
 }
 
 geojsonvt_geometry_collection_t *geojsonvt_geometry_collection_new() {
@@ -875,6 +881,11 @@ bool geojsonvt_feature_equal(geojsonvt_feature_t *feat1,
   return feat1->feat == feat2->feat;
 }
 
+char *geojsonvt_feature_stringify(geojsonvt_feature_t *feat) {
+  auto json = mapbox::geojson::stringifyvt(feat->feat);
+  return strdup(json.c_str());
+}
+
 geojsonvt_feature_collection_t *geojsonvt_feature_collection_new() {
   return new geojsonvt_feature_collection_t{};
 }
@@ -909,6 +920,12 @@ geojsonvt_feature_collection_get(geojsonvt_feature_collection_t *gc, int i) {
     return new geojsonvt_feature_t{gc->fc[i]};
   }
   return nullptr;
+}
+
+char *
+geojsonvt_feature_collection_stringify(geojsonvt_feature_collection_t *fc) {
+  auto json = mapbox::geojson::stringifyvt(fc->fc);
+  return strdup(json.c_str());
 }
 
 void geojsonvt_tile_free(geojsonvt_tile_t *t) { delete t; }

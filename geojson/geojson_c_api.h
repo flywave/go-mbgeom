@@ -192,6 +192,7 @@ GEOJSONCAPICALL mapbox_multi_polygon_t *
 mapbox_geometry_cast_multi_polygon(mapbox_geometry_t *geom);
 GEOJSONCAPICALL bool mapbox_geometry_equal(mapbox_geometry_t *geom1,
                                            mapbox_geometry_t *geom2);
+GEOJSONCAPICALL char *mapbox_geometry_stringify(mapbox_geometry_t *geom);
 
 GEOJSONCAPICALL mapbox_geometry_collection_t *mapbox_geometry_collection_new();
 GEOJSONCAPICALL void
@@ -291,6 +292,7 @@ GEOJSONCAPICALL mapbox_property_map_t *
 mapbox_feature_get_property_map(mapbox_feature_t *feat);
 GEOJSONCAPICALL bool mapbox_feature_equal(mapbox_feature_t *feat1,
                                           mapbox_feature_t *feat2);
+GEOJSONCAPICALL char *mapbox_feature_stringify(mapbox_feature_t *f);
 
 GEOJSONCAPICALL mapbox_feature_collection_t *mapbox_feature_collection_new();
 GEOJSONCAPICALL void
@@ -307,6 +309,8 @@ GEOJSONCAPICALL int
 mapbox_feature_collection_get_count(mapbox_feature_collection_t *gc);
 GEOJSONCAPICALL mapbox_feature_t *
 mapbox_feature_collection_get(mapbox_feature_collection_t *gc, int i);
+GEOJSONCAPICALL char *
+mapbox_feature_collection_stringify(mapbox_feature_collection_t *fc);
 
 GEOJSONCAPICALL mapbox_geojson_t *mapbox_geojson_parse(const char *json);
 GEOJSONCAPICALL mapbox_geojson_t *

@@ -875,6 +875,12 @@ func (e *Geometry) Intersection(o *Geometry) []*Geometry {
 	return geoms
 }
 
+func (e *Geometry) Stringify() string {
+	cjson := C.mapbox_geometry_stringify(e.g)
+	defer C.free(unsafe.Pointer(cjson))
+	return C.GoString(cjson)
+}
+
 type GeometryCollection struct {
 	g *C.struct__mapbox_geometry_collection_t
 }

@@ -617,6 +617,12 @@ func (e *Geometry) Equal(b *Geometry) bool {
 	return bool(C.geojsonvt_geometry_equal(e.g, b.g))
 }
 
+func (e *Geometry) Stringify() string {
+	cjson := C.geojsonvt_geometry_stringify(e.g)
+	defer C.free(unsafe.Pointer(cjson))
+	return C.GoString(cjson)
+}
+
 type GeometryCollection struct {
 	g *C.struct__geojsonvt_geometry_collection_t
 }

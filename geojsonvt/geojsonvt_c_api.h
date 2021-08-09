@@ -225,6 +225,7 @@ GEOJSONVTCAPICALL geojsonvt_multi_polygon_t *
 geojsonvt_geometry_cast_multi_polygon(geojsonvt_geometry_t *geom);
 GEOJSONVTCAPICALL bool geojsonvt_geometry_equal(geojsonvt_geometry_t *geom1,
                                                 geojsonvt_geometry_t *geom2);
+GEOJSONVTCAPICALL char *geojsonvt_geometry_stringify(geojsonvt_geometry_t *geom);
 
 GEOJSONVTCAPICALL geojsonvt_geometry_collection_t *
 geojsonvt_geometry_collection_new();
@@ -342,6 +343,7 @@ GEOJSONVTCAPICALL geojsonvt_property_map_t *
 geojsonvt_feature_get_property_map(geojsonvt_feature_t *feat);
 GEOJSONVTCAPICALL bool geojsonvt_feature_equal(geojsonvt_feature_t *feat1,
                                                geojsonvt_feature_t *feat2);
+GEOJSONVTCAPICALL char *geojsonvt_feature_stringify(geojsonvt_feature_t *feat);
 
 GEOJSONVTCAPICALL geojsonvt_feature_collection_t *
 geojsonvt_feature_collection_new();
@@ -359,6 +361,7 @@ GEOJSONVTCAPICALL int
 geojsonvt_feature_collection_get_count(geojsonvt_feature_collection_t *gc);
 GEOJSONVTCAPICALL geojsonvt_feature_t *
 geojsonvt_feature_collection_get(geojsonvt_feature_collection_t *gc, int i);
+GEOJSONVTCAPICALL char *geojsonvt_feature_collection_stringify(geojsonvt_feature_collection_t *fc);
 
 GEOJSONVTCAPICALL void geojsonvt_tile_free(geojsonvt_tile_t *t);
 GEOJSONVTCAPICALL geojsonvt_feature_collection_t *

@@ -28,4 +28,10 @@ func TestGeoJSONVT(t *testing.T) {
 	if tile == nil && !fc.Empty() {
 		t.FailNow()
 	}
+
+	jsonvt := fc.Stringify()
+
+	if jsonvt == "" {
+		t.FailNow()
+	}
 }

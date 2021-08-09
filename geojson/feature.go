@@ -403,6 +403,12 @@ func (v *Feature) ToGeom() *geom.Feature {
 	return &geom.Feature{ID: v.GetIdentifier().Get(), Geometry: v.GetGeometry(), Properties: v.GetPropertyMap().RawMap()}
 }
 
+func (v *Feature) Stringify() string {
+	cjson := C.mapbox_feature_stringify(v.f)
+	defer C.free(unsafe.Pointer(cjson))
+	return C.GoString(cjson)
+}
+
 type FeatureCollection struct {
 	fc *C.struct__mapbox_feature_collection_t
 }
@@ -457,4 +463,10 @@ func (v *FeatureCollection) ToGeom() *geom.FeatureCollection {
 		ret.Features[i] = v.Get(i).ToGeom()
 	}
 	return ret
+}
+
+func (v *FeatureCollection) Stringify() string {
+	cjson := C.mapbox_feature_collection_stringify(v.fc)
+	defer C.free(unsafe.Pointer(cjson))
+	return C.GoString(cjson)
 }

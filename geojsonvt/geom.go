@@ -17,6 +17,12 @@ type Point struct {
 	p *C.struct__geojsonvt_point_t
 }
 
+func NewEmptyPoint() *Point {
+	p := &Point{p: C.geojsonvt_point_new_empty()}
+	runtime.SetFinalizer(p, (*Point).free)
+	return p
+}
+
 func NewPoint(x, y float64) *Point {
 	p := &Point{p: C.geojsonvt_point_new(C.short(x), C.short(y))}
 	runtime.SetFinalizer(p, (*Point).free)
@@ -63,6 +69,12 @@ func (e *Point) Equal(b *Point) bool {
 
 type LineString struct {
 	ls *C.struct__geojsonvt_line_string_t
+}
+
+func NewEmptyLineString() *LineString {
+	p := &LineString{ls: C.geojsonvt_line_string_new_empty()}
+	runtime.SetFinalizer(p, (*LineString).free)
+	return p
 }
 
 func NewLineString(pts [][2]int16) *LineString {
@@ -135,6 +147,12 @@ type MultiPoint struct {
 	mp *C.struct__geojsonvt_multi_point_t
 }
 
+func NewEmptyMultiPoint() *MultiPoint {
+	p := &MultiPoint{mp: C.geojsonvt_multi_point_new_empty()}
+	runtime.SetFinalizer(p, (*MultiPoint).free)
+	return p
+}
+
 func NewMultiPoint(pts [][2]int16) *MultiPoint {
 	ls := &MultiPoint{mp: C.geojsonvt_multi_point_new((*C.short)(unsafe.Pointer(&pts[0])), C.int(len(pts)))}
 	runtime.SetFinalizer(ls, (*MultiPoint).free)
@@ -205,6 +223,12 @@ type LinearRing struct {
 	lr *C.struct__geojsonvt_linear_ring_t
 }
 
+func NewEmptyLinearRing() *LinearRing {
+	p := &LinearRing{lr: C.geojsonvt_linear_ring_new_empty()}
+	runtime.SetFinalizer(p, (*LinearRing).free)
+	return p
+}
+
 func NewLinearRing(pts [][2]int16) *LinearRing {
 	ls := &LinearRing{lr: C.geojsonvt_linear_ring_new((*C.short)(unsafe.Pointer(&pts[0])), C.int(len(pts)))}
 	runtime.SetFinalizer(ls, (*LinearRing).free)
@@ -267,6 +291,12 @@ func (e *LinearRing) Data() [][]int16 {
 
 type Polygon struct {
 	p *C.struct__geojsonvt_polygon_t
+}
+
+func NewEmptyPolygon() *Polygon {
+	ls := &Polygon{p: C.geojsonvt_polygon_new_empty()}
+	runtime.SetFinalizer(ls, (*Polygon).free)
+	return ls
 }
 
 func NewPolygon(rings []LinearRing) *Polygon {
@@ -357,6 +387,12 @@ type MultiLineString struct {
 	mls *C.struct__geojsonvt_multi_line_string_t
 }
 
+func NewEmptyMultiLineString() *MultiLineString {
+	ls := &MultiLineString{mls: C.geojsonvt_multi_line_string_new_empty()}
+	runtime.SetFinalizer(ls, (*MultiLineString).free)
+	return ls
+}
+
 func NewMultiLineString(lines []LineString) *MultiLineString {
 	clines := make([]*C.struct__geojsonvt_line_string_t, len(lines))
 	for i := range lines {
@@ -422,6 +458,12 @@ func (e *MultiLineString) Data() [][][]int16 {
 
 type MultiPolygon struct {
 	mp *C.struct__geojsonvt_multi_polygon_t
+}
+
+func NewEmptyMultiPolygon() *MultiPolygon {
+	ls := &MultiPolygon{mp: C.geojsonvt_multi_polygon_new_empty()}
+	runtime.SetFinalizer(ls, (*MultiPolygon).free)
+	return ls
 }
 
 func NewMultiPolygon(polys []Polygon) *MultiPolygon {
@@ -577,6 +619,12 @@ func (e *Geometry) Equal(b *Geometry) bool {
 
 type GeometryCollection struct {
 	g *C.struct__geojsonvt_geometry_collection_t
+}
+
+func NewEmptyGeometryCollection() *GeometryCollection {
+	ls := &GeometryCollection{g: C.geojsonvt_geometry_collection_new()}
+	runtime.SetFinalizer(ls, (*GeometryCollection).free)
+	return ls
 }
 
 func (e *GeometryCollection) free() {

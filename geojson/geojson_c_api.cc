@@ -33,6 +33,8 @@ mapbox_box_t *mapbox_box_envelope(mapbox_geometry_t *geom) {
   return new mapbox_box_t{mapbox::geometry::envelope(geom->geom)};
 }
 
+mapbox_point_t *mapbox_point_new_empty() { return new mapbox_point_t{}; }
+
 mapbox_point_t *mapbox_point_new(double x, double y) {
   return new mapbox_point_t{mapbox::geometry::point<double>{x, y}};
 }
@@ -59,6 +61,10 @@ mapbox_geometry_t *mapbox_point_to_geometry(mapbox_point_t *pt) {
 
 bool mapbox_point_equal(mapbox_point_t *geom1, mapbox_point_t *geom2) {
   return geom1->pt == geom2->pt;
+}
+
+mapbox_line_string_t *mapbox_line_string_new_empty() {
+  return new mapbox_line_string_t{};
 }
 
 mapbox_line_string_t *mapbox_line_string_new(double *xy, int pointcount) {
@@ -110,6 +116,10 @@ bool mapbox_line_string_equal(mapbox_line_string_t *geom1,
   return geom1->ls == geom2->ls;
 }
 
+mapbox_multi_point_t *mapbox_multi_point_new_empty() {
+  return new mapbox_multi_point_t{};
+}
+
 mapbox_multi_point_t *mapbox_multi_point_new(double *xy, int pointcount) {
   mapbox::geometry::multi_point<double> ls;
   ls.reserve(pointcount);
@@ -159,6 +169,10 @@ void mapbox_multi_point_get_point_xy(mapbox_multi_point_t *pt, int i, double *x,
   *y = p.y;
 }
 
+mapbox_linear_ring_t *mapbox_linear_ring_new_empty() {
+  return new mapbox_linear_ring_t{};
+}
+
 mapbox_linear_ring_t *mapbox_linear_ring_new(double *xy, int pointcount) {
   mapbox::geometry::linear_ring<double> ls;
   ls.reserve(pointcount);
@@ -203,6 +217,8 @@ bool mapbox_linear_ring_equal(mapbox_linear_ring_t *geom1,
                               mapbox_linear_ring_t *geom2) {
   return geom1->lr == geom2->lr;
 }
+
+mapbox_polygon_t *mapbox_polygon_new_empty() { return new mapbox_polygon_t{}; }
 
 mapbox_polygon_t *mapbox_polygon_new(mapbox_linear_ring_t **rings,
                                      int ringcount) {
@@ -263,6 +279,10 @@ bool mapbox_polygon_equal(mapbox_polygon_t *geom1, mapbox_polygon_t *geom2) {
   return geom1->poly == geom2->poly;
 }
 
+mapbox_multi_line_string_t *mapbox_multi_line_string_new_empty() {
+  return new mapbox_multi_line_string_t{};
+}
+
 mapbox_multi_line_string_t *
 mapbox_multi_line_string_new(mapbox_line_string_t **lines, int ringcount) {
   mapbox::geometry::multi_line_string<double> mls;
@@ -306,6 +326,10 @@ mapbox_multi_line_string_to_geometry(mapbox_multi_line_string_t *pt) {
 bool mapbox_multi_line_string_equal(mapbox_multi_line_string_t *geom1,
                                     mapbox_multi_line_string_t *geom2) {
   return geom1->mls == geom2->mls;
+}
+
+mapbox_multi_polygon_t *mapbox_multi_polygon_new_empty() {
+  return new mapbox_multi_polygon_t{};
 }
 
 mapbox_multi_polygon_t *mapbox_multi_polygon_new(mapbox_polygon_t **polys,

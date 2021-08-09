@@ -109,6 +109,10 @@ geojsonvt_box_t *geojsonvt_box_envelope(geojsonvt_geometry_t *geom) {
   return new geojsonvt_box_t{mapbox::geometry::envelope(geom->geom)};
 }
 
+geojsonvt_point_t *geojsonvt_point_new_empty() {
+  return new geojsonvt_point_t{mapbox::geometry::point<int16_t>{}};
+}
+
 geojsonvt_point_t *geojsonvt_point_new(int16_t x, int16_t y) {
   return new geojsonvt_point_t{mapbox::geometry::point<int16_t>{x, y}};
 }
@@ -135,6 +139,10 @@ geojsonvt_geometry_t *geojsonvt_point_to_geometry(geojsonvt_point_t *pt) {
 
 bool geojsonvt_point_equal(geojsonvt_point_t *geom1, geojsonvt_point_t *geom2) {
   return geom1->pt == geom2->pt;
+}
+
+geojsonvt_line_string_t *geojsonvt_line_string_new_empty() {
+  return new geojsonvt_line_string_t{};
 }
 
 geojsonvt_line_string_t *geojsonvt_line_string_new(int16_t *xy,
@@ -189,6 +197,10 @@ bool geojsonvt_line_string_equal(geojsonvt_line_string_t *geom1,
   return geom1->ls == geom2->ls;
 }
 
+geojsonvt_multi_point_t *geojsonvt_multi_point_new_empty() {
+  return new geojsonvt_multi_point_t{};
+}
+
 geojsonvt_multi_point_t *geojsonvt_multi_point_new(int16_t *xy,
                                                    int pointcount) {
   mapbox::geometry::multi_point<int16_t> ls;
@@ -241,6 +253,10 @@ void geojsonvt_multi_point_get_point_xy(geojsonvt_multi_point_t *pt, int i,
   *y = p.y;
 }
 
+geojsonvt_linear_ring_t *geojsonvt_linear_ring_new_empty() {
+  return new geojsonvt_linear_ring_t{};
+}
+
 geojsonvt_linear_ring_t *geojsonvt_linear_ring_new(int16_t *xy,
                                                    int pointcount) {
   mapbox::geometry::linear_ring<int16_t> ls;
@@ -286,6 +302,10 @@ void geojsonvt_linear_ring_append_point(geojsonvt_linear_ring_t *pt, int16_t x,
 bool geojsonvt_linear_ring_equal(geojsonvt_linear_ring_t *geom1,
                                  geojsonvt_linear_ring_t *geom2) {
   return geom1->lr == geom2->lr;
+}
+
+geojsonvt_polygon_t *geojsonvt_polygon_new_empty() {
+  return new geojsonvt_polygon_t{};
 }
 
 geojsonvt_polygon_t *geojsonvt_polygon_new(geojsonvt_linear_ring_t **rings,
@@ -352,6 +372,11 @@ bool geojsonvt_polygon_equal(geojsonvt_polygon_t *geom1,
 }
 
 geojsonvt_multi_line_string_t *
+geojsonvt_multi_line_string_new_empty() {
+  return new geojsonvt_multi_line_string_t{};
+}
+
+geojsonvt_multi_line_string_t *
 geojsonvt_multi_line_string_new(geojsonvt_line_string_t **lines,
                                 int ringcount) {
   mapbox::geometry::multi_line_string<int16_t> mls;
@@ -395,6 +420,11 @@ geojsonvt_multi_line_string_to_geometry(geojsonvt_multi_line_string_t *pt) {
 bool geojsonvt_multi_line_string_equal(geojsonvt_multi_line_string_t *geom1,
                                        geojsonvt_multi_line_string_t *geom2) {
   return geom1->mls == geom2->mls;
+}
+
+geojsonvt_multi_polygon_t *
+geojsonvt_multi_polygon_new_empty() {
+  return new geojsonvt_multi_polygon_t{};
 }
 
 geojsonvt_multi_polygon_t *

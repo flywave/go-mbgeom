@@ -39,6 +39,7 @@ GEOJSONCAPICALL mapbox_point_t *mapbox_box_get_min(mapbox_box_t *box);
 GEOJSONCAPICALL mapbox_point_t *mapbox_box_get_max(mapbox_box_t *box);
 GEOJSONCAPICALL mapbox_box_t *mapbox_box_envelope(mapbox_geometry_t *geom);
 
+GEOJSONCAPICALL mapbox_point_t *mapbox_point_new_empty();
 GEOJSONCAPICALL mapbox_point_t *mapbox_point_new(double x, double y);
 GEOJSONCAPICALL void mapbox_point_free(mapbox_point_t *pt);
 GEOJSONCAPICALL double mapbox_point_get_x(mapbox_point_t *pt);
@@ -51,6 +52,7 @@ GEOJSONCAPICALL mapbox_geometry_t *mapbox_point_to_geometry(mapbox_point_t *pt);
 GEOJSONCAPICALL bool mapbox_point_equal(mapbox_point_t *geom1,
                                         mapbox_point_t *geom2);
 
+GEOJSONCAPICALL mapbox_line_string_t *mapbox_line_string_new_empty();
 GEOJSONCAPICALL mapbox_line_string_t *mapbox_line_string_new(double *xy,
                                                              int pointcount);
 GEOJSONCAPICALL void mapbox_line_string_free(mapbox_line_string_t *pt);
@@ -70,6 +72,7 @@ mapbox_line_string_to_geometry(mapbox_line_string_t *pt);
 GEOJSONCAPICALL bool mapbox_line_string_equal(mapbox_line_string_t *geom1,
                                               mapbox_line_string_t *geom2);
 
+GEOJSONCAPICALL mapbox_multi_point_t *mapbox_multi_point_new_empty();
 GEOJSONCAPICALL mapbox_multi_point_t *mapbox_multi_point_new(double *xy,
                                                              int pointcount);
 GEOJSONCAPICALL void mapbox_multi_point_free(mapbox_multi_point_t *pt);
@@ -89,6 +92,7 @@ mapbox_multi_point_to_geometry(mapbox_multi_point_t *pt);
 GEOJSONCAPICALL bool mapbox_multi_point_equal(mapbox_multi_point_t *geom1,
                                               mapbox_multi_point_t *geom2);
 
+GEOJSONCAPICALL mapbox_linear_ring_t *mapbox_linear_ring_new_empty();
 GEOJSONCAPICALL mapbox_linear_ring_t *mapbox_linear_ring_new(double *xy,
                                                              int pointcount);
 GEOJSONCAPICALL void mapbox_linear_ring_free(mapbox_linear_ring_t *pt);
@@ -106,6 +110,7 @@ GEOJSONCAPICALL void mapbox_linear_ring_get_point_xy(mapbox_linear_ring_t *pt,
 GEOJSONCAPICALL bool mapbox_linear_ring_equal(mapbox_linear_ring_t *geom1,
                                               mapbox_linear_ring_t *geom2);
 
+GEOJSONCAPICALL mapbox_polygon_t *mapbox_polygon_new_empty();
 GEOJSONCAPICALL mapbox_polygon_t *
 mapbox_polygon_new(mapbox_linear_ring_t **rings, int ringcount);
 GEOJSONCAPICALL void mapbox_polygon_free(mapbox_polygon_t *pt);
@@ -128,6 +133,8 @@ GEOJSONCAPICALL bool mapbox_polygon_equal(mapbox_polygon_t *geom1,
                                           mapbox_polygon_t *geom2);
 
 GEOJSONCAPICALL mapbox_multi_line_string_t *
+mapbox_multi_line_string_new_empty();
+GEOJSONCAPICALL mapbox_multi_line_string_t *
 mapbox_multi_line_string_new(mapbox_line_string_t **lines, int ringcount);
 GEOJSONCAPICALL void
 mapbox_multi_line_string_free(mapbox_multi_line_string_t *pt);
@@ -146,6 +153,7 @@ GEOJSONCAPICALL bool
 mapbox_multi_line_string_equal(mapbox_multi_line_string_t *geom1,
                                mapbox_multi_line_string_t *geom2);
 
+GEOJSONCAPICALL mapbox_multi_polygon_t *mapbox_multi_polygon_new_empty();
 GEOJSONCAPICALL mapbox_multi_polygon_t *
 mapbox_multi_polygon_new(mapbox_polygon_t **lines, int ringcount);
 GEOJSONCAPICALL void mapbox_multi_polygon_free(mapbox_multi_polygon_t *pt);
@@ -328,9 +336,8 @@ mapbox_geojson_set_feature_collection(mapbox_geojson_t *gejson,
                                       mapbox_feature_collection_t *fc);
 GEOJSONCAPICALL char *mapbox_geojson_stringify(mapbox_geojson_t *gejson);
 
-GEOJSONCAPICALL _Bool
-mapbox_spatial_algorithms_intersects(mapbox_geometry_t *geom1,
-                                     mapbox_geometry_t *geom2);
+GEOJSONCAPICALL _Bool mapbox_spatial_algorithms_intersects(
+    mapbox_geometry_t *geom1, mapbox_geometry_t *geom2);
 GEOJSONCAPICALL _Bool mapbox_spatial_algorithms_disjoint(
     mapbox_geometry_t *geom1, mapbox_geometry_t *geom2);
 GEOJSONCAPICALL mapbox_geometry_t **

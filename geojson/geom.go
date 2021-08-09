@@ -19,6 +19,12 @@ type Point struct {
 	p *C.struct__mapbox_point_t
 }
 
+func NewEmptyPoint() *Point {
+	p := &Point{p: C.mapbox_point_new_empty()}
+	runtime.SetFinalizer(p, (*Point).free)
+	return p
+}
+
 func NewPoint(x, y float64) *Point {
 	p := &Point{p: C.mapbox_point_new(C.double(x), C.double(y))}
 	runtime.SetFinalizer(p, (*Point).free)
@@ -76,6 +82,12 @@ func (e *Point) Equal(b *Point) bool {
 type LineString struct {
 	geom.LineString
 	ls *C.struct__mapbox_line_string_t
+}
+
+func NewEmptyLineString() *LineString {
+	p := &LineString{ls: C.mapbox_line_string_new_empty()}
+	runtime.SetFinalizer(p, (*LineString).free)
+	return p
 }
 
 func NewGeomLineString(datas [][]float64) *LineString {
@@ -173,6 +185,12 @@ type MultiPoint struct {
 	mp *C.struct__mapbox_multi_point_t
 }
 
+func NewEmptyMultiPoint() *MultiPoint {
+	p := &MultiPoint{mp: C.mapbox_multi_point_new_empty()}
+	runtime.SetFinalizer(p, (*MultiPoint).free)
+	return p
+}
+
 func NewGeomMultiPoint(datas [][]float64) *MultiPoint {
 	pts := make([][2]float64, len(datas))
 	for i := range datas {
@@ -268,6 +286,12 @@ type LinearRing struct {
 	lr *C.struct__mapbox_linear_ring_t
 }
 
+func NewEmptyLinearRing() *LinearRing {
+	p := &LinearRing{lr: C.mapbox_linear_ring_new_empty()}
+	runtime.SetFinalizer(p, (*LinearRing).free)
+	return p
+}
+
 func NewGeomLinearRing(datas [][]float64) *LinearRing {
 	pts := make([][2]float64, len(datas))
 	for i := range datas {
@@ -355,6 +379,12 @@ func (e *LinearRing) Data() [][]float64 {
 type Polygon struct {
 	geom.Polygon
 	p *C.struct__mapbox_polygon_t
+}
+
+func NewEmptyPolygon() *Polygon {
+	p := &Polygon{p: C.mapbox_polygon_new_empty()}
+	runtime.SetFinalizer(p, (*Polygon).free)
+	return p
 }
 
 func NewGeomPolygon(subline [][][]float64) *Polygon {
@@ -475,6 +505,12 @@ type MultiLineString struct {
 	mls *C.struct__mapbox_multi_line_string_t
 }
 
+func NewEmptyMultiLineString() *MultiLineString {
+	p := &MultiLineString{mls: C.mapbox_multi_line_string_new_empty()}
+	runtime.SetFinalizer(p, (*MultiLineString).free)
+	return p
+}
+
 func NewGeomMultiLineString(subline [][][]float64) *MultiLineString {
 	clines := make([]*C.struct__mapbox_line_string_t, len(subline))
 	lrings := make([]*LineString, len(subline))
@@ -569,6 +605,12 @@ func (e *MultiLineString) Data() [][][]float64 {
 type MultiPolygon struct {
 	geom.MultiPolygon
 	mp *C.struct__mapbox_multi_polygon_t
+}
+
+func NewEmptyMultiPolygon() *MultiPolygon {
+	p := &MultiPolygon{mp: C.mapbox_multi_polygon_new_empty()}
+	runtime.SetFinalizer(p, (*MultiPolygon).free)
+	return p
 }
 
 func NewGeomMultiPolygon(mpolys [][][][]float64) *MultiPolygon {
@@ -837,11 +879,18 @@ type GeometryCollection struct {
 	g *C.struct__mapbox_geometry_collection_t
 }
 
+func NewGeometryCollection() *GeometryCollection {
+	gc := &GeometryCollection{g: C.mapbox_geometry_collection_new()}
+	runtime.SetFinalizer(gc, (*GeometryCollection).free)
+	return gc
+}
+
 func NewGeomGeometryCollection(gs geom.Collection) *GeometryCollection {
-	gc := &GeometryCollection{}
+	gc := &GeometryCollection{g: C.mapbox_geometry_collection_new()}
 	for i := range gs {
 		gc.Set(i, NewGeomGeometry(gs[i]))
 	}
+	runtime.SetFinalizer(gc, (*GeometryCollection).free)
 	return gc
 }
 

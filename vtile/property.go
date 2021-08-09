@@ -7,9 +7,9 @@ package vtile
 // #cgo CXXFLAGS:  -I ../ -std=c++14
 import "C"
 import (
+	"reflect"
 	"runtime"
 	"unsafe"
-	"reflect"
 )
 
 type Property struct {
@@ -31,7 +31,9 @@ func NewPropertyWithKeyValue(key string, val *PropertyValue) *Property {
 }
 
 func (v *Property) free() {
-	C.mvt_property_free(v.p)
+	if v.p != nil {
+		C.mvt_property_free(v.p)
+	}
 }
 
 func (v *Property) Valid() bool {
@@ -67,7 +69,9 @@ func NewPropertyValueWithData(data []byte) *PropertyValue {
 }
 
 func (v *PropertyValue) free() {
-	C.mvt_property_value_free(v.v)
+	if v.v != nil {
+		C.mvt_property_value_free(v.v)
+	}
 }
 
 func (v *PropertyValue) Valid() bool {

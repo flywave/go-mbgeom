@@ -22,7 +22,9 @@ func NewTile(data []byte) *Tile {
 }
 
 func (v *Tile) free() {
-	C.mvt_vector_tile_free(v.m)
+	if v.m != nil {
+		C.mvt_vector_tile_free(v.m)
+	}
 }
 
 func (v *Tile) Empty() bool {

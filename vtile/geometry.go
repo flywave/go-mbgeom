@@ -29,7 +29,9 @@ func NewGeometryValueWithData(data []byte, tp GeomType) *Geometry {
 }
 
 func (v *Geometry) free() {
-	C.mvt_geometry_free(v.g)
+	if v.g != nil {
+		C.mvt_geometry_free(v.g)
+	}
 }
 
 func (v *Geometry) GetType() GeomType {
@@ -64,7 +66,7 @@ func (v *Geometry) GetLineStringGeometry() *LineStringGeometry {
 }
 
 func (v *Geometry) GetPolygonGeometry() *PolygonGeometry {
-	ret :=  &PolygonGeometry{p: C.mvt_geometry_decode_polygon_geometry(v.g)}
+	ret := &PolygonGeometry{p: C.mvt_geometry_decode_polygon_geometry(v.g)}
 	runtime.SetFinalizer(ret, (*PolygonGeometry).free)
 	return ret
 }
@@ -84,7 +86,7 @@ func (v *PointGeometry) PointCount() int {
 func (v *PointGeometry) GetPoints() [][2]int32 {
 	ptsi := v.PointCount()
 	ret := make([][2]int32, ptsi)
-	
+
 	C.mvt_geometry_point_get_points(v.p, (*C.int)(unsafe.Pointer(&ret[0])), C.size_t(ptsi))
 
 	return ret
@@ -101,7 +103,7 @@ func (v *LineStringGeometry) LineStringCount() int {
 func (v *LineStringGeometry) GetPoints() []PointGeometry {
 	ptsi := v.LineStringCount()
 	cret := make([]*C.struct__mvt_geometry_point_t, ptsi)
-	
+
 	C.mvt_geometry_linestring_get_lines(v.p, &cret[0], C.size_t(ptsi))
 
 	ret := make([]PointGeometry, ptsi)
@@ -131,7 +133,7 @@ func (v *PolygonGeometry) PolygonCount() int {
 func (v *PolygonGeometry) GetLineStrings() []PointGeometry {
 	ptsi := v.PolygonCount()
 	cret := make([]*C.struct__mvt_geometry_point_t, ptsi)
-	
+
 	C.mvt_geometry_polygon_get_lines(v.p, &cret[0], C.size_t(ptsi))
 
 	ret := make([]PointGeometry, ptsi)

@@ -21,7 +21,9 @@ func NewPropertyMapper(layer *Layer, layerBuilder *LayerBuilder) *PropertyMapper
 }
 
 func (v *PropertyMapper) free() {
-	C.mvt_property_mapper_free(v.m)
+	if v.m != nil {
+		C.mvt_property_mapper_free(v.m)
+	}
 }
 
 func (v *PropertyMapper) MapKey(key uint32) uint32 {
@@ -43,7 +45,9 @@ type PointFeatureBuilder struct {
 }
 
 func (v *PointFeatureBuilder) free() {
-	C.mvt_point_feature_builder_free(v.m)
+	if v.m != nil {
+		C.mvt_point_feature_builder_free(v.m)
+	}
 }
 
 func (v *PointFeatureBuilder) SetID(id uint64) {
@@ -87,7 +91,9 @@ type LineStringFeatureBuilder struct {
 }
 
 func (v *LineStringFeatureBuilder) free() {
-	C.mvt_linestring_feature_builder_free(v.m)
+	if v.m != nil {
+		C.mvt_linestring_feature_builder_free(v.m)
+	}
 }
 
 func (v *LineStringFeatureBuilder) SetID(id uint64) {
@@ -131,7 +137,9 @@ type PolygonFeatureBuilder struct {
 }
 
 func (v *PolygonFeatureBuilder) free() {
-	C.mvt_polygon_feature_builder_free(v.m)
+	if v.m != nil {
+		C.mvt_polygon_feature_builder_free(v.m)
+	}
 }
 
 func (v *PolygonFeatureBuilder) SetID(id uint64) {
@@ -179,7 +187,9 @@ type GeometryFeatureBuilder struct {
 }
 
 func (v *GeometryFeatureBuilder) free() {
-	C.mvt_geometry_feature_builder_free(v.m)
+	if v.m != nil {
+		C.mvt_geometry_feature_builder_free(v.m)
+	}
 }
 
 func (v *GeometryFeatureBuilder) SetID(id uint64) {

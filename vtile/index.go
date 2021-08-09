@@ -28,7 +28,9 @@ func (v *KeyIndex) Get(key string) uint32 {
 }
 
 func (v *KeyIndex) free() {
-	C.mvt_key_index_free(v.idx)
+	if v.idx != nil {
+		C.mvt_key_index_free(v.idx)
+	}
 }
 
 type Int32ValueIndex struct {
@@ -46,7 +48,9 @@ func (v *Int32ValueIndex) Get(val int32) uint32 {
 }
 
 func (v *Int32ValueIndex) free() {
-	C.mvt_int32_value_index_free(v.idx)
+	if v.idx != nil {
+		C.mvt_int32_value_index_free(v.idx)
+	}
 }
 
 type Int64ValueIndex struct {
@@ -64,7 +68,9 @@ func (v *Int64ValueIndex) Get(val int64) uint32 {
 }
 
 func (v *Int64ValueIndex) free() {
-	C.mvt_int64_value_index_free(v.idx)
+	if v.idx != nil {
+		C.mvt_int64_value_index_free(v.idx)
+	}
 }
 
 type UInt64ValueIndex struct {
@@ -82,7 +88,9 @@ func (v *UInt64ValueIndex) Get(val uint64) uint32 {
 }
 
 func (v *UInt64ValueIndex) free() {
-	C.mvt_uint64_value_index_free(v.idx)
+	if v.idx != nil {
+		C.mvt_uint64_value_index_free(v.idx)
+	}
 }
 
 type UInt32ValueIndex struct {
@@ -100,7 +108,9 @@ func (v *UInt32ValueIndex) Get(val uint32) uint32 {
 }
 
 func (v *UInt32ValueIndex) free() {
-	C.mvt_uint32_value_index_free(v.idx)
+	if v.idx != nil {
+		C.mvt_uint32_value_index_free(v.idx)
+	}
 }
 
 type FloatValueIndex struct {
@@ -118,7 +128,9 @@ func (v *FloatValueIndex) Get(val float32) uint32 {
 }
 
 func (v *FloatValueIndex) free() {
-	C.mvt_float_value_index_free(v.idx)
+	if v.idx != nil {
+		C.mvt_float_value_index_free(v.idx)
+	}
 }
 
 type DoubleValueIndex struct {
@@ -136,7 +148,9 @@ func (v *DoubleValueIndex) Get(val float64) uint32 {
 }
 
 func (v *DoubleValueIndex) free() {
-	C.mvt_double_value_index_free(v.idx)
+	if v.idx != nil {
+		C.mvt_double_value_index_free(v.idx)
+	}
 }
 
 type StringValueIndex struct {
@@ -156,7 +170,9 @@ func (v *StringValueIndex) Get(val string) uint32 {
 }
 
 func (v *StringValueIndex) free() {
-	C.mvt_string_value_index_free(v.idx)
+	if v.idx != nil {
+		C.mvt_string_value_index_free(v.idx)
+	}
 }
 
 type BoolValueIndex struct {
@@ -174,5 +190,7 @@ func (v *BoolValueIndex) Get(val bool) uint32 {
 }
 
 func (v *BoolValueIndex) free() {
-	C.mvt_bool_value_index_free(v.idx)
+	if v.idx != nil {
+		C.mvt_bool_value_index_free(v.idx)
+	}
 }

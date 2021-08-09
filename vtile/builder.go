@@ -23,7 +23,9 @@ func NewTileBuilder() *TileBuilder {
 }
 
 func (v *TileBuilder) free() {
-	C.mvt_tile_builder_free(v.m)
+	if v.m != nil {
+		C.mvt_tile_builder_free(v.m)
+	}
 }
 
 func (v *TileBuilder) AddExistingLayer(layer *Layer) {
@@ -59,7 +61,9 @@ type LayerBuilder struct {
 }
 
 func (v *LayerBuilder) free() {
-	C.mvt_layer_builder_free(v.m)
+	if v.m != nil {
+		C.mvt_layer_builder_free(v.m)
+	}
 }
 
 func (v *LayerBuilder) AddKey(name string) {

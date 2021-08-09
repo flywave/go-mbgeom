@@ -102,7 +102,9 @@ func NewValueFromKeyValues(maps map[string]Value) *Value {
 }
 
 func (v *Value) free() {
-	C.mapbox_value_free(v.v)
+	if v.v != nil {
+		C.mapbox_value_free(v.v)
+	}
 }
 
 func (v *Value) Empty() bool {
@@ -200,7 +202,9 @@ func NewPropertyMap() *PropertyMap {
 }
 
 func (v *PropertyMap) free() {
-	C.mapbox_property_map_free(v.m)
+	if v.m != nil {
+		C.mapbox_property_map_free(v.m)
+	}
 }
 
 func (v *PropertyMap) Get(key string) *Value {
@@ -264,7 +268,9 @@ type Identifier struct {
 }
 
 func (v *Identifier) free() {
-	C.mapbox_identifier_free(v.m)
+	if v.m != nil {
+		C.mapbox_identifier_free(v.m)
+	}
 }
 
 func NewIdentifierFromRaw(id interface{}) *Identifier {
@@ -343,7 +349,9 @@ type Feature struct {
 }
 
 func (v *Feature) free() {
-	C.mapbox_feature_free(v.f)
+	if v.f != nil {
+		C.mapbox_feature_free(v.f)
+	}
 }
 
 func NewFeature(geom *Geometry) *Feature {
@@ -433,7 +441,9 @@ func (v *FeatureCollection) GetNative() unsafe.Pointer {
 }
 
 func (v *FeatureCollection) free() {
-	C.mapbox_feature_collection_free(v.fc)
+	if v.fc != nil {
+		C.mapbox_feature_collection_free(v.fc)
+	}
 }
 
 func (v *FeatureCollection) Empty() bool {

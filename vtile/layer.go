@@ -29,7 +29,9 @@ func NewLayerWithData(data []byte) *Layer {
 }
 
 func (v *Layer) free() {
-	C.mvt_vector_layer_free(v.l)
+	if v.l != nil {
+		C.mvt_vector_layer_free(v.l)
+	}
 }
 
 func (v *Layer) Valid() bool {

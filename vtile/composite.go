@@ -24,7 +24,9 @@ func NewTileObject(z, x, y uint32, data []byte) *TileObject {
 }
 
 func (v *TileObject) free() {
-	C.mvt_tile_object_free(v.o)
+	if v.o != nil {
+		C.mvt_tile_object_free(v.o)
+	}
 }
 
 func (v *TileObject) AddLayer(layer string) {
@@ -44,7 +46,9 @@ func NewTileBaton(num_tiles int) *TileBaton {
 }
 
 func (t *TileBaton) free() {
-	C.mvt_baton_free(t.b)
+	if t.b != nil {
+		C.mvt_baton_free(t.b)
+	}
 }
 
 func (t *TileBaton) SetZXY(z, x, y uint32) {

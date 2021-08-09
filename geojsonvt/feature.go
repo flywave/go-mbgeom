@@ -86,7 +86,9 @@ func NewValueFromKeyValues(maps map[string]Value) *Value {
 }
 
 func (v *Value) free() {
-	C.geojsonvt_value_free(v.v)
+	if v.v != nil {
+		C.geojsonvt_value_free(v.v)
+	}
 }
 
 func (v *Value) Empty() bool {
@@ -175,7 +177,9 @@ func NewPropertyMap() *PropertyMap {
 }
 
 func (v *PropertyMap) free() {
-	C.geojsonvt_property_map_free(v.m)
+	if v.m != nil {
+		C.geojsonvt_property_map_free(v.m)
+	}
 }
 
 func (v *PropertyMap) Get(key string) *Value {
@@ -239,7 +243,9 @@ type Identifier struct {
 }
 
 func (v *Identifier) free() {
-	C.geojsonvt_identifier_free(v.m)
+	if v.m != nil {
+		C.geojsonvt_identifier_free(v.m)
+	}
 }
 
 func NewIdentifierFromUInt(b uint64) *Identifier {
@@ -304,7 +310,9 @@ type Feature struct {
 }
 
 func (v *Feature) free() {
-	C.geojsonvt_feature_free(v.f)
+	if v.f != nil {
+		C.geojsonvt_feature_free(v.f)
+	}
 }
 
 func NewFeature(geom *Geometry) *Feature {
@@ -368,7 +376,9 @@ func NewFeatureCollection() *FeatureCollection {
 }
 
 func (v *FeatureCollection) free() {
-	C.geojsonvt_feature_collection_free(v.fc)
+	if v.fc != nil {
+		C.geojsonvt_feature_collection_free(v.fc)
+	}
 }
 
 func (v *FeatureCollection) Empty() bool {

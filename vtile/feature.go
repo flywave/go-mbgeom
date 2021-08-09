@@ -28,7 +28,9 @@ func NewFeatureWithData(layer *Layer, data []byte) *Feature {
 }
 
 func (v *Feature) free() {
-	C.mvt_feature_free(v.f)
+	if v.f != nil {
+		C.mvt_feature_free(v.f)
+	}
 }
 
 func (v *Feature) Valid() bool {

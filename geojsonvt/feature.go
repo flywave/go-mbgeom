@@ -369,6 +369,14 @@ type FeatureCollection struct {
 	fc *C.struct__geojsonvt_feature_collection_t
 }
 
+func ParseFeatureCollection(data string) *FeatureCollection {
+	cdata := C.CString(data)
+	defer C.free(unsafe.Pointer(cdata))
+	ret := &FeatureCollection{fc: C.geojsonvt_feature_collection_parse(cdata)}
+	runtime.SetFinalizer(ret, (*FeatureCollection).free)
+	return ret
+}
+
 func NewFeatureCollection() *FeatureCollection {
 	ret := &FeatureCollection{fc: C.geojsonvt_feature_collection_new()}
 	runtime.SetFinalizer(ret, (*FeatureCollection).free)

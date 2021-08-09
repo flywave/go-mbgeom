@@ -1,5 +1,6 @@
 #include "geojsonvt_c_api.h"
 #include "geom_c_api_impl.hh"
+#include "util.hh"
 
 #include <string.h>
 
@@ -7,10 +8,10 @@
 #include <mapbox/feature.hpp>
 #include <mapbox/geojson.hpp>
 #include <mapbox/geojsonvt.hpp>
+#include <mapbox/geojsonvt_impl.hpp>
 #include <mapbox/geometry.hpp>
 #include <mapbox/geometry/wagyu/wagyu.hpp>
-#include <mapbox/geojsonvt_impl.hpp>
- 
+
 #include <rapidjson/document.h>
 
 #ifdef __cplusplus
@@ -928,6 +929,12 @@ geojsonvt_feature_collection_stringify(geojsonvt_feature_collection_t *fc) {
   return strdup(json.c_str());
 }
 
+geojsonvt_feature_collection_t *
+geojsonvt_feature_collection_parse(const char *buf) {
+  return new geojsonvt_feature_collection_t{
+      mapbox::geojsonvt::parseJSONTile(buf)};
+}
+
 void geojsonvt_tile_free(geojsonvt_tile_t *t) { delete t; }
 
 geojsonvt_feature_collection_t *
@@ -958,6 +965,33 @@ void geojsonvt_free(geojsonvt_t *t) { delete t; }
 geojsonvt_tile_t *geojsonvt_get_tile(geojsonvt_t *t, uint32_t z, uint32_t x,
                                      uint32_t y) {
   return new geojsonvt_tile_t{t->vt.getTile(z, x, y)};
+}
+
+int geojsonvt_feature_collections_parse(const char *buf,
+                                        geojsonvt_feature_collection_t ***data,
+                                        char ***keys) {
+  std::map<std::string, mapbox::feature::feature_collection<int16_t>> feats =
+      mapbox::geojsonvt::parseJSONTiles(buf);
+  *data = new geojsonvt_feature_collection_t *[feats.size()];
+  *keys = new char *[feats.size()];
+  int i = 0;
+  for (auto kp : feats) {
+    (*keys)[i] = strdup(kp.first.c_str());
+    (*data)[i] = new geojsonvt_feature_collection_t{kp.second};
+    i++;
+  }
+  return feats.size();
+}
+
+void geojsonvt_feature_collections_free(int si,
+                                        geojsonvt_feature_collection_t **data,
+                                        char **keys) {
+  for (int i = 0; i < si; i++) {
+    delete data[i];
+    free(keys[i]);
+  }
+  delete[] data;
+  delete[] keys;
 }
 
 #ifdef __cplusplus

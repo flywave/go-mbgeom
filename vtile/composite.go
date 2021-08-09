@@ -7,10 +7,10 @@ package vtile
 // #cgo CXXFLAGS:  -I ../ -std=c++14
 import "C"
 import (
-	"runtime"
-	"unsafe"
 	"errors"
 	"reflect"
+	"runtime"
+	"unsafe"
 )
 
 type TileObject struct {
@@ -18,7 +18,7 @@ type TileObject struct {
 }
 
 func NewTileObject(z, x, y uint32, data []byte) *TileObject {
-	ret := &TileObject{o :C.mvt_tile_object_new(C.uint(z), C.uint(x), C.uint(y), (*C.char)(unsafe.Pointer(&data[0])), C.size_t(len(data)))}
+	ret := &TileObject{o: C.mvt_tile_object_new(C.uint(z), C.uint(x), C.uint(y), (*C.char)(unsafe.Pointer(&data[0])), C.size_t(len(data)))}
 	runtime.SetFinalizer(ret, (*TileObject).free)
 	return ret
 }
@@ -38,7 +38,7 @@ type TileBaton struct {
 }
 
 func NewTileBaton(num_tiles int) *TileBaton {
-	ret := &TileBaton{b :C.mvt_baton_new(C.size_t(num_tiles))}
+	ret := &TileBaton{b: C.mvt_baton_new(C.size_t(num_tiles))}
 	runtime.SetFinalizer(ret, (*TileBaton).free)
 	return ret
 }

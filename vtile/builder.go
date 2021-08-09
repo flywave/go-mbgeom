@@ -49,7 +49,7 @@ func (v *TileBuilder) Serialize() []byte {
 func (v *TileBuilder) GetLayerBuilder(name string, version, extent uint32) *LayerBuilder {
 	cname := C.CString(name)
 	C.free(unsafe.Pointer(cname))
-    ret :=	&LayerBuilder{m: C.mvt_tile_builder_get_layer_builder(v.m, cname, C.uint(version), C.uint(extent))}
+	ret := &LayerBuilder{m: C.mvt_tile_builder_get_layer_builder(v.m, cname, C.uint(version), C.uint(extent))}
 	runtime.SetFinalizer(ret, (*LayerBuilder).free)
 	return ret
 }

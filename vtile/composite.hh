@@ -1,8 +1,8 @@
 #pragma once
 
 #include <algorithm>
-#include <string>
 #include <memory>
+#include <string>
 #include <vector>
 
 #include <vtzero/types.hpp>
@@ -10,8 +10,8 @@
 namespace vtile {
 
 struct tile_object {
-  tile_object(uint32_t z0, uint32_t x0, uint32_t y0,
-              const char *data, size_t size, std::vector<std::string> layers0)
+  tile_object(uint32_t z0, uint32_t x0, uint32_t y0, const char *data,
+              size_t size, std::vector<std::string> layers0)
       : z{z0}, x{x0}, y{y0}, data{data, size}, layers{std::move(layers0)} {}
 
   ~tile_object() noexcept {}

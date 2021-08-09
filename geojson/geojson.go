@@ -124,3 +124,9 @@ func (e *GeoJSON) Get() interface{} {
 	}
 	return nil
 }
+
+func (e *GeoJSON) Stringify() string {
+	cjson := C.mapbox_geojson_stringify(e.m)
+	defer C.free(unsafe.Pointer(cjson))
+	return C.GoString(cjson)
+}

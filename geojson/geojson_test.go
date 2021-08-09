@@ -15,4 +15,10 @@ func TestGeoJSON(t *testing.T) {
 	if json == nil && !json.IsFeatureCollection() {
 		t.FailNow()
 	}
+
+	jsonraw := json.Stringify()
+
+	if jsonraw == "" {
+		t.FailNow()
+	}
 }

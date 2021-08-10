@@ -299,7 +299,7 @@ func NewEmptyPolygon() *Polygon {
 	return ls
 }
 
-func NewPolygon(rings []LinearRing) *Polygon {
+func NewPolygon(rings []*LinearRing) *Polygon {
 	crings := make([]*C.struct__geojsonvt_linear_ring_t, len(rings))
 	for i := range rings {
 		crings[i] = rings[i].lr
@@ -393,7 +393,7 @@ func NewEmptyMultiLineString() *MultiLineString {
 	return ls
 }
 
-func NewMultiLineString(lines []LineString) *MultiLineString {
+func NewMultiLineString(lines []*LineString) *MultiLineString {
 	clines := make([]*C.struct__geojsonvt_line_string_t, len(lines))
 	for i := range lines {
 		clines[i] = lines[i].ls

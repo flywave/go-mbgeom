@@ -18,6 +18,95 @@ type Value struct {
 	v *C.struct__geojsonvt_value_t
 }
 
+func NewValueRaw(v interface{}) *Value {
+	var ret *Value
+	switch val := v.(type) {
+	case bool:
+		ret = NewValueFromBool(val)
+	case uint64:
+		ret = NewValueFromUInt(val)
+	case int64:
+		ret = NewValueFromInt(val)
+	case float64:
+		ret = NewValueFromDouble(val)
+	case string:
+		ret = NewValueFromString(val)
+	case []interface{}:
+		vals := make([]*Value, len(val))
+		for i, vv := range val {
+			vals[i] = NewValueRaw(vv)
+		}
+		ret = NewValueFromValues(vals)
+	case []bool:
+		vals := make([]*Value, len(val))
+		for i, vv := range val {
+			vals[i] = NewValueFromBool(vv)
+		}
+		ret = NewValueFromValues(vals)
+	case []uint64:
+		vals := make([]*Value, len(val))
+		for i, vv := range val {
+			vals[i] = NewValueFromUInt(vv)
+		}
+		ret = NewValueFromValues(vals)
+	case []int64:
+		vals := make([]*Value, len(val))
+		for i, vv := range val {
+			vals[i] = NewValueFromInt(vv)
+		}
+		ret = NewValueFromValues(vals)
+	case []float64:
+		vals := make([]*Value, len(val))
+		for i, vv := range val {
+			vals[i] = NewValueFromDouble(vv)
+		}
+		ret = NewValueFromValues(vals)
+	case []string:
+		vals := make([]*Value, len(val))
+		for i, vv := range val {
+			vals[i] = NewValueFromString(vv)
+		}
+		ret = NewValueFromValues(vals)
+	case map[string]interface{}:
+		maps := make(map[string]*Value)
+		for k, vv := range val {
+			maps[k] = NewValueRaw(vv)
+		}
+		ret = NewValueFromKeyValues(maps)
+	case map[string]bool:
+		maps := make(map[string]*Value)
+		for k, vv := range val {
+			maps[k] = NewValueFromBool(vv)
+		}
+		ret = NewValueFromKeyValues(maps)
+	case map[string]uint64:
+		maps := make(map[string]*Value)
+		for k, vv := range val {
+			maps[k] = NewValueFromUInt(vv)
+		}
+		ret = NewValueFromKeyValues(maps)
+	case map[string]int64:
+		maps := make(map[string]*Value)
+		for k, vv := range val {
+			maps[k] = NewValueFromInt(vv)
+		}
+		ret = NewValueFromKeyValues(maps)
+	case map[string]float64:
+		maps := make(map[string]*Value)
+		for k, vv := range val {
+			maps[k] = NewValueFromDouble(vv)
+		}
+		ret = NewValueFromKeyValues(maps)
+	case map[string]string:
+		maps := make(map[string]*Value)
+		for k, vv := range val {
+			maps[k] = NewValueFromString(vv)
+		}
+		ret = NewValueFromKeyValues(maps)
+	}
+	return ret
+}
+
 func NewValue() *Value {
 	ret := &Value{v: C.geojsonvt_value_new()}
 	runtime.SetFinalizer(ret, (*Value).free)
@@ -56,7 +145,7 @@ func NewValueFromString(b string) *Value {
 	return ret
 }
 
-func NewValueFromValues(vals []Value) *Value {
+func NewValueFromValues(vals []*Value) *Value {
 	cvals := make([]*C.struct__geojsonvt_value_t, len(vals))
 	for i := range cvals {
 		cvals[i] = vals[i].v
@@ -66,7 +155,7 @@ func NewValueFromValues(vals []Value) *Value {
 	return ret
 }
 
-func NewValueFromKeyValues(maps map[string]Value) *Value {
+func NewValueFromKeyValues(maps map[string]*Value) *Value {
 	ckeys := make([]*C.char, len(maps))
 	cvals := make([]*C.struct__geojsonvt_value_t, len(maps))
 	i := 0
@@ -170,6 +259,16 @@ type PropertyMap struct {
 	m *C.struct__geojsonvt_property_map_t
 }
 
+func NewPropertyMapRaw(maps map[string]interface{}) *PropertyMap {
+	ret := &PropertyMap{m: C.geojsonvt_property_map_new()}
+	runtime.SetFinalizer(ret, (*PropertyMap).free)
+	for k, v := range maps {
+		value := NewValueRaw(v)
+		ret.Set(k, value)
+	}
+	return ret
+}
+
 func NewPropertyMap() *PropertyMap {
 	ret := &PropertyMap{m: C.geojsonvt_property_map_new()}
 	runtime.SetFinalizer(ret, (*PropertyMap).free)
@@ -246,6 +345,21 @@ func (v *Identifier) free() {
 	if v.m != nil {
 		C.geojsonvt_identifier_free(v.m)
 	}
+}
+
+func NewIdentifier(i interface{}) *Identifier {
+	var identifier *Identifier
+	switch id := i.(type) {
+	case uint64:
+		identifier = NewIdentifierFromUInt(id)
+	case int64:
+		identifier = NewIdentifierFromInt(id)
+	case float64:
+		identifier = NewIdentifierFromDouble(id)
+	case string:
+		identifier = NewIdentifierFromString(id)
+	}
+	return identifier
 }
 
 func NewIdentifierFromUInt(b uint64) *Identifier {

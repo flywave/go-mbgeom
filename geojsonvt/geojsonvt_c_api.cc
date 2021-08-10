@@ -765,6 +765,7 @@ char **geojsonvt_property_map_keys(geojsonvt_property_map_t *val, int *count) {
   int i = 0;
   for (auto rp : val->prop) {
     keys[i] = strdup(rp.first.c_str());
+    i++;
   }
   return keys;
 }

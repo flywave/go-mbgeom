@@ -62,3 +62,23 @@ func ParseFeatureCollections(data string) map[string]*FeatureCollection {
 
 	return rets
 }
+
+func StringifyFeatureCollections(maps map[string]*FeatureCollection) string {
+	feats := make([]*C.struct__geojsonvt_feature_collection_t, len(maps))
+	keys := make([]*C.char, len(maps))
+	i := 0
+	for k, v := range maps {
+		keys[i] = C.CString(k)
+		feats[i] = v.fc
+		i++
+	}
+
+	cjson := C.geojsonvt_feature_collections_stringify(C.int(i), &feats[0], &keys[0])
+	defer C.free(unsafe.Pointer(cjson))
+
+	for i := range keys {
+		C.free(unsafe.Pointer(keys[i]))
+	}
+
+	return C.GoString(cjson)
+}

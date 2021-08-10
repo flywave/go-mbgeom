@@ -983,6 +983,16 @@ int geojsonvt_feature_collections_parse(const char *buf,
   return feats.size();
 }
 
+char *geojsonvt_feature_collections_stringify(
+    int si, geojsonvt_feature_collection_t **data, char **keys) {
+  std::map<std::string, mapbox::feature::feature_collection<int16_t>> feats;
+  for (int i = 0; i < si; i++) {
+    feats.emplace(keys[i], data[i]->fc);
+  }
+  auto json = mapbox::geojson::stringifyvt(feats);
+  return strdup(json.c_str());
+}
+
 void geojsonvt_feature_collections_free(int si,
                                         geojsonvt_feature_collection_t **data,
                                         char **keys) {

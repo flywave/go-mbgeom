@@ -387,6 +387,9 @@ geojsonvt_get_tile(geojsonvt_t *t, uint32_t z, uint32_t x, uint32_t y);
 GEOJSONVTCAPICALL int geojsonvt_feature_collections_parse(
     const char *buf, geojsonvt_feature_collection_t ***data, char ***keys);
 
+GEOJSONVTCAPICALL char *geojsonvt_feature_collections_stringify(
+    int si, geojsonvt_feature_collection_t **data, char **keys);
+
 GEOJSONVTCAPICALL void geojsonvt_feature_collections_free(
     int si, geojsonvt_feature_collection_t **data, char **keys);
 

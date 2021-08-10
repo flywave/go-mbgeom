@@ -216,6 +216,17 @@ rapidjson_value convert<mapbox::feature::feature_collection<int16_t>>(const mapb
     return result;
 }
 
+template <>
+rapidjson_value convert<std::map<std::string, mapbox::feature::feature_collection<int16_t>>>(const std::map<std::string, mapbox::feature::feature_collection<int16_t>>& collection, rapidjson_allocator& allocator) {
+    rapidjson_value result(rapidjson::kObjectType);
+
+    for (const auto& element : collection) {
+        result.AddMember(rapidjson::GenericStringRef<char>(element.first.c_str()), convert(element.second, allocator), allocator);
+    }
+
+    return result;
+}
+
 template <class T>
 std::string stringifyvt(const T& t) {
     rapidjson_allocator allocator;

@@ -35,3 +35,16 @@ func TestGeoJSONVT(t *testing.T) {
 		t.FailNow()
 	}
 }
+
+func TestGeoJSONVTParserStringify(t *testing.T) {
+	f, _ := os.Open("../data/us-states-tiles.json")
+	bytes, _ := ioutil.ReadAll(f)
+
+	jsonvt := ParseFeatureCollections(string(bytes))
+
+	data := StringifyFeatureCollections(jsonvt)
+
+	if data == "" && jsonvt != nil {
+		t.FailNow()
+	}
+}

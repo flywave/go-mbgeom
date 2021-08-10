@@ -997,7 +997,6 @@ void geojsonvt_feature_collections_free(int si,
                                         geojsonvt_feature_collection_t **data,
                                         char **keys) {
   for (int i = 0; i < si; i++) {
-    delete data[i];
     free(keys[i]);
   }
   delete[] data;

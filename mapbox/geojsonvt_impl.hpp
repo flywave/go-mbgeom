@@ -14,13 +14,13 @@ namespace mapbox {
 namespace geojson {
 
 template <>
-rapidjson_value convert<mapbox::geometry::geometry<int16_t>>(const mapbox::geometry::geometry<int16_t>&, rapidjson_allocator&);
+inline rapidjson_value convert<mapbox::geometry::geometry<int16_t>>(const mapbox::geometry::geometry<int16_t>&, rapidjson_allocator&);
 
 template <>
-rapidjson_value convert<mapbox::feature::feature<int16_t>>(const mapbox::feature::feature<int16_t>&, rapidjson_allocator&);
+inline rapidjson_value convert<mapbox::feature::feature<int16_t>>(const mapbox::feature::feature<int16_t>&, rapidjson_allocator&);
 
 template <>
-rapidjson_value convert<mapbox::feature::feature_collection<int16_t>>(const mapbox::feature::feature_collection<int16_t>&, rapidjson_allocator&);
+inline rapidjson_value convert<mapbox::feature::feature_collection<int16_t>>(const mapbox::feature::feature_collection<int16_t>&, rapidjson_allocator&);
 
 struct to_type_16 {
 public:
@@ -168,7 +168,7 @@ struct to_coordinates_or_geometries_16 {
 };
 
 template <>
-rapidjson_value convert<mapbox::geometry::geometry<int16_t>>(const mapbox::geometry::geometry<int16_t>& element, rapidjson_allocator& allocator) {
+inline rapidjson_value convert<mapbox::geometry::geometry<int16_t>>(const mapbox::geometry::geometry<int16_t>& element, rapidjson_allocator& allocator) {
     if (element.is<empty>())
         return rapidjson_value(rapidjson::kNullType);
 
@@ -188,7 +188,7 @@ rapidjson_value convert<mapbox::geometry::geometry<int16_t>>(const mapbox::geome
 }
 
 template <>
-rapidjson_value convert<mapbox::feature::feature<int16_t>>(const mapbox::feature::feature<int16_t>& element, rapidjson_allocator& allocator) {
+inline rapidjson_value convert<mapbox::feature::feature<int16_t>>(const mapbox::feature::feature<int16_t>& element, rapidjson_allocator& allocator) {
     rapidjson_value result(rapidjson::kObjectType);
     result.AddMember("type", "Feature", allocator);
 
@@ -203,7 +203,7 @@ rapidjson_value convert<mapbox::feature::feature<int16_t>>(const mapbox::feature
 }
 
 template <>
-rapidjson_value convert<mapbox::feature::feature_collection<int16_t>>(const mapbox::feature::feature_collection<int16_t>& collection, rapidjson_allocator& allocator) {
+inline rapidjson_value convert<mapbox::feature::feature_collection<int16_t>>(const mapbox::feature::feature_collection<int16_t>& collection, rapidjson_allocator& allocator) {
     rapidjson_value result(rapidjson::kObjectType);
     result.AddMember("type", "FeatureCollection", allocator);
 
@@ -217,7 +217,7 @@ rapidjson_value convert<mapbox::feature::feature_collection<int16_t>>(const mapb
 }
 
 template <>
-rapidjson_value convert<std::map<std::string, mapbox::feature::feature_collection<int16_t>>>(const std::map<std::string, mapbox::feature::feature_collection<int16_t>>& collection, rapidjson_allocator& allocator) {
+inline rapidjson_value convert<std::map<std::string, mapbox::feature::feature_collection<int16_t>>>(const std::map<std::string, mapbox::feature::feature_collection<int16_t>>& collection, rapidjson_allocator& allocator) {
     rapidjson_value result(rapidjson::kObjectType);
 
     for (const auto& element : collection) {

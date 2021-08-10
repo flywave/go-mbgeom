@@ -466,7 +466,7 @@ func NewEmptyMultiPolygon() *MultiPolygon {
 	return ls
 }
 
-func NewMultiPolygon(polys []Polygon) *MultiPolygon {
+func NewMultiPolygon(polys []*Polygon) *MultiPolygon {
 	cpolys := make([]*C.struct__geojsonvt_polygon_t, len(polys))
 	for i := range polys {
 		cpolys[i] = polys[i].p

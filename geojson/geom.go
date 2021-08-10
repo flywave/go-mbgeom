@@ -495,7 +495,7 @@ func (e *Polygon) Data() [][][]float64 {
 	ret[0] = el.Data()
 	for i := range ret[1:] {
 		p := e.GetInterior(i)
-		ret[i] = p.Data()
+		ret[i+1] = p.Data()
 	}
 	return ret
 }

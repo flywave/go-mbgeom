@@ -1,5 +1,5 @@
 // +build linux darwin
 
-package main
+package mbgeom
 
 import _ "github.com/benesch/cgosymbolizer"

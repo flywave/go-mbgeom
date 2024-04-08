@@ -968,6 +968,20 @@ geojsonvt_tile_t *geojsonvt_get_tile(geojsonvt_t *t, uint32_t z, uint32_t x,
   return new geojsonvt_tile_t{t->vt.getTile(z, x, y)};
 }
 
+int geojsonvt_get_tiles_count(geojsonvt_t *t) {
+  return t->vt.getInternalTiles().size();
+}
+
+int geojsonvt_get_tiles(geojsonvt_t *t, geojsonvt_tile_t **rets) {
+  auto tiles = t->vt.getInternalTiles();
+  int i = 0;
+  for (auto kp : tiles) {
+    rets[i] = new geojsonvt_tile_t{kp.second.tile};
+    i++;
+  }
+  return tiles.size();
+}
+
 int geojsonvt_feature_collections_parse(const char *buf,
                                         geojsonvt_feature_collection_t ***data,
                                         char ***keys) {

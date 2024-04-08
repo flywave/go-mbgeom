@@ -43,5 +43,23 @@ func (t *GeoJSONVT) free() {
 }
 
 func (t *GeoJSONVT) GetTile(z, x, y uint32) *Tile {
-	return &Tile{t: C.geojsonvt_get_tile(t.vt, C.uint(z), C.uint(x), C.uint(y))}
+	tt := &Tile{t: C.geojsonvt_get_tile(t.vt, C.uint(z), C.uint(x), C.uint(y))}
+	runtime.SetFinalizer(tt, (*Tile).free)
+	return tt
+}
+
+func (t *GeoJSONVT) GetTiles() []Tile {
+	count := int(C.geojsonvt_get_tiles_count(t.vt))
+	tiles := make([]*C.struct__geojsonvt_tile_t, count)
+
+	ccount := C.geojsonvt_get_tiles(t.vt, &tiles[0])
+	rets := make([]Tile, ccount)
+
+	for i := range tiles {
+		tt := Tile{t: tiles[i]}
+		runtime.SetFinalizer(&tt, (*Tile).free)
+		rets[i] = tt
+	}
+
+	return rets
 }

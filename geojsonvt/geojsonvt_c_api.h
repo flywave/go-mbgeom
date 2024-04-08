@@ -383,6 +383,9 @@ geojsonvt_new(void *geom, struct _geojsonvt_tile_options_t opts);
 GEOJSONVTCAPICALL void geojsonvt_free(geojsonvt_t *t);
 GEOJSONVTCAPICALL geojsonvt_tile_t *
 geojsonvt_get_tile(geojsonvt_t *t, uint32_t z, uint32_t x, uint32_t y);
+GEOJSONVTCAPICALL int geojsonvt_get_tiles_count(geojsonvt_t *t);
+GEOJSONVTCAPICALL int geojsonvt_get_tiles(geojsonvt_t *t,
+                                          geojsonvt_tile_t **rets);
 
 GEOJSONVTCAPICALL int geojsonvt_feature_collections_parse(
     const char *buf, geojsonvt_feature_collection_t ***data, char ***keys);

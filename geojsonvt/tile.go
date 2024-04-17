@@ -10,6 +10,8 @@ import (
 	"reflect"
 	"runtime"
 	"unsafe"
+
+	"github.com/flywave/go-mbgeom/geojson"
 )
 
 type Tile struct {
@@ -25,6 +27,11 @@ func (t *Tile) free() {
 func (t *Tile) GetFeatureCollection() *FeatureCollection {
 	fc := &FeatureCollection{fc: C.geojsonvt_tile_get_feature_collection(t.t)}
 	runtime.SetFinalizer(fc, (*FeatureCollection).free)
+	return fc
+}
+
+func (t *Tile) GetSourceFeatureCollection() *geojson.FeatureCollection {
+	fc := geojson.NewGeomFeatureCollectionNative((unsafe.Pointer(C.geojsonvt_tile_get_source_feature_collection(t.t))))
 	return fc
 }
 

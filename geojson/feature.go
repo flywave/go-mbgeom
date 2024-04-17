@@ -421,6 +421,12 @@ type FeatureCollection struct {
 	fc *C.struct__mapbox_feature_collection_t
 }
 
+func NewGeomFeatureCollectionNative(fc unsafe.Pointer) *FeatureCollection {
+	ret := &FeatureCollection{fc: (*C.struct__mapbox_feature_collection_t)(fc)}
+	runtime.SetFinalizer(ret, (*FeatureCollection).free)
+	return ret
+}
+
 func NewGeomFeatureCollection(f *geom.FeatureCollection) *FeatureCollection {
 	ret := &FeatureCollection{fc: C.mapbox_feature_collection_new()}
 	runtime.SetFinalizer(ret, (*FeatureCollection).free)

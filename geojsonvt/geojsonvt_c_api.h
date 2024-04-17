@@ -366,6 +366,8 @@ geojsonvt_feature_collection_parse(const char *buf);
 GEOJSONVTCAPICALL void geojsonvt_tile_free(geojsonvt_tile_t *t);
 GEOJSONVTCAPICALL geojsonvt_feature_collection_t *
 geojsonvt_tile_get_feature_collection(geojsonvt_tile_t *t);
+GEOJSONVTCAPICALL mapbox_feature_collection_t *
+geojsonvt_tile_get_source_feature_collection(geojsonvt_tile_t *t);
 
 struct _geojsonvt_tile_options_t {
   double tolerance;

@@ -943,6 +943,11 @@ geojsonvt_tile_get_feature_collection(geojsonvt_tile_t *t) {
   return new geojsonvt_feature_collection_t{t->t.features};
 }
 
+mapbox_feature_collection_t *
+geojsonvt_tile_get_source_feature_collection(geojsonvt_tile_t *t) {
+  return new mapbox_feature_collection_t{t->t.source_features};
+}
+
 geojsonvt_t *geojsonvt_new(void *geom, struct _geojsonvt_tile_options_t opts) {
   mapbox::geojsonvt::Options opt;
   {

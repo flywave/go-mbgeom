@@ -23,7 +23,7 @@ func TestGeoJSONVT(t *testing.T) {
 	vt := NewGeoJSONVT(json, *opts)
 	tile := vt.GetTile(0, 0, 0)
 
-	fc := tile.GetFeatureCollection()
+	fc := tile.GetSourceFeatureCollection()
 
 	if tile == nil && !fc.Empty() {
 		t.FailNow()

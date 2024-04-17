@@ -10,15 +10,23 @@
 #include <mapbox/geojsonvt_impl.hpp>
 
 #include <algorithm>
+#include <iostream>
 #include <string>
 #include <vector>
-#include<iostream>
+
+
+#include <mapbox/geojson_impl.hpp>
+
 
 int main(int argc, char **argv) {
-  std::string jsondata = mapbox::geojsonvt::loadFile("data/us-states-tiles.json");
-  std::map<std::string, mapbox::feature::feature_collection<int16_t>> feats =
-      mapbox::geojsonvt::parseJSONTiles(jsondata);
-  auto json = mapbox::geojson::stringifyvt(feats);
+  std::string jsondata = mapbox::geojsonvt::loadFile("../data/countries.geojson");
+  auto feats = mapbox::geojson::parse(jsondata);
+  mapbox::geojsonvt::Options opt;
+  auto vt = mapbox::geojsonvt::GeoJSONVT(feats, opt);
 
-  std::cout << json <<std::endl;
+  auto tile = vt.getTile(0, 0, 0);
+
+  auto json = mapbox::geojson::stringify(tile.source_features);
+
+  std::cout << json << std::endl;
 }

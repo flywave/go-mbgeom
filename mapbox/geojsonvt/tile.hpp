@@ -135,8 +135,8 @@ private:
   mapbox::geometry::empty reproject(const vt_empty &empty) { return empty; }
 
   mapbox::geometry::point<double> reproject(const vt_point &p) {
-    double lon = (p.x - 0.5) * 360;
-    double lat = 2.0 * atan(exp(M_PI * p.y)) - M_PI * 0.5;
+    double lon = 360 * p.x / z2 - 180;
+    double lat = 180 / M_PI * atan(sinh(M_PI * (1 - 2 * p.y / z2)));
     return {lon, lat};
   }
 

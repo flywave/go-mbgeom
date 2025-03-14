@@ -3,7 +3,7 @@ package geojson
 // #include <stdlib.h>
 // #include <string.h>
 // #include "geojson_c_api.h"
-// #cgo CFLAGS: -I ../
+// #cgo CFLAGS: -I ../ -std=c11
 // #cgo CXXFLAGS:  -I ../ -std=c++14
 import "C"
 import (
@@ -47,13 +47,13 @@ func NewValueFromBool(b bool) *Value {
 }
 
 func NewValueFromUInt(b uint64) *Value {
-	ret := &Value{v: C.mapbox_value_from_uint(C.ulong(b))}
+	ret := &Value{v: C.mapbox_value_from_uint(C.uint64_t(b))}
 	runtime.SetFinalizer(ret, (*Value).free)
 	return ret
 }
 
 func NewValueFromInt(b int64) *Value {
-	ret := &Value{v: C.mapbox_value_from_int(C.long(b))}
+	ret := &Value{v: C.mapbox_value_from_int(C.int64_t(b))}
 	runtime.SetFinalizer(ret, (*Value).free)
 	return ret
 }
@@ -288,13 +288,13 @@ func NewIdentifierFromRaw(id interface{}) *Identifier {
 }
 
 func NewIdentifierFromUInt(b uint64) *Identifier {
-	ret := &Identifier{m: C.mapbox_identifier_from_uint(C.ulong(b))}
+	ret := &Identifier{m: C.mapbox_identifier_from_uint(C.uint64_t(b))}
 	runtime.SetFinalizer(ret, (*Identifier).free)
 	return ret
 }
 
 func NewIdentifierFromInt(b int64) *Identifier {
-	ret := &Identifier{m: C.mapbox_identifier_from_int(C.long(b))}
+	ret := &Identifier{m: C.mapbox_identifier_from_int(C.int64_t(b))}
 	runtime.SetFinalizer(ret, (*Identifier).free)
 	return ret
 }

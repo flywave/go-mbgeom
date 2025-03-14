@@ -3,7 +3,7 @@ package vtile
 // #include <stdlib.h>
 // #include <string.h>
 // #include "vtile_c_api.h"
-// #cgo CFLAGS: -I ../
+// #cgo CFLAGS: -I ../ -std=c11
 // #cgo CXXFLAGS:  -I ../ -std=c++14
 import "C"
 import (

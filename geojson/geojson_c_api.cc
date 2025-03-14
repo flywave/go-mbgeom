@@ -376,31 +376,31 @@ bool mapbox_multi_polygon_equal(mapbox_multi_polygon_t *geom1,
 
 void mapbox_geometry_free(mapbox_geometry_t *geom) { delete geom; }
 
-_Bool mapbox_geometry_empty(mapbox_geometry_t *geom) {
+bool mapbox_geometry_empty(mapbox_geometry_t *geom) {
   return geom->geom.valid();
 }
 
-_Bool mapbox_geometry_is_point(mapbox_geometry_t *geom) {
+bool mapbox_geometry_is_point(mapbox_geometry_t *geom) {
   return geom->geom.is<mapbox::geometry::point<double>>();
 }
 
-_Bool mapbox_geometry_is_line_string(mapbox_geometry_t *geom) {
+bool mapbox_geometry_is_line_string(mapbox_geometry_t *geom) {
   return geom->geom.is<mapbox::geometry::line_string<double>>();
 }
 
-_Bool mapbox_geometry_is_polygon(mapbox_geometry_t *geom) {
+bool mapbox_geometry_is_polygon(mapbox_geometry_t *geom) {
   return geom->geom.is<mapbox::geometry::polygon<double>>();
 }
 
-_Bool mapbox_geometry_is_multi_point(mapbox_geometry_t *geom) {
+bool mapbox_geometry_is_multi_point(mapbox_geometry_t *geom) {
   return geom->geom.is<mapbox::geometry::multi_point<double>>();
 }
 
-_Bool mapbox_geometry_is_multi_line_string(mapbox_geometry_t *geom) {
+bool mapbox_geometry_is_multi_line_string(mapbox_geometry_t *geom) {
   return geom->geom.is<mapbox::geometry::multi_line_string<double>>();
 }
 
-_Bool mapbox_geometry_is_multi_polygon(mapbox_geometry_t *geom) {
+bool mapbox_geometry_is_multi_polygon(mapbox_geometry_t *geom) {
   return geom->geom.is<mapbox::geometry::multi_polygon<double>>();
 }
 
@@ -473,7 +473,7 @@ void mapbox_geometry_collection_free(mapbox_geometry_collection_t *geom) {
   delete geom;
 }
 
-_Bool mapbox_geometry_collection_empty(mapbox_geometry_collection_t *gc) {
+bool mapbox_geometry_collection_empty(mapbox_geometry_collection_t *gc) {
   return gc->gc.empty();
 }
 
@@ -508,7 +508,7 @@ mapbox_value_t *mapbox_value_new() {
 
 void mapbox_value_free(mapbox_value_t *val) { delete val; }
 
-mapbox_value_t *mapbox_value_from_bool(_Bool v) {
+mapbox_value_t *mapbox_value_from_bool(bool v) {
   return new mapbox_value_t{mapbox::feature::value{v}};
 }
 
@@ -547,42 +547,42 @@ mapbox_value_t *mapbox_value_from_keyvalues(const char **ks,
   return new mapbox_value_t{mapbox::feature::value{v}};
 }
 
-_Bool mapbox_value_is_empty(mapbox_value_t *geom) { return !geom->val.valid(); }
+bool mapbox_value_is_empty(mapbox_value_t *geom) { return !geom->val.valid(); }
 
-_Bool mapbox_value_is_null(mapbox_value_t *geom) {
+bool mapbox_value_is_null(mapbox_value_t *geom) {
   return geom->val.is<mapbox::feature::null_value_t>();
 }
 
-_Bool mapbox_value_is_bool(mapbox_value_t *geom) {
+bool mapbox_value_is_bool(mapbox_value_t *geom) {
   return geom->val.is<bool>();
 }
 
-_Bool mapbox_value_is_uint(mapbox_value_t *geom) {
+bool mapbox_value_is_uint(mapbox_value_t *geom) {
   return geom->val.is<uint64_t>();
 }
 
-_Bool mapbox_value_is_int(mapbox_value_t *geom) {
+bool mapbox_value_is_int(mapbox_value_t *geom) {
   return geom->val.is<int64_t>();
 }
 
-_Bool mapbox_value_is_double(mapbox_value_t *geom) {
+bool mapbox_value_is_double(mapbox_value_t *geom) {
   return geom->val.is<double>();
 }
 
-_Bool mapbox_value_is_string(mapbox_value_t *geom) {
+bool mapbox_value_is_string(mapbox_value_t *geom) {
   return geom->val.is<std::string>();
 }
 
-_Bool mapbox_value_is_vector(mapbox_value_t *geom) {
+bool mapbox_value_is_vector(mapbox_value_t *geom) {
   return geom->val.is<std::shared_ptr<std::vector<mapbox::feature::value>>>();
 }
 
-_Bool mapbox_value_is_map(mapbox_value_t *geom) {
+bool mapbox_value_is_map(mapbox_value_t *geom) {
   return geom->val.is<std::shared_ptr<
       std::unordered_map<std::string, mapbox::feature::value>>>();
 }
 
-_Bool mapbox_value_cast_bool(mapbox_value_t *geom) {
+bool mapbox_value_cast_bool(mapbox_value_t *geom) {
   return geom->val.get<bool>();
 }
 
@@ -642,14 +642,14 @@ void mapbox_property_map_set(mapbox_property_map_t *val, const char *key,
   val->prop[key] = v->val;
 }
 
-_Bool mapbox_property_map_has(mapbox_property_map_t *val, const char *key) {
+bool mapbox_property_map_has(mapbox_property_map_t *val, const char *key) {
   if (val->prop.find(key) == val->prop.end()) {
     return false;
   }
   return true;
 }
 
-_Bool mapbox_property_map_empty(mapbox_property_map_t *val) {
+bool mapbox_property_map_empty(mapbox_property_map_t *val) {
   return val->prop.empty();
 }
 
@@ -692,19 +692,19 @@ mapbox_identifier_t *mapbox_identifier_from_string(const char *v) {
 
 void mapbox_identifier_free(mapbox_identifier_t *val) { delete val; }
 
-_Bool mapbox_identifier_is_uint(mapbox_identifier_t *geom) {
+bool mapbox_identifier_is_uint(mapbox_identifier_t *geom) {
   return geom->id.is<uint64_t>();
 }
 
-_Bool mapbox_identifier_is_int(mapbox_identifier_t *geom) {
+bool mapbox_identifier_is_int(mapbox_identifier_t *geom) {
   return geom->id.is<int64_t>();
 }
 
-_Bool mapbox_identifier_is_double(mapbox_identifier_t *geom) {
+bool mapbox_identifier_is_double(mapbox_identifier_t *geom) {
   return geom->id.is<double>();
 }
 
-_Bool mapbox_identifier_is_string(mapbox_identifier_t *geom) {
+bool mapbox_identifier_is_string(mapbox_identifier_t *geom) {
   return geom->id.is<std::string>();
 }
 
@@ -785,7 +785,7 @@ void mapbox_feature_collection_free(mapbox_feature_collection_t *geom) {
   delete geom;
 }
 
-_Bool mapbox_feature_collection_empty(mapbox_feature_collection_t *gc) {
+bool mapbox_feature_collection_empty(mapbox_feature_collection_t *gc) {
   return gc->fc.empty();
 }
 
@@ -838,19 +838,19 @@ mapbox_feature_collection_stringify(mapbox_feature_collection_t *fc) {
 
 void mapbox_geojson_free(mapbox_geojson_t *gejson) { delete gejson; }
 
-_Bool mapbox_geojson_is_empty(mapbox_geojson_t *gejson) {
+bool mapbox_geojson_is_empty(mapbox_geojson_t *gejson) {
   return !gejson->json.valid();
 }
 
-_Bool mapbox_geojson_is_geometry(mapbox_geojson_t *gejson) {
+bool mapbox_geojson_is_geometry(mapbox_geojson_t *gejson) {
   return gejson->json.is<mapbox::geojson::geometry>();
 }
 
-_Bool mapbox_geojson_is_feature(mapbox_geojson_t *gejson) {
+bool mapbox_geojson_is_feature(mapbox_geojson_t *gejson) {
   return gejson->json.is<mapbox::geojson::feature>();
 }
 
-_Bool mapbox_geojson_is_feature_collection(mapbox_geojson_t *gejson) {
+bool mapbox_geojson_is_feature_collection(mapbox_geojson_t *gejson) {
   return gejson->json.is<mapbox::geojson::feature_collection>();
 }
 
@@ -888,12 +888,12 @@ char *mapbox_geojson_stringify(mapbox_geojson_t *gejson) {
   return strdup(json.c_str());
 }
 
-_Bool mapbox_spatial_algorithms_intersects(mapbox_geometry_t *geom1,
+bool mapbox_spatial_algorithms_intersects(mapbox_geometry_t *geom1,
                                            mapbox_geometry_t *geom2) {
   return mapbox::geometry::algorithms::intersects(geom1->geom, geom2->geom);
 }
 
-_Bool mapbox_spatial_algorithms_disjoint(mapbox_geometry_t *geom1,
+bool mapbox_spatial_algorithms_disjoint(mapbox_geometry_t *geom1,
                                          mapbox_geometry_t *geom2) {
   return mapbox::geometry::algorithms::disjoint(geom1->geom, geom2->geom);
 }

@@ -195,17 +195,17 @@ geojsonvt_multi_polygon_equal(geojsonvt_multi_polygon_t *geom1,
                               geojsonvt_multi_polygon_t *geom2);
 
 GEOJSONVTCAPICALL void geojsonvt_geometry_free(geojsonvt_geometry_t *geom);
-GEOJSONVTCAPICALL _Bool geojsonvt_geometry_empty(geojsonvt_geometry_t *geom);
-GEOJSONVTCAPICALL _Bool geojsonvt_geometry_is_point(geojsonvt_geometry_t *geom);
-GEOJSONVTCAPICALL _Bool
+GEOJSONVTCAPICALL bool geojsonvt_geometry_empty(geojsonvt_geometry_t *geom);
+GEOJSONVTCAPICALL bool geojsonvt_geometry_is_point(geojsonvt_geometry_t *geom);
+GEOJSONVTCAPICALL bool
 geojsonvt_geometry_is_line_string(geojsonvt_geometry_t *geom);
-GEOJSONVTCAPICALL _Bool
+GEOJSONVTCAPICALL bool
 geojsonvt_geometry_is_polygon(geojsonvt_geometry_t *geom);
-GEOJSONVTCAPICALL _Bool
+GEOJSONVTCAPICALL bool
 geojsonvt_geometry_is_multi_point(geojsonvt_geometry_t *geom);
-GEOJSONVTCAPICALL _Bool
+GEOJSONVTCAPICALL bool
 geojsonvt_geometry_is_multi_line_string(geojsonvt_geometry_t *geom);
-GEOJSONVTCAPICALL _Bool
+GEOJSONVTCAPICALL bool
 geojsonvt_geometry_is_multi_polygon(geojsonvt_geometry_t *geom);
 GEOJSONVTCAPICALL geojsonvt_point_t *
 geojsonvt_geometry_cast_point(geojsonvt_geometry_t *geom);
@@ -228,7 +228,7 @@ GEOJSONVTCAPICALL geojsonvt_geometry_collection_t *
 geojsonvt_geometry_collection_new();
 GEOJSONVTCAPICALL void
 geojsonvt_geometry_collection_free(geojsonvt_geometry_collection_t *geom);
-GEOJSONVTCAPICALL _Bool
+GEOJSONVTCAPICALL bool
 geojsonvt_geometry_collection_empty(geojsonvt_geometry_collection_t *gc);
 GEOJSONVTCAPICALL void
 geojsonvt_geometry_collection_append(geojsonvt_geometry_collection_t *gc,
@@ -243,7 +243,7 @@ geojsonvt_geometry_collection_get(geojsonvt_geometry_collection_t *gc, int i);
 
 GEOJSONVTCAPICALL geojsonvt_value_t *geojsonvt_value_new();
 GEOJSONVTCAPICALL void geojsonvt_value_free(geojsonvt_value_t *val);
-GEOJSONVTCAPICALL geojsonvt_value_t *geojsonvt_value_from_bool(_Bool v);
+GEOJSONVTCAPICALL geojsonvt_value_t *geojsonvt_value_from_bool(bool v);
 GEOJSONVTCAPICALL geojsonvt_value_t *geojsonvt_value_from_uint(uint64_t v);
 GEOJSONVTCAPICALL geojsonvt_value_t *geojsonvt_value_from_int(int64_t v);
 GEOJSONVTCAPICALL geojsonvt_value_t *geojsonvt_value_from_double(double v);
@@ -253,16 +253,16 @@ geojsonvt_value_from_values(geojsonvt_value_t **vs, int valuecount);
 GEOJSONVTCAPICALL geojsonvt_value_t *
 geojsonvt_value_from_keyvalues(const char **ks, geojsonvt_value_t **vs,
                                int valuecount);
-GEOJSONVTCAPICALL _Bool geojsonvt_value_is_empty(geojsonvt_value_t *geom);
-GEOJSONVTCAPICALL _Bool geojsonvt_value_is_null(geojsonvt_value_t *geom);
-GEOJSONVTCAPICALL _Bool geojsonvt_value_is_bool(geojsonvt_value_t *geom);
-GEOJSONVTCAPICALL _Bool geojsonvt_value_is_uint(geojsonvt_value_t *geom);
-GEOJSONVTCAPICALL _Bool geojsonvt_value_is_int(geojsonvt_value_t *geom);
-GEOJSONVTCAPICALL _Bool geojsonvt_value_is_double(geojsonvt_value_t *geom);
-GEOJSONVTCAPICALL _Bool geojsonvt_value_is_string(geojsonvt_value_t *geom);
-GEOJSONVTCAPICALL _Bool geojsonvt_value_is_vector(geojsonvt_value_t *geom);
-GEOJSONVTCAPICALL _Bool geojsonvt_value_is_map(geojsonvt_value_t *geom);
-GEOJSONVTCAPICALL _Bool geojsonvt_value_cast_bool(geojsonvt_value_t *geom);
+GEOJSONVTCAPICALL bool geojsonvt_value_is_empty(geojsonvt_value_t *geom);
+GEOJSONVTCAPICALL bool geojsonvt_value_is_null(geojsonvt_value_t *geom);
+GEOJSONVTCAPICALL bool geojsonvt_value_is_bool(geojsonvt_value_t *geom);
+GEOJSONVTCAPICALL bool geojsonvt_value_is_uint(geojsonvt_value_t *geom);
+GEOJSONVTCAPICALL bool geojsonvt_value_is_int(geojsonvt_value_t *geom);
+GEOJSONVTCAPICALL bool geojsonvt_value_is_double(geojsonvt_value_t *geom);
+GEOJSONVTCAPICALL bool geojsonvt_value_is_string(geojsonvt_value_t *geom);
+GEOJSONVTCAPICALL bool geojsonvt_value_is_vector(geojsonvt_value_t *geom);
+GEOJSONVTCAPICALL bool geojsonvt_value_is_map(geojsonvt_value_t *geom);
+GEOJSONVTCAPICALL bool geojsonvt_value_cast_bool(geojsonvt_value_t *geom);
 GEOJSONVTCAPICALL uint64_t geojsonvt_value_cast_uint(geojsonvt_value_t *geom);
 GEOJSONVTCAPICALL int64_t geojsonvt_value_cast_int(geojsonvt_value_t *geom);
 GEOJSONVTCAPICALL double geojsonvt_value_cast_double(geojsonvt_value_t *geom);
@@ -281,9 +281,9 @@ geojsonvt_property_map_get(geojsonvt_property_map_t *val, const char *key);
 GEOJSONVTCAPICALL void geojsonvt_property_map_set(geojsonvt_property_map_t *val,
                                                   const char *key,
                                                   geojsonvt_value_t *v);
-GEOJSONVTCAPICALL _Bool
+GEOJSONVTCAPICALL bool
 geojsonvt_property_map_has(geojsonvt_property_map_t *val, const char *key);
-GEOJSONVTCAPICALL _Bool
+GEOJSONVTCAPICALL bool
 geojsonvt_property_map_empty(geojsonvt_property_map_t *val);
 GEOJSONVTCAPICALL char **
 geojsonvt_property_map_keys(geojsonvt_property_map_t *val, int *count);
@@ -300,13 +300,13 @@ geojsonvt_identifier_from_double(double v);
 GEOJSONVTCAPICALL geojsonvt_identifier_t *
 geojsonvt_identifier_from_string(const char *v);
 GEOJSONVTCAPICALL void geojsonvt_identifier_free(geojsonvt_identifier_t *val);
-GEOJSONVTCAPICALL _Bool
+GEOJSONVTCAPICALL bool
 geojsonvt_identifier_is_uint(geojsonvt_identifier_t *geom);
-GEOJSONVTCAPICALL _Bool
+GEOJSONVTCAPICALL bool
 geojsonvt_identifier_is_int(geojsonvt_identifier_t *geom);
-GEOJSONVTCAPICALL _Bool
+GEOJSONVTCAPICALL bool
 geojsonvt_identifier_is_double(geojsonvt_identifier_t *geom);
-GEOJSONVTCAPICALL _Bool
+GEOJSONVTCAPICALL bool
 geojsonvt_identifier_is_string(geojsonvt_identifier_t *geom);
 GEOJSONVTCAPICALL uint64_t
 geojsonvt_identifier_cast_uint(geojsonvt_identifier_t *geom);
@@ -346,7 +346,7 @@ GEOJSONVTCAPICALL geojsonvt_feature_collection_t *
 geojsonvt_feature_collection_new();
 GEOJSONVTCAPICALL void
 geojsonvt_feature_collection_free(geojsonvt_feature_collection_t *featc);
-GEOJSONVTCAPICALL _Bool
+GEOJSONVTCAPICALL bool
 geojsonvt_feature_collection_empty(geojsonvt_feature_collection_t *gc);
 GEOJSONVTCAPICALL void
 geojsonvt_feature_collection_append(geojsonvt_feature_collection_t *gc,

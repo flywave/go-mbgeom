@@ -170,14 +170,14 @@ GEOJSONCAPICALL bool mapbox_multi_polygon_equal(mapbox_multi_polygon_t *geom1,
                                                 mapbox_multi_polygon_t *geom2);
 
 GEOJSONCAPICALL void mapbox_geometry_free(mapbox_geometry_t *geom);
-GEOJSONCAPICALL _Bool mapbox_geometry_empty(mapbox_geometry_t *geom);
-GEOJSONCAPICALL _Bool mapbox_geometry_is_point(mapbox_geometry_t *geom);
-GEOJSONCAPICALL _Bool mapbox_geometry_is_line_string(mapbox_geometry_t *geom);
-GEOJSONCAPICALL _Bool mapbox_geometry_is_polygon(mapbox_geometry_t *geom);
-GEOJSONCAPICALL _Bool mapbox_geometry_is_multi_point(mapbox_geometry_t *geom);
-GEOJSONCAPICALL _Bool
+GEOJSONCAPICALL bool mapbox_geometry_empty(mapbox_geometry_t *geom);
+GEOJSONCAPICALL bool mapbox_geometry_is_point(mapbox_geometry_t *geom);
+GEOJSONCAPICALL bool mapbox_geometry_is_line_string(mapbox_geometry_t *geom);
+GEOJSONCAPICALL bool mapbox_geometry_is_polygon(mapbox_geometry_t *geom);
+GEOJSONCAPICALL bool mapbox_geometry_is_multi_point(mapbox_geometry_t *geom);
+GEOJSONCAPICALL bool
 mapbox_geometry_is_multi_line_string(mapbox_geometry_t *geom);
-GEOJSONCAPICALL _Bool mapbox_geometry_is_multi_polygon(mapbox_geometry_t *geom);
+GEOJSONCAPICALL bool mapbox_geometry_is_multi_polygon(mapbox_geometry_t *geom);
 GEOJSONCAPICALL mapbox_point_t *
 mapbox_geometry_cast_point(mapbox_geometry_t *geom);
 GEOJSONCAPICALL mapbox_line_string_t *
@@ -197,7 +197,7 @@ GEOJSONCAPICALL char *mapbox_geometry_stringify(mapbox_geometry_t *geom);
 GEOJSONCAPICALL mapbox_geometry_collection_t *mapbox_geometry_collection_new();
 GEOJSONCAPICALL void
 mapbox_geometry_collection_free(mapbox_geometry_collection_t *geom);
-GEOJSONCAPICALL _Bool
+GEOJSONCAPICALL bool
 mapbox_geometry_collection_empty(mapbox_geometry_collection_t *gc);
 GEOJSONCAPICALL void
 mapbox_geometry_collection_append(mapbox_geometry_collection_t *gc,
@@ -212,7 +212,7 @@ mapbox_geometry_collection_get(mapbox_geometry_collection_t *gc, int i);
 
 GEOJSONCAPICALL mapbox_value_t *mapbox_value_new();
 GEOJSONCAPICALL void mapbox_value_free(mapbox_value_t *val);
-GEOJSONCAPICALL mapbox_value_t *mapbox_value_from_bool(_Bool v);
+GEOJSONCAPICALL mapbox_value_t *mapbox_value_from_bool(bool v);
 GEOJSONCAPICALL mapbox_value_t *mapbox_value_from_uint(uint64_t v);
 GEOJSONCAPICALL mapbox_value_t *mapbox_value_from_int(int64_t v);
 GEOJSONCAPICALL mapbox_value_t *mapbox_value_from_double(double v);
@@ -222,16 +222,16 @@ GEOJSONCAPICALL mapbox_value_t *mapbox_value_from_values(mapbox_value_t **vs,
 GEOJSONCAPICALL mapbox_value_t *mapbox_value_from_keyvalues(const char **ks,
                                                             mapbox_value_t **vs,
                                                             int valuecount);
-GEOJSONCAPICALL _Bool mapbox_value_is_empty(mapbox_value_t *geom);
-GEOJSONCAPICALL _Bool mapbox_value_is_null(mapbox_value_t *geom);
-GEOJSONCAPICALL _Bool mapbox_value_is_bool(mapbox_value_t *geom);
-GEOJSONCAPICALL _Bool mapbox_value_is_uint(mapbox_value_t *geom);
-GEOJSONCAPICALL _Bool mapbox_value_is_int(mapbox_value_t *geom);
-GEOJSONCAPICALL _Bool mapbox_value_is_double(mapbox_value_t *geom);
-GEOJSONCAPICALL _Bool mapbox_value_is_string(mapbox_value_t *geom);
-GEOJSONCAPICALL _Bool mapbox_value_is_vector(mapbox_value_t *geom);
-GEOJSONCAPICALL _Bool mapbox_value_is_map(mapbox_value_t *geom);
-GEOJSONCAPICALL _Bool mapbox_value_cast_bool(mapbox_value_t *geom);
+GEOJSONCAPICALL bool mapbox_value_is_empty(mapbox_value_t *geom);
+GEOJSONCAPICALL bool mapbox_value_is_null(mapbox_value_t *geom);
+GEOJSONCAPICALL bool mapbox_value_is_bool(mapbox_value_t *geom);
+GEOJSONCAPICALL bool mapbox_value_is_uint(mapbox_value_t *geom);
+GEOJSONCAPICALL bool mapbox_value_is_int(mapbox_value_t *geom);
+GEOJSONCAPICALL bool mapbox_value_is_double(mapbox_value_t *geom);
+GEOJSONCAPICALL bool mapbox_value_is_string(mapbox_value_t *geom);
+GEOJSONCAPICALL bool mapbox_value_is_vector(mapbox_value_t *geom);
+GEOJSONCAPICALL bool mapbox_value_is_map(mapbox_value_t *geom);
+GEOJSONCAPICALL bool mapbox_value_cast_bool(mapbox_value_t *geom);
 GEOJSONCAPICALL uint64_t mapbox_value_cast_uint(mapbox_value_t *geom);
 GEOJSONCAPICALL int64_t mapbox_value_cast_int(mapbox_value_t *geom);
 GEOJSONCAPICALL double mapbox_value_cast_double(mapbox_value_t *geom);
@@ -249,9 +249,9 @@ mapbox_property_map_get(mapbox_property_map_t *val, const char *key);
 GEOJSONCAPICALL void mapbox_property_map_set(mapbox_property_map_t *val,
                                              const char *key,
                                              mapbox_value_t *v);
-GEOJSONCAPICALL _Bool mapbox_property_map_has(mapbox_property_map_t *val,
+GEOJSONCAPICALL bool mapbox_property_map_has(mapbox_property_map_t *val,
                                               const char *key);
-GEOJSONCAPICALL _Bool mapbox_property_map_empty(mapbox_property_map_t *val);
+GEOJSONCAPICALL bool mapbox_property_map_empty(mapbox_property_map_t *val);
 GEOJSONCAPICALL char **mapbox_property_map_keys(mapbox_property_map_t *val,
                                                 int *count);
 GEOJSONCAPICALL void mapbox_property_map_free_keys(char **keys, int count);
@@ -263,10 +263,10 @@ GEOJSONCAPICALL mapbox_identifier_t *mapbox_identifier_from_double(double v);
 GEOJSONCAPICALL mapbox_identifier_t *
 mapbox_identifier_from_string(const char *v);
 GEOJSONCAPICALL void mapbox_identifier_free(mapbox_identifier_t *val);
-GEOJSONCAPICALL _Bool mapbox_identifier_is_uint(mapbox_identifier_t *geom);
-GEOJSONCAPICALL _Bool mapbox_identifier_is_int(mapbox_identifier_t *geom);
-GEOJSONCAPICALL _Bool mapbox_identifier_is_double(mapbox_identifier_t *geom);
-GEOJSONCAPICALL _Bool mapbox_identifier_is_string(mapbox_identifier_t *geom);
+GEOJSONCAPICALL bool mapbox_identifier_is_uint(mapbox_identifier_t *geom);
+GEOJSONCAPICALL bool mapbox_identifier_is_int(mapbox_identifier_t *geom);
+GEOJSONCAPICALL bool mapbox_identifier_is_double(mapbox_identifier_t *geom);
+GEOJSONCAPICALL bool mapbox_identifier_is_string(mapbox_identifier_t *geom);
 GEOJSONCAPICALL uint64_t mapbox_identifier_cast_uint(mapbox_identifier_t *geom);
 GEOJSONCAPICALL int64_t mapbox_identifier_cast_int(mapbox_identifier_t *geom);
 GEOJSONCAPICALL double mapbox_identifier_cast_double(mapbox_identifier_t *geom);
@@ -297,7 +297,7 @@ GEOJSONCAPICALL char *mapbox_feature_stringify(mapbox_feature_t *f);
 GEOJSONCAPICALL mapbox_feature_collection_t *mapbox_feature_collection_new();
 GEOJSONCAPICALL void
 mapbox_feature_collection_free(mapbox_feature_collection_t *featc);
-GEOJSONCAPICALL _Bool
+GEOJSONCAPICALL bool
 mapbox_feature_collection_empty(mapbox_feature_collection_t *gc);
 GEOJSONCAPICALL void
 mapbox_feature_collection_append(mapbox_feature_collection_t *gc,
@@ -320,10 +320,10 @@ mapbox_geojson_from_feature(mapbox_feature_t *feat);
 GEOJSONCAPICALL mapbox_geojson_t *
 mapbox_geojson_from_feature_collection(mapbox_feature_collection_t *fc);
 GEOJSONCAPICALL void mapbox_geojson_free(mapbox_geojson_t *gejson);
-GEOJSONCAPICALL _Bool mapbox_geojson_is_empty(mapbox_geojson_t *gejson);
-GEOJSONCAPICALL _Bool mapbox_geojson_is_geometry(mapbox_geojson_t *gejson);
-GEOJSONCAPICALL _Bool mapbox_geojson_is_feature(mapbox_geojson_t *gejson);
-GEOJSONCAPICALL _Bool
+GEOJSONCAPICALL bool mapbox_geojson_is_empty(mapbox_geojson_t *gejson);
+GEOJSONCAPICALL bool mapbox_geojson_is_geometry(mapbox_geojson_t *gejson);
+GEOJSONCAPICALL bool mapbox_geojson_is_feature(mapbox_geojson_t *gejson);
+GEOJSONCAPICALL bool
 mapbox_geojson_is_feature_collection(mapbox_geojson_t *gejson);
 GEOJSONCAPICALL mapbox_geometry_t *
 mapbox_geojson_get_geometry(mapbox_geojson_t *gejson);
@@ -340,9 +340,9 @@ mapbox_geojson_set_feature_collection(mapbox_geojson_t *gejson,
                                       mapbox_feature_collection_t *fc);
 GEOJSONCAPICALL char *mapbox_geojson_stringify(mapbox_geojson_t *gejson);
 
-GEOJSONCAPICALL _Bool mapbox_spatial_algorithms_intersects(
+GEOJSONCAPICALL bool mapbox_spatial_algorithms_intersects(
     mapbox_geometry_t *geom1, mapbox_geometry_t *geom2);
-GEOJSONCAPICALL _Bool mapbox_spatial_algorithms_disjoint(
+GEOJSONCAPICALL bool mapbox_spatial_algorithms_disjoint(
     mapbox_geometry_t *geom1, mapbox_geometry_t *geom2);
 GEOJSONCAPICALL mapbox_geometry_t **
 mapbox_spatial_algorithms_intersection(mapbox_geometry_t *geom1,

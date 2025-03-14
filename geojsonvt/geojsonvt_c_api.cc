@@ -474,31 +474,31 @@ bool geojsonvt_multi_polygon_equal(geojsonvt_multi_polygon_t *geom1,
 
 void geojsonvt_geometry_free(geojsonvt_geometry_t *geom) { delete geom; }
 
-_Bool geojsonvt_geometry_empty(geojsonvt_geometry_t *geom) {
+bool geojsonvt_geometry_empty(geojsonvt_geometry_t *geom) {
   return geom->geom.valid();
 }
 
-_Bool geojsonvt_geometry_is_point(geojsonvt_geometry_t *geom) {
+bool geojsonvt_geometry_is_point(geojsonvt_geometry_t *geom) {
   return geom->geom.is<mapbox::geometry::point<int16_t>>();
 }
 
-_Bool geojsonvt_geometry_is_line_string(geojsonvt_geometry_t *geom) {
+bool geojsonvt_geometry_is_line_string(geojsonvt_geometry_t *geom) {
   return geom->geom.is<mapbox::geometry::line_string<int16_t>>();
 }
 
-_Bool geojsonvt_geometry_is_polygon(geojsonvt_geometry_t *geom) {
+bool geojsonvt_geometry_is_polygon(geojsonvt_geometry_t *geom) {
   return geom->geom.is<mapbox::geometry::polygon<int16_t>>();
 }
 
-_Bool geojsonvt_geometry_is_multi_point(geojsonvt_geometry_t *geom) {
+bool geojsonvt_geometry_is_multi_point(geojsonvt_geometry_t *geom) {
   return geom->geom.is<mapbox::geometry::multi_point<int16_t>>();
 }
 
-_Bool geojsonvt_geometry_is_multi_line_string(geojsonvt_geometry_t *geom) {
+bool geojsonvt_geometry_is_multi_line_string(geojsonvt_geometry_t *geom) {
   return geom->geom.is<mapbox::geometry::multi_line_string<int16_t>>();
 }
 
-_Bool geojsonvt_geometry_is_multi_polygon(geojsonvt_geometry_t *geom) {
+bool geojsonvt_geometry_is_multi_polygon(geojsonvt_geometry_t *geom) {
   return geom->geom.is<mapbox::geometry::multi_polygon<int16_t>>();
 }
 
@@ -573,7 +573,7 @@ void geojsonvt_geometry_collection_free(geojsonvt_geometry_collection_t *geom) {
   delete geom;
 }
 
-_Bool geojsonvt_geometry_collection_empty(geojsonvt_geometry_collection_t *gc) {
+bool geojsonvt_geometry_collection_empty(geojsonvt_geometry_collection_t *gc) {
   return gc->gc.empty();
 }
 
@@ -609,7 +609,7 @@ geojsonvt_value_t *geojsonvt_value_new() {
 
 void geojsonvt_value_free(geojsonvt_value_t *val) { delete val; }
 
-geojsonvt_value_t *geojsonvt_value_from_bool(_Bool v) {
+geojsonvt_value_t *geojsonvt_value_from_bool(bool v) {
   return new geojsonvt_value_t{mapbox::feature::value{v}};
 }
 
@@ -649,44 +649,44 @@ geojsonvt_value_t *geojsonvt_value_from_keyvalues(const char **ks,
   return new geojsonvt_value_t{mapbox::feature::value{v}};
 }
 
-_Bool geojsonvt_value_is_empty(geojsonvt_value_t *geom) {
+bool geojsonvt_value_is_empty(geojsonvt_value_t *geom) {
   return !geom->val.valid();
 }
 
-_Bool geojsonvt_value_is_null(geojsonvt_value_t *geom) {
+bool geojsonvt_value_is_null(geojsonvt_value_t *geom) {
   return geom->val.is<mapbox::feature::null_value_t>();
 }
 
-_Bool geojsonvt_value_is_bool(geojsonvt_value_t *geom) {
+bool geojsonvt_value_is_bool(geojsonvt_value_t *geom) {
   return geom->val.is<bool>();
 }
 
-_Bool geojsonvt_value_is_uint(geojsonvt_value_t *geom) {
+bool geojsonvt_value_is_uint(geojsonvt_value_t *geom) {
   return geom->val.is<uint64_t>();
 }
 
-_Bool geojsonvt_value_is_int(geojsonvt_value_t *geom) {
+bool geojsonvt_value_is_int(geojsonvt_value_t *geom) {
   return geom->val.is<int64_t>();
 }
 
-_Bool geojsonvt_value_is_double(geojsonvt_value_t *geom) {
+bool geojsonvt_value_is_double(geojsonvt_value_t *geom) {
   return geom->val.is<double>();
 }
 
-_Bool geojsonvt_value_is_string(geojsonvt_value_t *geom) {
+bool geojsonvt_value_is_string(geojsonvt_value_t *geom) {
   return geom->val.is<std::string>();
 }
 
-_Bool geojsonvt_value_is_vector(geojsonvt_value_t *geom) {
+bool geojsonvt_value_is_vector(geojsonvt_value_t *geom) {
   return geom->val.is<std::shared_ptr<std::vector<mapbox::feature::value>>>();
 }
 
-_Bool geojsonvt_value_is_map(geojsonvt_value_t *geom) {
+bool geojsonvt_value_is_map(geojsonvt_value_t *geom) {
   return geom->val.is<std::shared_ptr<
       std::unordered_map<std::string, mapbox::feature::value>>>();
 }
 
-_Bool geojsonvt_value_cast_bool(geojsonvt_value_t *geom) {
+bool geojsonvt_value_cast_bool(geojsonvt_value_t *geom) {
   return geom->val.get<bool>();
 }
 
@@ -747,7 +747,7 @@ void geojsonvt_property_map_set(geojsonvt_property_map_t *val, const char *key,
   val->prop[key] = v->val;
 }
 
-_Bool geojsonvt_property_map_has(geojsonvt_property_map_t *val,
+bool geojsonvt_property_map_has(geojsonvt_property_map_t *val,
                                  const char *key) {
   if (val->prop.find(key) == val->prop.end()) {
     return false;
@@ -755,7 +755,7 @@ _Bool geojsonvt_property_map_has(geojsonvt_property_map_t *val,
   return true;
 }
 
-_Bool geojsonvt_property_map_empty(geojsonvt_property_map_t *val) {
+bool geojsonvt_property_map_empty(geojsonvt_property_map_t *val) {
   return val->prop.empty();
 }
 
@@ -799,19 +799,19 @@ geojsonvt_identifier_t *geojsonvt_identifier_from_string(const char *v) {
 
 void geojsonvt_identifier_free(geojsonvt_identifier_t *val) { delete val; }
 
-_Bool geojsonvt_identifier_is_uint(geojsonvt_identifier_t *geom) {
+bool geojsonvt_identifier_is_uint(geojsonvt_identifier_t *geom) {
   return geom->id.is<uint64_t>();
 }
 
-_Bool geojsonvt_identifier_is_int(geojsonvt_identifier_t *geom) {
+bool geojsonvt_identifier_is_int(geojsonvt_identifier_t *geom) {
   return geom->id.is<int64_t>();
 }
 
-_Bool geojsonvt_identifier_is_double(geojsonvt_identifier_t *geom) {
+bool geojsonvt_identifier_is_double(geojsonvt_identifier_t *geom) {
   return geom->id.is<double>();
 }
 
-_Bool geojsonvt_identifier_is_string(geojsonvt_identifier_t *geom) {
+bool geojsonvt_identifier_is_string(geojsonvt_identifier_t *geom) {
   return geom->id.is<std::string>();
 }
 
@@ -896,7 +896,7 @@ void geojsonvt_feature_collection_free(geojsonvt_feature_collection_t *geom) {
   delete geom;
 }
 
-_Bool geojsonvt_feature_collection_empty(geojsonvt_feature_collection_t *gc) {
+bool geojsonvt_feature_collection_empty(geojsonvt_feature_collection_t *gc) {
   return gc->fc.empty();
 }
 

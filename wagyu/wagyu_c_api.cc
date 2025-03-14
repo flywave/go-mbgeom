@@ -22,7 +22,7 @@ void mapbox_wagyu_add_polygon(mapbox_wagyu_t *ctx, void *poly, uint8_t p_type) {
       static_cast<mapbox::geometry::wagyu::polygon_type>(p_type));
 }
 
-void mapbox_wagyu_reverse_rings(mapbox_wagyu_t *ctx, _Bool value) {
+void mapbox_wagyu_reverse_rings(mapbox_wagyu_t *ctx, bool value) {
   ctx->ctx.reverse_rings(value);
 }
 
@@ -32,7 +32,7 @@ void *mapbox_wagyu_get_bounds(mapbox_wagyu_t *ctx) {
   return new _mapbox_box_t{ctx->ctx.get_bounds()};
 }
 
-_Bool mapbox_wagyu_execute(mapbox_wagyu_t *ctx, uint8_t tp, void *mp,
+bool mapbox_wagyu_execute(mapbox_wagyu_t *ctx, uint8_t tp, void *mp,
                            uint8_t subject_fill_type, uint8_t clip_fill_type) {
   return ctx->ctx.execute(
       static_cast<mapbox::geometry::wagyu::clip_type>(tp),

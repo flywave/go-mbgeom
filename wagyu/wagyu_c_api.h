@@ -22,10 +22,10 @@ WAGYUCAPICALL void mapbox_wagyu_add_ring(mapbox_wagyu_t *ctx, void *ring,
                                          uint8_t p_type);
 WAGYUCAPICALL void mapbox_wagyu_add_polygon(mapbox_wagyu_t *ctx, void *poly,
                                             uint8_t p_type);
-WAGYUCAPICALL void mapbox_wagyu_reverse_rings(mapbox_wagyu_t *ctx, _Bool value);
+WAGYUCAPICALL void mapbox_wagyu_reverse_rings(mapbox_wagyu_t *ctx, bool value);
 WAGYUCAPICALL void mapbox_wagyu_clear(mapbox_wagyu_t *ctx);
 WAGYUCAPICALL void *mapbox_wagyu_get_bounds(mapbox_wagyu_t *ctx);
-WAGYUCAPICALL _Bool mapbox_wagyu_execute(mapbox_wagyu_t *ctx, uint8_t tp,
+WAGYUCAPICALL bool mapbox_wagyu_execute(mapbox_wagyu_t *ctx, uint8_t tp,
                                          void *mp, uint8_t subject_fill_type,
                                          uint8_t clip_fill_type);
 

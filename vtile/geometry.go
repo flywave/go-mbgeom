@@ -5,6 +5,7 @@ package vtile
 // #include "vtile_c_api.h"
 // #cgo CFLAGS: -I ../ -std=c11
 // #cgo CXXFLAGS:  -I ../ -std=c++14
+// #cgo darwin CXXFLAGS: -Wno-enum-constexpr-conversion -Wno-c++11-narrowing
 import "C"
 import (
 	"reflect"

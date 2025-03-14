@@ -5,6 +5,7 @@ package vtile
 // #include "vtile_c_api.h"
 // #cgo CFLAGS: -I ../ -std=c11
 // #cgo CXXFLAGS:  -I ../ -std=c++14
+// #cgo darwin CXXFLAGS: -Wno-enum-constexpr-conversion -Wno-c++11-narrowing
 import "C"
 import (
 	"reflect"
@@ -141,7 +142,7 @@ func (v *Layer) ResetFeature() {
 }
 
 func (v *Layer) GetFeature(index int) *Feature {
-	ret := &Feature{f: C.mvt_vector_layer_get_feature_by_id(v.l, C.ulong(index))}
+	ret := &Feature{f: C.mvt_vector_layer_get_feature_by_id(v.l, C.uint64_t(index))}
 	runtime.SetFinalizer(ret, (*Feature).free)
 	return ret
 }

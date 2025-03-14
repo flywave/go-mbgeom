@@ -5,6 +5,7 @@ package vtile
 // #include "vtile_c_api.h"
 // #cgo CFLAGS: -I ../ -std=c11
 // #cgo CXXFLAGS:  -I ../ -std=c++14
+// #cgo darwin CXXFLAGS: -Wno-enum-constexpr-conversion -Wno-c++11-narrowing
 import "C"
 import (
 	"runtime"
@@ -64,7 +65,7 @@ func NewInt64ValueIndex(lb *LayerBuilder) *Int64ValueIndex {
 }
 
 func (v *Int64ValueIndex) Get(val int64) uint32 {
-	return uint32(C.mvt_int64_value_index_get(v.idx, C.long(val)))
+	return uint32(C.mvt_int64_value_index_get(v.idx, C.int64_t(val)))
 }
 
 func (v *Int64ValueIndex) free() {
@@ -84,7 +85,7 @@ func NewUInt64ValueIndex(lb *LayerBuilder) *UInt64ValueIndex {
 }
 
 func (v *UInt64ValueIndex) Get(val uint64) uint32 {
-	return uint32(C.mvt_uint64_value_index_get(v.idx, C.ulong(val)))
+	return uint32(C.mvt_uint64_value_index_get(v.idx, C.uint64_t(val)))
 }
 
 func (v *UInt64ValueIndex) free() {

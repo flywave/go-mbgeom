@@ -5,6 +5,7 @@ package vtile
 // #include "vtile_c_api.h"
 // #cgo CFLAGS: -I ../ -std=c11
 // #cgo CXXFLAGS:  -I ../ -std=c++14
+// #cgo darwin CXXFLAGS: -Wno-enum-constexpr-conversion -Wno-c++11-narrowing
 import "C"
 import (
 	"runtime"
@@ -51,7 +52,7 @@ func (v *PointFeatureBuilder) free() {
 }
 
 func (v *PointFeatureBuilder) SetID(id uint64) {
-	C.mvt_point_feature_builder_set_id(v.m, C.ulong(id))
+	C.mvt_point_feature_builder_set_id(v.m, C.uint64_t(id))
 }
 
 func (v *PointFeatureBuilder) CopyID(feat *Feature) {
@@ -97,7 +98,7 @@ func (v *LineStringFeatureBuilder) free() {
 }
 
 func (v *LineStringFeatureBuilder) SetID(id uint64) {
-	C.mvt_linestring_feature_builder_set_id(v.m, C.ulong(id))
+	C.mvt_linestring_feature_builder_set_id(v.m, C.uint64_t(id))
 }
 
 func (v *LineStringFeatureBuilder) CopyID(feat *Feature) {
@@ -143,7 +144,7 @@ func (v *PolygonFeatureBuilder) free() {
 }
 
 func (v *PolygonFeatureBuilder) SetID(id uint64) {
-	C.mvt_polygon_feature_builder_set_id(v.m, C.ulong(id))
+	C.mvt_polygon_feature_builder_set_id(v.m, C.uint64_t(id))
 }
 
 func (v *PolygonFeatureBuilder) CopyID(feat *Feature) {
@@ -193,7 +194,7 @@ func (v *GeometryFeatureBuilder) free() {
 }
 
 func (v *GeometryFeatureBuilder) SetID(id uint64) {
-	C.mvt_geometry_feature_builder_set_id(v.m, C.ulong(id))
+	C.mvt_geometry_feature_builder_set_id(v.m, C.uint64_t(id))
 }
 
 func (v *GeometryFeatureBuilder) CopyID(feat *Feature) {

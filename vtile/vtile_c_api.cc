@@ -172,7 +172,7 @@ void mvt_vector_tile_free(mvt_vector_tile_t *ctx) {
   }
 }
 
-_Bool mvt_vector_tile_empty(mvt_vector_tile_t *ctx) { return ctx->vt.empty(); }
+bool mvt_vector_tile_empty(mvt_vector_tile_t *ctx) { return ctx->vt.empty(); }
 
 size_t mvt_vector_tile_count_layers(mvt_vector_tile_t *ctx) {
   return ctx->vt.count_layers();
@@ -195,7 +195,7 @@ mvt_layer_t *mvt_vector_tile_get_layer_by_name(mvt_vector_tile_t *ctx,
   return new mvt_layer_t{ctx->vt.get_layer_by_name(name)};
 }
 
-_Bool mvt_vector_tile_is_vector_tile(const char *data, size_t si) {
+bool mvt_vector_tile_is_vector_tile(const char *data, size_t si) {
   return vtzero::is_vector_tile(vtzero::data_view(data, si));
 }
 
@@ -207,7 +207,7 @@ mvt_layer_t *mvt_layer_new_with_data(const char *data, size_t si) {
 
 void mvt_vector_layer_free(mvt_layer_t *ctx) { delete ctx; }
 
-_Bool mvt_layer_valid(mvt_layer_t *ctx) { return ctx->l.valid(); }
+bool mvt_layer_valid(mvt_layer_t *ctx) { return ctx->l.valid(); }
 
 const char *mvt_layer_get_data(mvt_layer_t *ctx, size_t *si) {
   auto dv = ctx->l.data();
@@ -223,7 +223,7 @@ uint32_t mvt_layer_version(mvt_layer_t *ctx) { return ctx->l.version(); }
 
 uint32_t mvt_layer_extent(mvt_layer_t *ctx) { return ctx->l.extent(); }
 
-_Bool mvt_layer_empty(mvt_layer_t *ctx) { return ctx->l.empty(); }
+bool mvt_layer_empty(mvt_layer_t *ctx) { return ctx->l.empty(); }
 
 size_t mvt_layer_num_features(mvt_layer_t *ctx) {
   return ctx->l.num_features();
@@ -302,11 +302,11 @@ mvt_feature_t *mvt_feature_new_with_data(mvt_layer_t *layer, const char *data,
 
 void mvt_feature_free(mvt_feature_t *ctx) { delete ctx; }
 
-_Bool mvt_feature_valid(mvt_feature_t *ctx) { return ctx->feat.valid(); }
+bool mvt_feature_valid(mvt_feature_t *ctx) { return ctx->feat.valid(); }
 
 uint64_t mvt_feature_get_id(mvt_feature_t *ctx) { return ctx->feat.id(); }
 
-_Bool mvt_feature_has_id(mvt_feature_t *ctx) { return ctx->feat.has_id(); }
+bool mvt_feature_has_id(mvt_feature_t *ctx) { return ctx->feat.has_id(); }
 
 uint32_t mvt_feature_get_geometry_type(mvt_feature_t *ctx) {
   return static_cast<uint32_t>(ctx->feat.geometry_type());
@@ -316,7 +316,7 @@ mvt_geometry_t *mvt_feature_get_geometry(mvt_feature_t *ctx) {
   return new mvt_geometry_t{ctx->feat.geometry()};
 }
 
-_Bool mvt_feature_empty(mvt_feature_t *ctx) { return ctx->feat.empty(); }
+bool mvt_feature_empty(mvt_feature_t *ctx) { return ctx->feat.empty(); }
 
 size_t mvt_feature_num_properties(mvt_feature_t *ctx) {
   return ctx->feat.num_properties();
@@ -330,7 +330,7 @@ void mvt_feature_reset_property(mvt_feature_t *ctx) {
   ctx->feat.reset_property();
 }
 
-_Bool mvt_feature_next_property_indexes(mvt_feature_t *ctx, uint32_t *key,
+bool mvt_feature_next_property_indexes(mvt_feature_t *ctx, uint32_t *key,
                                         uint32_t *value) {
   auto pair = ctx->feat.next_property_indexes();
   if (pair.key().valid() && pair.value().valid()) {
@@ -351,7 +351,7 @@ mvt_property_t *mvt_property_new_with_keyvalue(const char *key,
 
 void mvt_property_free(mvt_property_t *prop) { delete prop; }
 
-_Bool mvt_property_valid(mvt_property_t *prop) { return prop->prop.valid(); }
+bool mvt_property_valid(mvt_property_t *prop) { return prop->prop.valid(); }
 
 char *mvt_feature_get_key(mvt_property_t *prop) {
   return strdup(prop->prop.key().data());
@@ -373,7 +373,7 @@ mvt_property_value_t *mvt_property_value_new_with_data(const char *data,
 
 void mvt_property_value_free(mvt_property_value_t *pv) { delete pv; }
 
-_Bool mvt_property_value_valid(mvt_property_value_t *pv) {
+bool mvt_property_value_valid(mvt_property_value_t *pv) {
   return pv->pv.valid();
 }
 
@@ -874,7 +874,7 @@ mvt_bool_value_index_t *mvt_bool_value_index_new(mvt_layer_builder_t *layer) {
 
 void mvt_bool_value_index_free(mvt_bool_value_index_t *idx) { delete idx; }
 
-uint32_t mvt_bool_value_index_get(mvt_bool_value_index_t *idx, _Bool val) {
+uint32_t mvt_bool_value_index_get(mvt_bool_value_index_t *idx, bool val) {
   return idx->idx(val).value();
 }
 
@@ -928,7 +928,7 @@ void mvt_baton_add_tile(mvt_baton_t *baton, mvt_tile_object_t *t) {
 
 void mvt_baton_clear_tile(mvt_baton_t *baton) { baton->b->tiles.clear(); }
 
-char *mvt_composite(mvt_baton_t *baton, size_t *size, _Bool *error) {
+char *mvt_composite(mvt_baton_t *baton, size_t *size, bool *error) {
   auto str = vtile::composite(std::move(baton->b), error);
   *size = str.size();
   char *result = (char *)malloc(sizeof(char) * *size);

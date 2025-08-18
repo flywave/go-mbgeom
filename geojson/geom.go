@@ -713,10 +713,10 @@ func NewGeomGeometry(g geom.Geometry) *Geometry {
 	switch geo := g.(type) {
 	default:
 		return nil
-	case geom.Point:
+	case geom.Point3:
 		pt := NewPoint(geo.X(), geo.Y())
 		return pt.Geom()
-	case geom.Point3:
+	case geom.Point:
 		pt := NewPoint(geo.X(), geo.Y())
 		return pt.Geom()
 	case geom.MultiPoint:

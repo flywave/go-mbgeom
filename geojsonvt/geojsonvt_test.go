@@ -1,7 +1,7 @@
 package geojsonvt
 
 import (
-	"io/ioutil"
+	"io"
 	"os"
 	"testing"
 
@@ -10,7 +10,7 @@ import (
 
 func TestGeoJSONVT(t *testing.T) {
 	f, _ := os.Open("../data/countries.geojson")
-	bytes, _ := ioutil.ReadAll(f)
+	bytes, _ := io.ReadAll(f)
 
 	json := geojson.Parse(string(bytes))
 
@@ -38,7 +38,7 @@ func TestGeoJSONVT(t *testing.T) {
 
 func TestGeoJSONVTParserStringify(t *testing.T) {
 	f, _ := os.Open("../data/us-states-tiles.json")
-	bytes, _ := ioutil.ReadAll(f)
+	bytes, _ := io.ReadAll(f)
 
 	jsonvt := ParseFeatureCollections(string(bytes))
 

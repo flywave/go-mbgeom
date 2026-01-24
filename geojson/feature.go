@@ -4,7 +4,7 @@ package geojson
 // #include <string.h>
 // #include "geojson_c_api.h"
 // #cgo CFLAGS: -I ../ -std=c11
-// #cgo CXXFLAGS:  -I ../ -std=c++14
+// #cgo CXXFLAGS:  -I ../ -std=c++14 -w
 import "C"
 import (
 	"reflect"

@@ -4,7 +4,7 @@ package wagyu
 // #include <string.h>
 // #include "wagyu_c_api.h"
 // #cgo CFLAGS: -I ../
-// #cgo CXXFLAGS:  -I ../ -std=c++14
+// #cgo CXXFLAGS:  -I ../ -std=c++14 -w
 import "C"
 import (
 	"runtime"

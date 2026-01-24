@@ -4,7 +4,7 @@ package geojsonvt
 // #include <string.h>
 // #include "geojsonvt_c_api.h"
 // #cgo CFLAGS: -I ../ -std=c11
-// #cgo CXXFLAGS:  -I ../ -std=c++14
+// #cgo CXXFLAGS:  -I ../ -std=c++14 -w
 import "C"
 import (
 	"runtime"
